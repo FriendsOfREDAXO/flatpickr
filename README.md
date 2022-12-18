@@ -24,6 +24,14 @@ Just install it from the REDAXO installer
 {"class": "flatpickr_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
 ```
 
+## Disable the view of the time
+
+Just set the data-altFormat. 😀
+
+```json 
+{"class":"flatpickr","data-altFormat":"j. F, Y"}
+```
+
 ## Disable dates
 
 You can disable dates via a comma seprated list. 
