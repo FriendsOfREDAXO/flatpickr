@@ -1,11 +1,18 @@
-$(document).on('rex:ready',function() {
-flatpickr(".flatpickr_date_time",  
-{
-    enableTime: true,
-    altInput: true,    
-    altFormat: "j. F, Y H:i",   
-    time_24hr: true,
-    "locale":  myDiv.getAttribute('data-locale') || 'en'
+document.addEventListener('rex:ready', function() {
+  var elements = document.querySelectorAll('.flatpickr_date_time');
+
+  elements.forEach(function(element) {
+    var locale = element.getAttribute('data-locale') || 'en';
+
+    flatpickr(element,  
+    {
+        enableTime: true,
+        altInput: true,    
+        altFormat: "j. F, Y H:i",   
+        time_24hr: true,
+        "locale":  locale
     }                 
-);
+    );
+  });
 });
+
