@@ -1,4 +1,4 @@
-(document).on('rex:ready', function () {
+$(document).on('rex:ready', function () {
     var elements = document.querySelectorAll('.flatpickr');
 
     elements.forEach(function (element) {
