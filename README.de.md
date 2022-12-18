@@ -24,6 +24,16 @@ Einfach über den REDAXO-Installer installieren.
 {"class": "flatpickr_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
 ```
 
+## Die Ansicht nur für Datumsfelder einstellen. 
+
+Wenn man die Uhrzeit in einem Datumsfeld nicht sehen möchte, sollte man den Timepicker nicht verwenden und eine andere Ansicht einstellen.
+
+Einfach das data-altFormat setzen 😀.
+
+``json 
+{"class": "flatpickr", "data-altFormat": "j. F, Y"}
+```
+
 ## Tage deaktivieren
 
 Einzelne Tage können deaktiviert werden. 
