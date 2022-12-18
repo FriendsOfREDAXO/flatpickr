@@ -18,4 +18,8 @@ Einfach über den REDAXO-Installer installieren.
 <input type="date" class="form-control flatpickr" data-locale="de" data-anableTime="true" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
 ```
 
+## Erstellen eines RangeField über 2 Input-Felder 
 
+```json
+{"class": "flatpickr_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
+```
