@@ -18,4 +18,4 @@ Einfach über den REDAXO-Installer installieren.
 <input type="date" class="form-control flatpickr" data-locale="de" data-anableTime="true" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
 ```
 
-Übersetzt mit www.DeepL.com/Translator (kostenlose Version)
+
