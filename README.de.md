@@ -30,7 +30,7 @@ Wenn man die Uhrzeit in einem Datumsfeld nicht sehen möchte, sollte man den Tim
 
 Einfach das data-altFormat setzen 😀.
 
-``json 
+```json 
 {"class": "flatpickr", "data-altFormat": "j. F, Y"}
 ```
 
