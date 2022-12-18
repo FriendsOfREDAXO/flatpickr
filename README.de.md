@@ -8,7 +8,7 @@ Einfach über den REDAXO-Installer installieren.
 
 ## Verwendung in YForm
 
-``json
+```json
 {"class": "flatpickr", "data-locale": "de", "data-enableTime": "true"}
 ```
 
