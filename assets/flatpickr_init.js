@@ -5,7 +5,7 @@ flatpickr(".flatpickr_date_time",
     altInput: true,    
     altFormat: "j. F, Y H:i",   
     time_24hr: true,
-    "locale": "de" 
+    "locale":  myDiv.getAttribute('data-locale') || 'en'
     }                 
 );
 });
