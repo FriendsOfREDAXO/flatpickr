@@ -1,3 +1,4 @@
+$(document).on('rex:ready',function() {
 flatpickr(".flatpickr_date_time",  
 {
     enableTime: true,
@@ -7,3 +8,4 @@ flatpickr(".flatpickr_date_time",
     "locale": "de" 
     }                 
 );
+});
