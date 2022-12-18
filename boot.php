@@ -1,5 +1,5 @@
 <?php
-$addon = rex_addon::get('flatpckr');
+$addon = rex_addon::get('flatpickr');
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_view::addCssFile($addon->getAssetsUrl('vendor/flatpickr/dist/flatpickr.min.css'));
     rex_view::addJsFile($addon->getAssetsUrl('vendor/flatpickr/dist/themes/dark.css'));
