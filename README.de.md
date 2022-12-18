@@ -23,3 +23,12 @@ Einfach über den REDAXO-Installer installieren.
 ```json
 {"class": "flatpickr_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
 ```
+## Autor
+
+**Friends Of REDAXO**
+
+* http://www.redaxo.org
+* https://github.com/FriendsOfREDAXO
+
+**Project-Lead**
+[Thomas Skerbis](https://github.com/skerbis)
