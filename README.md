@@ -33,3 +33,6 @@ Just install it from the REDAXO installer
 
 **Project lead**
 [Thomas Skerbis](https://github.com/skerbis)
+
+**Vendor**
+https://flatpickr.js.org
