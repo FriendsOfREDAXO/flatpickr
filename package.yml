@@ -1,5 +1,5 @@
 package: flatpickr
-version: '0.0.1-dev'
+version: '1.0.0'
 author: 'Friends Of REDAXO'
 supportpage: https://github.com/FriendsOfREDAXO/flatpickr
 load: late
