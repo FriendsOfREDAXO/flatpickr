@@ -1,8 +1,8 @@
-package: addon_key
-version: '0.0.0'
+package: flatpickr
+version: '0.0.1-dev'
 author: 'Friends Of REDAXO'
-supportpage: https://github.com/FriendsOfREDAXO/addon_key
+supportpage: https://github.com/FriendsOfREDAXO/flatpickr
 requires:
-    redaxo: '^5.13.0'
+    redaxo: '^5.14.0'
     php:
-        version: '>=7.3, <9'
+        version: '>=7.4, <9'
