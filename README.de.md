@@ -24,7 +24,7 @@ Einfach über den REDAXO-Installer installieren.
 {"class": "flatpickr_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
 ```
 
-## Disable dates
+## Tage deaktivieren
 
 Einzelne Tage können deaktiviert werden. 
 Hierzu listet man diese Tage im Attribut data-disabled als kommaseparierte Liste.
