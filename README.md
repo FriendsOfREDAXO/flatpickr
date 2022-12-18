@@ -24,7 +24,9 @@ Just install it from the REDAXO installer
 {"class": "flatpickr_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
 ```
 
-## Disable the view of the time
+## Set the view just for date fields. 
+
+If you don't want to see the time in a date-field, don't use the timepicker and set an alternative View.
 
 Just set the data-altFormat. 😀
 
