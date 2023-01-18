@@ -15,7 +15,7 @@ Just install it from the REDAXO installer
 ## Howto use in Modules
 
 ```html
-<input type="date" class="form-control flatpickr" data-locale="de" data-anableTime="true" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
+<input type="date" class="form-control flatpickr" data-locale="de" data-enableTime="true" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
 ```
 
 ## Howto RangeField over 2 input fields 
