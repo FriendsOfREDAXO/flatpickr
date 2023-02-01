@@ -39,7 +39,6 @@ $(document).on('rex:ready', function () {
             var disabled_list = disabled.split(',');
         }
         else { disabled_list = []; }
-        alert(rangeField);
         if (rangeField != "") {
             flatpickr(element,
                 {
@@ -52,10 +51,6 @@ $(document).on('rex:ready', function () {
                     locale: clocale
                 });
         }
-
-
-
-
     });
 
 });
