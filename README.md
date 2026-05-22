@@ -1,6 +1,17 @@
-# flatpickr for REDAXO
+# a11y_datetime for REDAXO
 
-flatpickr is a lightweight and powerful datetime picker.
+a11y_datetime is an accessibility-focused fork of flatpickr.
+
+## Why the addon is still named flatpickr
+
+The addon package name stays `flatpickr` on purpose to keep existing REDAXO installations, installer updates, and project references fully compatible.
+Internally, the frontend assets have been migrated to `a11y_datetime`.
+
+## a11y_datetime Links
+
+Website: https://friendsofredaxo.github.io/a11y_datetime/
+
+GitHub: https://github.com/FriendsOfREDAXO/a11y_datetime
 
 ## Howto install
 
@@ -10,6 +21,12 @@ Just install it from the REDAXO installer
 
 ```json
 {"class": "flatpickr","data-locale":"de","data-enableTime":"true"}
+```
+
+You can also use the new class name:
+
+```json
+{"class": "a11y_datetime","data-locale":"de","data-enableTime":"true"}
 ```
 
 ## Howto use in Modules
@@ -22,6 +39,12 @@ Just install it from the REDAXO installer
 
 ```json
 {"class": "flatpickr_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
+```
+
+or
+
+```json
+{"class": "a11y_datetime_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
 ```
 
 ## Set the view just for date fields. 
@@ -57,4 +80,4 @@ Example:
 [Thomas Skerbis](https://github.com/skerbis)
 
 **Vendor**
-https://flatpickr.js.org
+https://github.com/FriendsOfREDAXO/a11y_datetime

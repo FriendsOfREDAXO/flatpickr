@@ -1,39 +1,70 @@
 $(document).on('rex:ready', function () {
-    var pickr_elements = document.querySelectorAll('.flatpickr');
+    var pickerFactory = null;
+    if (typeof a11y_datetime === 'function') {
+        pickerFactory = a11y_datetime;
+    } else if (typeof flatpickr === 'function') {
+        pickerFactory = flatpickr;
+    }
+
+    if (!pickerFactory) {
+        return;
+    }
+
+    var rangePluginFactory = null;
+    if (typeof rangePlugin === 'function') {
+        rangePluginFactory = rangePlugin;
+    } else if (
+        typeof plugins_rangePlugin !== 'undefined' &&
+        plugins_rangePlugin &&
+        typeof plugins_rangePlugin.default === 'function'
+    ) {
+        rangePluginFactory = plugins_rangePlugin.default;
+    }
+
+    var parseBool = function (value, fallbackValue) {
+        if (value === null || value === undefined || value === '') {
+            return fallbackValue;
+        }
+
+        if (typeof value === 'boolean') {
+            return value;
+        }
+
+        return String(value).toLowerCase() === 'true';
+    };
+
+    var pickr_elements = document.querySelectorAll('.flatpickr, .a11y_datetime');
 
     pickr_elements.forEach(function (element) {
         var clocale = element.getAttribute('data-locale') || 'de';
-        var cenableTime = element.getAttribute('data-enableTime') || false;
+        var cenableTime = parseBool(element.getAttribute('data-enableTime'), false);
         var caltFormat = element.getAttribute('data-altFormat') || "j. F, Y H:i";
         var disabled = element.getAttribute('data-disabled') || "";
-        var isMultiple = element.getAttribute('data-multiple') || false;
-        var mode = isMultiple ? 'multiple' : 'single';
-        var conjunction = element.getAttribute('data-conjunction') || ',';
 
         if (disabled && disabled != "") {
             var disabled_list = disabled.split(',');
         }
         else { disabled_list = []; }
-        
-        flatpickr(element,
+        pickerFactory(element,
             {
                 enableTime: cenableTime,
                 altInput: true,
                 altFormat: caltFormat,
                 time_24hr: true,
                 disable: disabled_list,
-                locale: clocale,
-                mode: mode,
-                conjunction: conjunction
+                locale: clocale
             }
         );
     });
 
-    var pickr_elements2 = document.querySelectorAll('.flatpickr_range');
+
+
+
+    var pickr_elements2 = document.querySelectorAll('.flatpickr_range, .a11y_datetime_range');
 
     pickr_elements2.forEach(function (element) {
         var clocale = element.getAttribute('data-locale') || 'de';
-        var cenableTime = element.getAttribute('data-enableTime') || false;
+        var cenableTime = parseBool(element.getAttribute('data-enableTime'), false);
         var caltFormat = element.getAttribute('data-altFormat') || "j. F, Y H:i";
         var rangeField = element.getAttribute('data-rangefield') || "";
         var disabled = element.getAttribute('data-disabled') || "";
@@ -42,11 +73,11 @@ $(document).on('rex:ready', function () {
             var disabled_list = disabled.split(',');
         }
         else { disabled_list = []; }
-        if (rangeField != "") {
-            flatpickr(element,
+        if (rangeField != "" && rangePluginFactory) {
+            pickerFactory(element,
                 {
                     enableTime: cenableTime,
-                    "plugins": [new rangePlugin({ input: rangeField })],
+                    "plugins": [new rangePluginFactory({ input: rangeField })],
                     altInput: true,
                     altFormat: caltFormat,
                     time_24hr: true,
@@ -55,42 +86,5 @@ $(document).on('rex:ready', function () {
                 });
         }
     });
-    
-    // Neuer Code für Multiple-Datumsauswahl
-    var pickr_elements3 = document.querySelectorAll('.flatpickr_multiple');
-    
-    pickr_elements3.forEach(function (element) {
-        var clocale = element.getAttribute('data-locale') || 'de';
-        var cenableTime = element.getAttribute('data-enableTime') || false;
-        var caltFormat = element.getAttribute('data-altFormat') || "j. F, Y";
-        var disabled = element.getAttribute('data-disabled') || "";
-        var conjunction = element.getAttribute('data-conjunction') || ',';
-        
-        if (disabled && disabled != "") {
-            var disabled_list = disabled.split(',');
-        }
-        else { disabled_list = []; }
-        
-        flatpickr(element,
-            {
-                mode: 'multiple',
-                enableTime: cenableTime,
-                altInput: true,
-                altFormat: caltFormat,
-                dateFormat: 'Y-m-d',
-                time_24hr: true,
-                disable: disabled_list,
-                locale: clocale,
-                conjunction: conjunction,
-                onChange: function(selectedDates, dateStr) {
-                    // Stellen Sie sicher, dass der Wert im Original-Input korrekt gesetzt wird
-                    element.value = dateStr;
-                    
-                    // Optional: Ein Change-Event auslösen
-                    var event = new Event('change', { bubbles: true });
-                    element.dispatchEvent(event);
-                }
-            }
-        );
-    });
+
 });
