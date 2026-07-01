@@ -8,6 +8,7 @@
 
   <link rel="stylesheet" href="../a11y_datetime.css" />
   <link rel="stylesheet" href="../ie.css" />
+  <link rel="stylesheet" href="../plugins/confirmDate/confirmDate.css" />
 
   <style>
     :root {
@@ -407,6 +408,62 @@
         </article>
 
         <article class="card">
+          <h3>Time Wheel Popover (15 min)</h3>
+          <p class="desc">Apple-like split time selection with fixed 15 minute steps, accessible on desktop and mobile.</p>
+          <label for="demo-time-wheel">Date and stepped time</label>
+          <input id="demo-time-wheel" placeholder="Select date and 15-min time" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="time wheel popover code"><code>pick("#demo-time-wheel", {
+  enableTime: true,
+  minuteIncrement: 15,
+  dateFormat: "Y-m-d H:i",
+  calendarTitle: "Select date and stepped time",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Time Wheel Popover 24h</h3>
+          <p class="desc">Compact stepped time popover without AM/PM, using a 24 hour clock.</p>
+          <label for="demo-time-wheel-24">Date and stepped time (24h)</label>
+          <input id="demo-time-wheel-24" placeholder="Select date and 24h time" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="time wheel 24h code"><code>pick("#demo-time-wheel-24", {
+  enableTime: true,
+  time_24hr: true,
+  minuteIncrement: 15,
+  dateFormat: "Y-m-d H:i",
+  calendarTitle: "Select date and stepped time (24h)",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Single Date + Time + Confirm</h3>
+          <p class="desc">Example with an explicit confirm action before the picker closes.</p>
+          <label for="demo-confirm">Date and time with confirm</label>
+          <input id="demo-confirm" placeholder="Select date and confirm" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="confirm date code"><code>pick("#demo-confirm", {
+  enableTime: true,
+  dateFormat: "Y-m-d H:i",
+  calendarTitle: "Confirm date and time",
+  announceChanges: true,
+  plugins: [plugins_confirmDatePlugin.default({
+    confirmText: "Confirm ",
+    showAlways: true,
+    theme: "light"
+  })]
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
           <h3>Optional Feature Playground</h3>
           <p class="desc">Toggle optional UI behavior for titlebar, close button, and initial keyboard day focus.</p>
           <label for="demo-optional">Preview input</label>
@@ -562,6 +619,7 @@
   <!-- classList polyfill for IE9 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.2.20171210/classList.min.js"></script>
   <script src="../a11y_datetime.js"></script>
+  <script src="../plugins/confirmDate/confirmDate.js"></script>
   <script src="../plugins/weekSelect/weekSelect.js"></script>
 
   <script>
@@ -596,6 +654,41 @@
       calendarTitle: "Select a time",
       announceChanges: true
     });
+
+    pick("#demo-time-wheel", {
+      enableTime: true,
+      minuteIncrement: 15,
+      dateFormat: "Y-m-d H:i",
+      calendarTitle: "Select date and stepped time",
+      announceChanges: true
+    });
+
+    pick("#demo-time-wheel-24", {
+      enableTime: true,
+      time_24hr: true,
+      minuteIncrement: 15,
+      dateFormat: "Y-m-d H:i",
+      calendarTitle: "Select date and stepped time (24h)",
+      announceChanges: true
+    });
+
+    if (
+      typeof plugins_confirmDatePlugin !== "undefined" &&
+      plugins_confirmDatePlugin &&
+      typeof plugins_confirmDatePlugin.default === "function"
+    ) {
+      pick("#demo-confirm", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        calendarTitle: "Confirm date and time",
+        announceChanges: true,
+        plugins: [plugins_confirmDatePlugin.default({
+          confirmText: "Confirm ",
+          showAlways: true,
+          theme: "light"
+        })]
+      });
+    }
 
     pick("#demo-limits", {
       minDate: "today",

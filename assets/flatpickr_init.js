@@ -38,6 +38,7 @@ $(document).on('rex:ready', function () {
     pickr_elements.forEach(function (element) {
         var clocale = element.getAttribute('data-locale') || 'de';
         var cenableTime = parseBool(element.getAttribute('data-enableTime'), false);
+        var cfocusOpens = parseBool(element.getAttribute('data-focusOpens'), false);
         var caltFormat = element.getAttribute('data-altFormat') || "j. F, Y H:i";
         var disabled = element.getAttribute('data-disabled') || "";
 
@@ -48,6 +49,7 @@ $(document).on('rex:ready', function () {
         pickerFactory(element,
             {
                 enableTime: cenableTime,
+                focusOpens: cfocusOpens,
                 altInput: true,
                 altFormat: caltFormat,
                 time_24hr: true,
@@ -65,6 +67,7 @@ $(document).on('rex:ready', function () {
     pickr_elements2.forEach(function (element) {
         var clocale = element.getAttribute('data-locale') || 'de';
         var cenableTime = parseBool(element.getAttribute('data-enableTime'), false);
+        var cfocusOpens = parseBool(element.getAttribute('data-focusOpens'), false);
         var caltFormat = element.getAttribute('data-altFormat') || "j. F, Y H:i";
         var rangeField = element.getAttribute('data-rangefield') || "";
         var disabled = element.getAttribute('data-disabled') || "";
@@ -77,6 +80,7 @@ $(document).on('rex:ready', function () {
             pickerFactory(element,
                 {
                     enableTime: cenableTime,
+                    focusOpens: cfocusOpens,
                     "plugins": [new rangePluginFactory({ input: rangeField })],
                     altInput: true,
                     altFormat: caltFormat,

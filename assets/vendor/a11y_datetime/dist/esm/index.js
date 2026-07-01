@@ -55,6 +55,11 @@ function FlatpickrInstance(element, instanceConfig) {
     self.setDate = setDate;
     self.toggle = toggle;
     var liveRegion;
+    var timeWheelPopover;
+    var timeWheelTrigger;
+    var timeWheelHourOptions = [];
+    var timeWheelMinuteOptions = [];
+    var timeWheelAmPmOptions = [];
     var calendarInstanceId = "a11y-dt-".concat(Math.random()
         .toString(36)
         .slice(2, 10));
@@ -234,6 +239,192 @@ function FlatpickrInstance(element, instanceConfig) {
             setHours(date.getHours(), date.getMinutes(), date.getSeconds());
         }
     }
+    function markWheelSelection(options, selectedValue) {
+        var hasSelected = false;
+        options.forEach(function (option) {
+            var isSelected = option.dataset.value === selectedValue;
+            hasSelected = hasSelected || isSelected;
+            option.classList.toggle("is-selected", isSelected);
+            option.setAttribute("aria-selected", isSelected ? "true" : "false");
+            option.tabIndex = isSelected ? 0 : -1;
+        });
+        if (!hasSelected && options[0]) {
+            options[0].tabIndex = 0;
+        }
+    }
+    function syncTimeWheelPopover() {
+        if (!timeWheelPopover || !self.hourElement || !self.minuteElement)
+            return;
+        var hourValue = String(parseInt(self.hourElement.value, 10));
+        var minuteValue = String(parseInt(self.minuteElement.value, 10));
+        markWheelSelection(timeWheelHourOptions, hourValue);
+        markWheelSelection(timeWheelMinuteOptions, minuteValue);
+        if (self.amPM !== undefined) {
+            markWheelSelection(timeWheelAmPmOptions, String(self.amPM.textContent || ""));
+        }
+        if (timeWheelTrigger) {
+            var label = "".concat(pad(self.hourElement.value), ":").concat(pad(self.minuteElement.value));
+            if (self.amPM !== undefined && self.amPM.textContent) {
+                label += " ".concat(self.amPM.textContent);
+            }
+            timeWheelTrigger.textContent = label;
+            timeWheelTrigger.setAttribute("aria-label", "Selected time: ".concat(label));
+        }
+    }
+    function setTimeWheelPopoverOpen(open) {
+        if (!timeWheelPopover)
+            return;
+        if (open) {
+            timeWheelPopover.removeAttribute("hidden");
+            timeWheelPopover.classList.add("is-open");
+            if (timeWheelTrigger) {
+                timeWheelTrigger.setAttribute("aria-expanded", "true");
+            }
+            var initialFocus = timeWheelHourOptions.find(function (option) { return option.tabIndex === 0; }) ||
+                timeWheelHourOptions[0];
+            initialFocus === null || initialFocus === void 0 ? void 0 : initialFocus.focus();
+            return;
+        }
+        timeWheelPopover.setAttribute("hidden", "hidden");
+        timeWheelPopover.classList.remove("is-open");
+        if (timeWheelTrigger) {
+            timeWheelTrigger.setAttribute("aria-expanded", "false");
+        }
+    }
+    function getTimeWheelFocusTarget() {
+        return (timeWheelHourOptions.find(function (option) { return option.tabIndex === 0; }) ||
+            timeWheelHourOptions[0] ||
+            timeWheelMinuteOptions.find(function (option) { return option.tabIndex === 0; }) ||
+            timeWheelMinuteOptions[0] ||
+            timeWheelAmPmOptions.find(function (option) { return option.tabIndex === 0; }) ||
+            timeWheelAmPmOptions[0] ||
+            self.hourElement);
+    }
+    function buildTimeWheelPopover() {
+        var popover = createElement("div", "flatpickr-time-wheel-popover");
+        popover.id = "".concat(calendarInstanceId, "-time-wheel-popover");
+        popover.setAttribute("role", "dialog");
+        popover.setAttribute("aria-modal", "false");
+        popover.setAttribute("aria-label", "Time picker popover");
+        popover.setAttribute("hidden", "hidden");
+        var wheelContent = createElement("div", "flatpickr-time-wheel-content");
+        var buildColumn = function (className, label, values, onSelect) {
+            var column = createElement("div", className);
+            column.setAttribute("role", "listbox");
+            column.setAttribute("aria-label", label);
+            values.forEach(function (value) {
+                var button = createElement("button", "flatpickr-time-wheel-option", pad(value));
+                button.type = "button";
+                button.dataset.value = String(parseInt(value, 10));
+                button.setAttribute("role", "option");
+                button.setAttribute("aria-selected", "false");
+                button.setAttribute("aria-label", "".concat(label, ": ").concat(pad(value)));
+                button.tabIndex = -1;
+                bind(button, "click", function () { return onSelect(value); });
+                bind(button, "keydown", function (event) {
+                    var options = Array.from(column.querySelectorAll(".flatpickr-time-wheel-option"));
+                    var currentIndex = options.indexOf(button);
+                    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                        event.preventDefault();
+                        var delta = event.key === "ArrowDown" ? 1 : -1;
+                        var nextIndex = Math.max(0, Math.min(options.length - 1, currentIndex + delta));
+                        var nextButton = options[nextIndex];
+                        if (!nextButton)
+                            return;
+                        nextButton.focus();
+                        nextButton.click();
+                        return;
+                    }
+                    if (event.key === "Tab") {
+                        var listColumns = Array.from(popover.querySelectorAll(".flatpickr-time-wheel-column"));
+                        var currentColumnIndex = listColumns.indexOf(column);
+                        var nextColumn = listColumns[currentColumnIndex + (event.shiftKey ? -1 : 1)];
+                        if (nextColumn) {
+                            event.preventDefault();
+                            var firstTarget = nextColumn.querySelector(".flatpickr-time-wheel-option.is-selected, .flatpickr-time-wheel-option");
+                            firstTarget === null || firstTarget === void 0 ? void 0 : firstTarget.focus();
+                        }
+                        return;
+                    }
+                    if (event.key === "Escape") {
+                        event.preventDefault();
+                        setTimeWheelPopoverOpen(false);
+                        timeWheelTrigger === null || timeWheelTrigger === void 0 ? void 0 : timeWheelTrigger.focus();
+                    }
+                });
+                column.appendChild(button);
+            });
+            return {
+                column: column,
+                options: Array.from(column.querySelectorAll(".flatpickr-time-wheel-option")),
+            };
+        };
+        var hourValues = self.config.time_24hr
+            ? Array.from({ length: 24 }, function (_, i) { return String(i); })
+            : Array.from({ length: 12 }, function (_, i) { return String(i + 1); });
+        var minuteStep = Math.max(1, self.config.minuteIncrement);
+        var minuteValues = Array.from({ length: Math.ceil(60 / minuteStep) }, function (_, i) { return String(Math.min(i * minuteStep, 59)); });
+        var hourColumn = buildColumn("flatpickr-time-wheel-column flatpickr-time-wheel-hours", self.l10n.hourAriaLabel, hourValues, function (value) {
+            if (!self.hourElement)
+                return;
+            self.hourElement.value = pad(value);
+            updateTime();
+            syncTimeWheelPopover();
+        });
+        timeWheelHourOptions = hourColumn.options;
+        wheelContent.appendChild(hourColumn.column);
+        var minuteColumn = buildColumn("flatpickr-time-wheel-column flatpickr-time-wheel-minutes", self.l10n.minuteAriaLabel, minuteValues, function (value) {
+            if (!self.minuteElement)
+                return;
+            self.minuteElement.value = pad(value);
+            updateTime();
+            syncTimeWheelPopover();
+        });
+        timeWheelMinuteOptions = minuteColumn.options;
+        wheelContent.appendChild(minuteColumn.column);
+        if (!self.config.time_24hr && self.amPM !== undefined) {
+            var amPmValues = [self.l10n.amPM[0], self.l10n.amPM[1]];
+            var amPmColumn_1 = createElement("div", "flatpickr-time-wheel-column flatpickr-time-wheel-ampm");
+            amPmColumn_1.setAttribute("role", "listbox");
+            amPmColumn_1.setAttribute("aria-label", "AM/PM");
+            amPmValues.forEach(function (value) {
+                var button = createElement("button", "flatpickr-time-wheel-option", value);
+                button.type = "button";
+                button.dataset.value = value;
+                button.setAttribute("role", "option");
+                button.setAttribute("aria-selected", "false");
+                button.setAttribute("aria-label", "AM/PM: ".concat(value));
+                button.tabIndex = -1;
+                bind(button, "click", function () {
+                    if (!self.amPM)
+                        return;
+                    self.amPM.textContent = value;
+                    updateTime();
+                    syncTimeWheelPopover();
+                });
+                amPmColumn_1.appendChild(button);
+            });
+            timeWheelAmPmOptions = Array.from(amPmColumn_1.querySelectorAll(".flatpickr-time-wheel-option"));
+            wheelContent.appendChild(amPmColumn_1);
+        }
+        else {
+            timeWheelAmPmOptions = [];
+        }
+        popover.appendChild(wheelContent);
+        var footer = createElement("div", "flatpickr-time-wheel-footer");
+        var doneButton = createElement("button", "flatpickr-time-wheel-done", "Done");
+        doneButton.type = "button";
+        doneButton.setAttribute("aria-label", "Close time picker");
+        bind(doneButton, "click", function () {
+            setTimeWheelPopoverOpen(false);
+            if (timeWheelTrigger) {
+                timeWheelTrigger.focus();
+            }
+        });
+        footer.appendChild(doneButton);
+        popover.appendChild(footer);
+        return popover;
+    }
     function setHours(hours, minutes, seconds) {
         if (self.latestSelectedDateObj !== undefined) {
             self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
@@ -248,6 +439,7 @@ function FlatpickrInstance(element, instanceConfig) {
             self.amPM.textContent = self.l10n.amPM[int(hours >= 12)];
         if (self.secondElement !== undefined)
             self.secondElement.value = pad(seconds);
+        syncTimeWheelPopover();
     }
     function onYearInput(event) {
         var eventTarget = getEventTarget(event);
@@ -304,7 +496,9 @@ function FlatpickrInstance(element, instanceConfig) {
             bind(window.document, "mousedown", documentClick);
         bind(window.document, "focus", documentClick, { capture: true });
         if (self.config.clickOpens === true) {
-            bind(self._input, "focus", self.open);
+            if (self.config.focusOpens === true) {
+                bind(self._input, "focus", self.open);
+            }
             bind(self._input, "click", self.open);
         }
         if (self.daysContainer !== undefined) {
@@ -779,8 +973,10 @@ function FlatpickrInstance(element, instanceConfig) {
         self.calendarContainer.classList.add("hasTime");
         if (self.config.noCalendar)
             self.calendarContainer.classList.add("noCalendar");
+        var isTimeOnly = self.config.enableTime === true && self.config.noCalendar === true;
         var defaults = getDefaultHours(self.config);
         self.timeContainer = createElement("div", "flatpickr-time");
+        self.timeContainer.classList.add("has-wheel-popover");
         self.timeContainer.tabIndex = -1;
         var separator = createElement("span", "flatpickr-time-separator", ":");
         var hourInput = createNumberInput("flatpickr-hour", {
@@ -834,6 +1030,33 @@ function FlatpickrInstance(element, instanceConfig) {
             self.amPM.title = self.l10n.toggleTitle;
             self.amPM.tabIndex = -1;
             self.timeContainer.appendChild(self.amPM);
+        }
+        if (!isTimeOnly) {
+            var timeBar = createElement("div", "flatpickr-time-wheel-bar");
+            var timeLabel = createElement("span", "flatpickr-time-wheel-label", "Time");
+            timeWheelTrigger = createElement("button", "flatpickr-time-wheel-trigger");
+            timeWheelTrigger.type = "button";
+            timeWheelTrigger.setAttribute("aria-haspopup", "dialog");
+            timeWheelTrigger.setAttribute("aria-expanded", "false");
+            timeWheelTrigger.setAttribute("aria-controls", "".concat(calendarInstanceId, "-time-wheel-popover"));
+            bind(timeWheelTrigger, "click", function () {
+                if (!timeWheelPopover)
+                    return;
+                setTimeWheelPopoverOpen(!timeWheelPopover.classList.contains("is-open"));
+            });
+            timeBar.appendChild(timeLabel);
+            timeBar.appendChild(timeWheelTrigger);
+            self.timeContainer.appendChild(timeBar);
+        }
+        else {
+            timeWheelTrigger = undefined;
+        }
+        timeWheelPopover = buildTimeWheelPopover();
+        self.timeContainer.appendChild(timeWheelPopover);
+        syncTimeWheelPopover();
+        if (isTimeOnly) {
+            timeWheelPopover.removeAttribute("hidden");
+            timeWheelPopover.classList.add("is-open");
         }
         return self.timeContainer;
     }
@@ -921,6 +1144,7 @@ function FlatpickrInstance(element, instanceConfig) {
     }
     function close() {
         self.isOpen = false;
+        setTimeWheelPopoverOpen(false);
         if (!self.isMobile) {
             if (self.calendarContainer !== undefined) {
                 self.calendarContainer.classList.remove("open");
@@ -1135,6 +1359,7 @@ function FlatpickrInstance(element, instanceConfig) {
         var isInput = self.config.wrap
             ? element.contains(eventTarget)
             : eventTarget === self._input;
+        var isTimeOnlyInput = self.config.enableTime === true && self.config.noCalendar === true;
         var allowInput = self.config.allowInput;
         var allowKeydown = self.isOpen && (!allowInput || !isInput);
         var allowInlineKeydown = self.config.inline && isInput && !allowInput;
@@ -1155,7 +1380,8 @@ function FlatpickrInstance(element, instanceConfig) {
         }
         else if (isCalendarElem(eventTarget) ||
             allowKeydown ||
-            allowInlineKeydown) {
+            allowInlineKeydown ||
+            (isTimeOnlyInput && isInput)) {
             var isTimeObj = !!self.timeContainer &&
                 self.timeContainer.contains(eventTarget);
             var isMonthDropdown = eventTarget === self.monthsDropdownContainer;
@@ -1168,6 +1394,18 @@ function FlatpickrInstance(element, instanceConfig) {
                     if (eventTarget === self.closeButton) {
                         e.preventDefault();
                         focusAndClose();
+                        break;
+                    }
+                    if (eventTarget === timeWheelTrigger) {
+                        e.preventDefault();
+                        setTimeWheelPopoverOpen(true);
+                        break;
+                    }
+                    if (timeWheelPopover !== undefined &&
+                        eventTarget.classList.contains("flatpickr-time-wheel-done")) {
+                        e.preventDefault();
+                        setTimeWheelPopoverOpen(false);
+                        timeWheelTrigger === null || timeWheelTrigger === void 0 ? void 0 : timeWheelTrigger.focus();
                         break;
                     }
                     if (eventTarget === self.prevMonthNav ||
@@ -1254,7 +1492,8 @@ function FlatpickrInstance(element, instanceConfig) {
                     }
                     break;
                 case 9:
-                    if (self.isOpen) {
+                    if (self.isOpen ||
+                        (self.config.enableTime === true && self.config.noCalendar === true)) {
                         var firstDay = !self.config.noCalendar
                             ? getPreferredTabDay()
                             : undefined;
@@ -1267,10 +1506,10 @@ function FlatpickrInstance(element, instanceConfig) {
                             !self.config.noCalendar ? self.currentYearElement : undefined,
                             !self.config.noCalendar ? self.nextMonthNav : undefined,
                             firstDay,
-                            self.hourElement,
-                            self.minuteElement,
-                            self.secondElement,
-                            self.amPM,
+                            timeWheelTrigger || getTimeWheelFocusTarget(),
+                            timeWheelTrigger ? undefined : self.minuteElement,
+                            timeWheelTrigger ? undefined : self.secondElement,
+                            timeWheelTrigger ? undefined : self.amPM,
                             !self.config.noCalendar ? self.closeButton : undefined,
                         ]
                             .concat(self.pluginElements)
@@ -1283,6 +1522,9 @@ function FlatpickrInstance(element, instanceConfig) {
                         });
                         if (isInput && tabOrder.length > 0) {
                             e.preventDefault();
+                            if (self.config.enableTime === true && self.config.noCalendar === true) {
+                                setTimeWheelPopoverOpen(true);
+                            }
                             tabOrder[0].focus();
                         }
                         else if (isDayInGrid) {
@@ -1300,7 +1542,9 @@ function FlatpickrInstance(element, instanceConfig) {
                                 }
                             }
                             else {
-                                (self.hourElement ||
+                                (timeWheelTrigger ||
+                                    getTimeWheelFocusTarget() ||
+                                    self.hourElement ||
                                     self.minuteElement ||
                                     self.secondElement ||
                                     self.amPM ||
@@ -1413,6 +1657,7 @@ function FlatpickrInstance(element, instanceConfig) {
     function open(e, positionElement) {
         if (positionElement === void 0) { positionElement = self._positionElement; }
         if (self.isMobile === true) {
+            var isTimeOnlyInput = self.config.enableTime === true && self.config.noCalendar === true;
             if (e) {
                 e.preventDefault();
                 var eventTarget = getEventTarget(e);
@@ -1421,7 +1666,9 @@ function FlatpickrInstance(element, instanceConfig) {
                 }
             }
             if (self.mobileInput !== undefined) {
-                self.mobileInput.focus();
+                if (isTimeOnlyInput) {
+                    self.mobileInput.focus();
+                }
                 self.mobileInput.click();
             }
             triggerEvent("onOpen");
@@ -1442,6 +1689,7 @@ function FlatpickrInstance(element, instanceConfig) {
             announce("".concat(monthToStr(self.currentMonth, self.config.shorthandCurrentMonth, self.l10n), " ").concat(self.currentYear));
         }
         if (self.config.enableTime === true && self.config.noCalendar === true) {
+            setTimeWheelPopoverOpen(true);
             if (self.config.allowInput === false &&
                 (e === undefined ||
                     !self.timeContainer.contains(e.relatedTarget))) {
@@ -1556,6 +1804,9 @@ function FlatpickrInstance(element, instanceConfig) {
             self.config[boolOpts[i]] =
                 self.config[boolOpts[i]] === true ||
                     self.config[boolOpts[i]] === "true";
+        if (self.config.enableTime) {
+            self.config.disableMobile = true;
+        }
         HOOKS.filter(function (hook) { return self.config[hook] !== undefined; }).forEach(function (hook) {
             self.config[hook] = arrayify(self.config[hook] || []).map(bindToInstance);
         });
@@ -1721,6 +1972,7 @@ function FlatpickrInstance(element, instanceConfig) {
     function selectDate(e) {
         e.preventDefault();
         e.stopPropagation();
+        var isKeyboardSelection = e.type === "keydown";
         var isSelectable = function (day) {
             return day.classList &&
                 day.classList.contains("flatpickr-day") &&
@@ -1779,7 +2031,7 @@ function FlatpickrInstance(element, instanceConfig) {
             self.hourElement === undefined) {
             focusedDayAfterBuild.focus();
         }
-        if (self.hourElement !== undefined)
+        if (self.hourElement !== undefined && isKeyboardSelection)
             self.hourElement !== undefined && self.hourElement.focus();
         if (self.config.closeOnSelect) {
             var single = self.config.mode === "single" && !self.config.enableTime;

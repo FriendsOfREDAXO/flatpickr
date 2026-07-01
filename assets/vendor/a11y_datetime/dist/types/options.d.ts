@@ -21,6 +21,7 @@ export interface BaseOptions {
     appendTo: HTMLElement;
     ariaDateFormat: string;
     autoFillDefaultTime: boolean;
+    focusOpens: boolean;
     clickOpens: boolean;
     closeOnSelect: boolean;
     calendarTitle: string;
@@ -97,6 +98,7 @@ export interface ParsedOptions {
     appendTo?: HTMLElement;
     ariaDateFormat: string;
     autoFillDefaultTime: boolean;
+    focusOpens: boolean;
     clickOpens: boolean;
     closeOnSelect: boolean;
     calendarTitle: string;

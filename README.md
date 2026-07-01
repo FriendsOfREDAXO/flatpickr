@@ -35,6 +35,12 @@ You can also use the new class name:
 <input type="date" class="form-control flatpickr" data-locale="de" data-enableTime="true" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
 ```
 
+Optional: enable opening on focus for a field:
+
+```html
+<input type="text" class="form-control a11y_datetime" data-focusOpens="true" name="event_start">
+```
+
 ## Howto RangeField over 2 input fields 
 
 ```json
@@ -55,6 +61,15 @@ Just set the data-altFormat. 😀
 
 ```json 
 {"class":"flatpickr","data-altFormat":"j. F, Y"}
+```
+
+## Open on focus (optional)
+
+By default, the picker does not open automatically when the input receives focus via Tab.
+If you want the legacy behavior for a specific field, enable it explicitly:
+
+```json
+{"class":"flatpickr","data-focusOpens":"true"}
 ```
 
 ## Disable dates

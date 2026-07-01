@@ -56,6 +56,12 @@ $addon = rex_addon::get('flatpickr');
 <input type="text" class="form-control a11y_datetime" data-locale="de" data-enableTime="true" name="event_start">
 ```
 
+Optional kann das Öffnen bei Fokus gezielt aktiviert werden:
+
+```html
+<input type="text" class="form-control a11y_datetime" data-focusOpens="true" name="event_start">
+```
+
 ## Verwendung in YForm
 
 ```json
@@ -94,6 +100,15 @@ Einfach das data-altFormat setzen 😀.
 
 ```json 
 {"class": "flatpickr", "data-altFormat": "j. F, Y"}
+```
+
+## Öffnen bei Fokus (optional)
+
+Standardmäßig öffnet der Picker beim Tab-Fokus nicht automatisch.
+Wenn das frühere Verhalten gewünscht ist (z. B. in Pflichtfeldern), kann es pro Feld aktiviert werden:
+
+```json
+{"class": "flatpickr", "data-focusOpens": "true"}
 ```
 
 ## Tage deaktivieren

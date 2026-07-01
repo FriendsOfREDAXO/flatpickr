@@ -86,6 +86,7 @@ var plugins_minMaxTimePlugin = (() => {
     announceChanges: true,
     ariaDateFormat: "F j, Y",
     autoFillDefaultTime: true,
+    focusOpens: false,
     clickOpens: true,
     closeOnSelect: true,
     calendarTitle: "Calendar",
