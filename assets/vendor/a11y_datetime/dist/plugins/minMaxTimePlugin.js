@@ -115,6 +115,11 @@ var plugins_minMaxTimePlugin = (() => {
     ignoredFocusElements: [],
     inline: false,
     locale: "default",
+    timeRules: [],
+    monthYearWheel: true,
+    showMonthNavArrows: false,
+    yearRange: { past: 10, future: 10 },
+    yearWheelManualInput: true,
     minuteIncrement: 5,
     mode: "single",
     monthSelectorType: "dropdown",
@@ -216,6 +221,11 @@ var plugins_minMaxTimePlugin = (() => {
     monthAriaLabel: "Month",
     hourAriaLabel: "Hour",
     minuteAriaLabel: "Minute",
+    timeLabel: "Time",
+    timePickerAriaLabel: "Time picker popover",
+    doneButtonLabel: "Done",
+    closeTimePickerAriaLabel: "Close time picker",
+    selectedTimeAriaLabel: "Selected time",
     time_24hr: false
   };
 

@@ -786,6 +786,11 @@ var l10n_index = (() => {
     rangeSeparator: " bis ",
     scrollTitle: "Zum \xC4ndern scrollen",
     toggleTitle: "Zum Umschalten klicken",
+    timeLabel: "Zeit",
+    timePickerAriaLabel: "Zeitauswahl",
+    doneButtonLabel: "Fertig",
+    closeTimePickerAriaLabel: "Zeitauswahl schlie\xDFen",
+    selectedTimeAriaLabel: "Ausgew\xE4hlte Zeit",
     time_24hr: true
   };
   fp13.l10ns.de = German;
@@ -861,6 +866,11 @@ var l10n_index = (() => {
     monthAriaLabel: "Month",
     hourAriaLabel: "Hour",
     minuteAriaLabel: "Minute",
+    timeLabel: "Time",
+    timePickerAriaLabel: "Time picker popover",
+    doneButtonLabel: "Done",
+    closeTimePickerAriaLabel: "Close time picker",
+    selectedTimeAriaLabel: "Selected time",
     time_24hr: false
   };
 

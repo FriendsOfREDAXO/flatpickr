@@ -6,6 +6,15 @@ export type DateRangeLimit<D = DateOption> = {
     to: D;
 };
 export type DateLimit<D = DateOption> = D | DateRangeLimit<D> | ((date: Date) => boolean);
+export type TimeRule = {
+    days: number[];
+    from: DateOption;
+    to: DateOption;
+};
+export type YearRange = {
+    past: number;
+    future: number;
+};
 export type Hook = (dates: Date[], currentDateString: string, self: Instance, data?: any) => void;
 export type HookKey = "onChange" | "onClose" | "onDayCreate" | "onDestroy" | "onKeyDown" | "onMonthChange" | "onOpen" | "onParseConfig" | "onReady" | "onValueUpdate" | "onYearChange" | "onPreCalendarPosition";
 export declare const HOOKS: HookKey[];
@@ -49,6 +58,11 @@ export interface BaseOptions {
     maxTime: DateOption;
     minDate: DateOption;
     minTime: DateOption;
+    timeRules: TimeRule[];
+    monthYearWheel: boolean;
+    showMonthNavArrows: boolean;
+    yearRange: YearRange;
+    yearWheelManualInput: boolean;
     minuteIncrement: number;
     mode: "single" | "multiple" | "range" | "time";
     monthSelectorType: "dropdown" | "static";
@@ -126,6 +140,11 @@ export interface ParsedOptions {
     maxTime?: Date;
     minDate?: Date;
     minTime?: Date;
+    timeRules: TimeRule[];
+    monthYearWheel: boolean;
+    showMonthNavArrows: boolean;
+    yearRange: YearRange;
+    yearWheelManualInput: boolean;
     minuteIncrement: number;
     mode: BaseOptions["mode"];
     monthSelectorType: string;

@@ -18,7 +18,7 @@
       --text: #1d2f49;
       --muted: #4d617e;
       --border: #ced9e8;
-      --ring: #2f78c4;
+      --ring: #0b4f97;
       --control-bg: #ffffff;
       --summary-fg: #30415f;
       --code-bg: #0f1624;
@@ -73,7 +73,7 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 1.25rem 1.25rem 1rem;
-      background: linear-gradient(135deg, #2a69ad 0%, #2f78c4 55%, #3ea0db 100%);
+      background: linear-gradient(135deg, #184f8f 0%, #1f5fa9 55%, #2474b8 100%);
       color: #eef4ff;
       box-shadow: 0 18px 42px rgba(16, 30, 58, 0.2);
       margin-bottom: var(--section-gap);
@@ -149,6 +149,19 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1rem;
+    }
+
+    .group-title {
+      margin: 1rem 0 0.45rem;
+      font-size: 0.98rem;
+      letter-spacing: 0.02em;
+      color: var(--summary-fg);
+    }
+
+    .group-note {
+      margin: 0 0 0.8rem;
+      color: var(--muted);
+      font-size: 0.86rem;
     }
 
     .card {
@@ -269,6 +282,69 @@
       font-size: 0.88rem;
     }
 
+    .a11y-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.6rem;
+    }
+
+    .a11y-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--card-soft);
+      padding: 0.75rem;
+    }
+
+    .a11y-item h3 {
+      margin: 0 0 0.35rem;
+      font-size: 0.98rem;
+    }
+
+    .a11y-item p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .shortcut-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.55rem;
+      margin-top: 0.7rem;
+    }
+
+    .shortcut-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.58rem 0.65rem;
+      background: var(--card-soft);
+      font-size: 0.87rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .shortcut-item kbd {
+      font-family: "IBM Plex Mono", "Cascadia Code", monospace;
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: var(--control-bg);
+      color: var(--text);
+      font-size: 0.78rem;
+      padding: 2px 6px;
+      white-space: nowrap;
+    }
+
+    .demo-shortcuts-help {
+      margin-top: 0.75rem;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
     @media (max-width: 700px) {
       .wrap {
         margin: 1rem auto;
@@ -331,7 +407,7 @@
           <select id="design" aria-label="Calendar design preset">
             <option value="balanced">Balanced</option>
             <option value="soft">Soft Editorial</option>
-            <option value="contrast">High Contrast</option>
+            <option value="contrast" selected>High Contrast</option>
           </select>
         </div>
       </div>
@@ -340,6 +416,8 @@
 
     <section class="panel" aria-labelledby="examples-heading">
       <h2 id="examples-heading">Interactive Examples + Code</h2>
+      <h3 class="group-title">Type A: Core Selection</h3>
+      <p class="group-note">Single, range, multiple, and locale basics for general date/time usage.</p>
       <div class="demo-grid">
         <article class="card">
           <h3>Single Date + Time</h3>
@@ -358,14 +436,69 @@
         </article>
 
         <article class="card">
+          <h3>Multilanguage: Deutsch</h3>
+          <p class="desc">German locale with day-month-year formatting and 24h time.</p>
+          <label for="demo-locale-de">Termin (DE)</label>
+          <input id="demo-locale-de" placeholder="TT.MM.JJJJ HH:mm" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="locale de code"><code>pick("#demo-locale-de", {
+  locale: "de",
+  enableTime: true,
+  time_24hr: true,
+  dateFormat: "d.m.Y H:i",
+  calendarTitle: "Termin wählen",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Multilanguage: Français</h3>
+          <p class="desc">French locale with localized month/day names and compact datetime format.</p>
+          <label for="demo-locale-fr">Rendez-vous (FR)</label>
+          <input id="demo-locale-fr" placeholder="JJ/MM/AAAA HH:mm" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="locale fr code"><code>pick("#demo-locale-fr", {
+  locale: "fr",
+  enableTime: true,
+  time_24hr: true,
+  dateFormat: "d/m/Y H:i",
+  calendarTitle: "Choisir une date",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Multilanguage: 日本語</h3>
+          <p class="desc">Japanese locale example for date/time input with locale-aware labels.</p>
+          <label for="demo-locale-ja">日時 (JA)</label>
+          <input id="demo-locale-ja" placeholder="YYYY/MM/DD HH:mm" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="locale ja code"><code>pick("#demo-locale-ja", {
+  locale: "ja",
+  enableTime: true,
+  time_24hr: true,
+  dateFormat: "Y/m/d H:i",
+  calendarTitle: "日付を選択",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
           <h3>Date Range</h3>
-          <p class="desc">Check-in / check-out flow with keyboard-friendly month and day traversal.</p>
+          <p class="desc">Check-in / check-out flow with three visible months for faster range selection.</p>
           <label for="demo-range">Start and end date</label>
           <input id="demo-range" placeholder="Select date range" />
           <details>
             <summary>Show setup code</summary>
             <pre aria-label="range picker code"><code>pick("#demo-range", {
   mode: "range",
+  showMonths: 3,
   dateFormat: "Y-m-d",
   calendarTitle: "Select a date range",
   announceChanges: true
@@ -389,6 +522,11 @@
 });</code></pre>
           </details>
         </article>
+  </div>
+
+  <h3 class="group-title">Type B: Time and Scheduling Rules</h3>
+  <p class="group-note">Time-only flows, stepped wheels, weekday business windows, and precise timestamps.</p>
+  <div class="demo-grid">
 
         <article class="card">
           <h3>Time Only</h3>
@@ -437,6 +575,133 @@
   minuteIncrement: 15,
   dateFormat: "Y-m-d H:i",
   calendarTitle: "Select date and stepped time (24h)",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Weekday Time Windows</h3>
+          <p class="desc">Define time limits by weekday, for example Monday to Friday 08:00-17:00 and Saturday 10:00-14:00.</p>
+          <label for="demo-business-hours">Date and business hours</label>
+          <input id="demo-business-hours" placeholder="Select date and allowed time" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="weekday time windows code"><code>pick("#demo-business-hours", {
+  enableTime: true,
+  dateFormat: "Y-m-d H:i",
+  defaultDate: "2026-07-06 09:00",
+  timeRules: [
+    { days: [1, 2, 3, 4, 5], from: "08:00", to: "17:00" },
+    { days: [6], from: "10:00", to: "14:00" }
+  ],
+  calendarTitle: "Business hours schedule",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Wochentag-Zeitfenster (DE)</h3>
+          <p class="desc">Montag-Freitag 08:00-17:00, Samstag 10:00-14:00. Sonntag ist in diesem Beispiel deaktiviert.</p>
+          <label for="demo-business-hours-de">Termin (Deutsch)</label>
+          <input id="demo-business-hours-de" placeholder="TT.MM.JJJJ HH:mm" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="weekday time windows de code"><code>pick("#demo-business-hours-de", {
+  locale: "de",
+  enableTime: true,
+  time_24hr: true,
+  dateFormat: "d.m.Y H:i",
+  timeRules: [
+    { days: [1, 2, 3, 4, 5], from: "08:00", to: "17:00" },
+    { days: [6], from: "10:00", to: "14:00" }
+  ],
+  calendarTitle: "Termine innerhalb der Oeffnungszeiten",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Appointment Preset</h3>
+          <p class="desc">Scheduler preset: month/year wheel, small future window, and weekday office hours.</p>
+          <label for="demo-appointment">Appointment date and time</label>
+          <input id="demo-appointment" placeholder="Select appointment" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="appointment preset code"><code>pick("#demo-appointment", {
+  enableTime: true,
+  dateFormat: "Y-m-d H:i",
+  monthYearWheel: true,
+  yearRange: { past: 1, future: 2 },
+  yearWheelManualInput: true,
+  minuteIncrement: 15,
+  timeRules: [
+    { days: [1, 2, 3, 4, 5], from: "08:00", to: "17:00" }
+  ],
+  minDate: "today",
+  calendarTitle: "Appointment booking",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Week Numbers + Precision Time</h3>
+          <p class="desc">Advanced picker with week numbers, 24h clock, and second-level precision.</p>
+          <label for="demo-precision">Precise timestamp</label>
+          <input id="demo-precision" placeholder="Select date and exact time" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="precision code"><code>pick("#demo-precision", {
+  enableTime: true,
+  enableSeconds: true,
+  time_24hr: true,
+  weekNumbers: true,
+  dateFormat: "Y-m-d H:i:S",
+  calendarTitle: "Precise date and time"
+});</code></pre>
+          </details>
+        </article>
+      </div>
+
+      <h3 class="group-title">Type C: Header, Presets, and Plugins</h3>
+      <p class="group-note">Month/year wheel, preset ranges, and plugin-driven confirmation and week selection.</p>
+      <div class="demo-grid">
+
+        <article class="card">
+          <h3>Month + Year Wheel</h3>
+          <p class="desc">Wheel-style month/year chooser with configurable year range and optional manual year input.</p>
+          <label for="demo-month-year-wheel">Date with month/year wheel</label>
+          <input id="demo-month-year-wheel" placeholder="Select date with wheel" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="month year wheel code"><code>pick("#demo-month-year-wheel", {
+  dateFormat: "Y-m-d",
+  monthYearWheel: true,
+  yearRange: { past: 10, future: 10 },
+  yearWheelManualInput: true,
+  calendarTitle: "Month and year wheel",
+  announceChanges: true
+});</code></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h3>Birthday Picker Preset</h3>
+          <p class="desc">Month/year wheel with a birthdate range: current year back to 100 years, no future dates.</p>
+          <label for="demo-birthday">Birth date</label>
+          <input id="demo-birthday" placeholder="Select birth date" />
+          <details>
+            <summary>Show setup code</summary>
+            <pre aria-label="birthday preset code"><code>pick("#demo-birthday", {
+  dateFormat: "Y-m-d",
+  monthYearWheel: true,
+  yearRange: { past: 100, future: 0 },
+  yearWheelManualInput: true,
+  maxDate: "today",
+  calendarTitle: "Birth date",
   announceChanges: true
 });</code></pre>
           </details>
@@ -541,24 +806,6 @@
         </article>
 
         <article class="card">
-          <h3>Week Numbers + Precision Time</h3>
-          <p class="desc">Advanced picker with week numbers, 24h clock, and second-level precision.</p>
-          <label for="demo-precision">Precise timestamp</label>
-          <input id="demo-precision" placeholder="Select date and exact time" />
-          <details>
-            <summary>Show setup code</summary>
-            <pre aria-label="precision code"><code>pick("#demo-precision", {
-  enableTime: true,
-  enableSeconds: true,
-  time_24hr: true,
-  weekNumbers: true,
-  dateFormat: "Y-m-d H:i:S",
-  calendarTitle: "Precise date and time"
-});</code></pre>
-          </details>
-        </article>
-
-        <article class="card">
           <h3>Week Select</h3>
           <p class="desc">Pick an entire calendar week with hover preview and week number output.</p>
           <label for="demo-weekselect">Week picker</label>
@@ -573,6 +820,11 @@
 });</code></pre>
           </details>
         </article>
+      </div>
+
+      <h3 class="group-title">Type D: Validation and Display Variants</h3>
+      <p class="group-note">Input constraints, disabled dates, and display-focused alternatives.</p>
+      <div class="demo-grid">
 
         <article class="card">
           <h3>Inline Calendar</h3>
@@ -614,11 +866,51 @@
       </div>
       <p class="foot">All variations are done without changing picker internals, only through configuration and CSS variables.</p>
     </section>
+
+    <section class="panel" aria-labelledby="a11y-shortcuts-heading" id="demo-a11y-shortcuts">
+      <h2 id="a11y-shortcuts-heading">A11y Solutions and Shortcuts</h2>
+      <p class="hint">This demo highlights core accessibility behavior and provides direct shortcuts for quick keyboard testing.</p>
+
+      <div class="a11y-grid" aria-label="Accessibility solutions overview">
+        <article class="a11y-item">
+          <h3>Screen Reader Announcements</h3>
+          <p>Month/date updates are announced through aria-live when announceChanges is active.</p>
+        </article>
+        <article class="a11y-item">
+          <h3>Popover Focus Traps</h3>
+          <p>Time and month/year popovers keep Tab focus inside until Done, Enter, or Escape.</p>
+        </article>
+        <article class="a11y-item">
+          <h3>Weekday Rule Constraints</h3>
+          <p>timeRules can restrict time windows and disable weekdays without a matching rule.</p>
+        </article>
+        <article class="a11y-item">
+          <h3>Reduced Motion and Contrast</h3>
+          <p>Motion and contrast can be adapted without code changes using variables and presets.</p>
+        </article>
+      </div>
+
+      <div class="shortcut-grid" aria-label="Demo shortcuts list">
+        <div class="shortcut-item"><span>Focus Single Date + Time</span><kbd>Alt+1</kbd></div>
+        <div class="shortcut-item"><span>Focus Time Wheel Demo</span><kbd>Alt+2</kbd></div>
+        <div class="shortcut-item"><span>Focus Month/Year Wheel Demo</span><kbd>Alt+3</kbd></div>
+        <div class="shortcut-item"><span>Focus DE Business Hours Demo</span><kbd>Alt+4</kbd></div>
+        <div class="shortcut-item"><span>Focus Optional Playground</span><kbd>Alt+0</kbd></div>
+        <div class="shortcut-item"><span>Jump to this section</span><kbd>Alt+K</kbd></div>
+      </div>
+
+      <p class="demo-shortcuts-help">Shortcuts are active outside text inputs. Each action is also announced in a hidden live region.</p>
+      <div id="demo-shortcuts-live" class="flatpickr-visually-hidden" aria-live="polite" aria-atomic="true"></div>
+    </section>
   </main>
 
   <!-- classList polyfill for IE9 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.2.20171210/classList.min.js"></script>
   <script src="../a11y_datetime.js"></script>
+  <script src="../l10n/de.js"></script>
+  <script src="../l10n/fr.js"></script>
+  <script src="../l10n/ja.js"></script>
+  <script src="../plugins/rangePlugin.js"></script>
   <script src="../plugins/confirmDate/confirmDate.js"></script>
   <script src="../plugins/weekSelect/weekSelect.js"></script>
 
@@ -632,12 +924,86 @@
       announceChanges: true
     });
 
-    pick("#demo-range", {
-      mode: "range",
-      dateFormat: "Y-m-d",
-      calendarTitle: "Select a date range",
+    pick("#demo-locale-de", {
+      locale: "de",
+      enableTime: true,
+      time_24hr: true,
+      dateFormat: "d.m.Y H:i",
+      calendarTitle: "Termin wählen",
       announceChanges: true
     });
+
+    pick("#demo-locale-fr", {
+      locale: "fr",
+      enableTime: true,
+      time_24hr: true,
+      dateFormat: "d/m/Y H:i",
+      calendarTitle: "Choisir une date",
+      announceChanges: true
+    });
+
+    pick("#demo-locale-ja", {
+      locale: "ja",
+      enableTime: true,
+      time_24hr: true,
+      dateFormat: "Y/m/d H:i",
+      calendarTitle: "日付を選択",
+      announceChanges: true
+    });
+
+    var rangePluginFactory =
+      typeof window.rangePlugin === "function"
+        ? window.rangePlugin
+        : typeof window.plugins_rangePlugin !== "undefined" &&
+          window.plugins_rangePlugin &&
+          typeof window.plugins_rangePlugin.default === "function"
+        ? window.plugins_rangePlugin.default
+        : undefined;
+
+    function destroyPickerIfExists(selector) {
+      var el = document.querySelector(selector);
+      if (!el || !el._flatpickr) return;
+      el._flatpickr.destroy();
+    }
+
+    function initResponsiveRangeDemo() {
+      var isMobileRange = window.matchMedia("(max-width: 700px)").matches;
+
+      destroyPickerIfExists("#demo-range");
+      destroyPickerIfExists("#demo-range-from");
+
+      if (isMobileRange && rangePluginFactory) {
+        pick("#demo-range-from", {
+          mode: "range",
+          plugins: [new rangePluginFactory({ input: "#demo-range-to" })],
+          showMonths: 1,
+          dateFormat: "Y-m-d",
+          disableMobile: true,
+          calendarTitle: "Select start and end date",
+          announceChanges: true
+        });
+        return;
+      }
+
+      pick("#demo-range", {
+        mode: "range",
+        showMonths: 3,
+        dateFormat: "Y-m-d",
+        disableMobile: true,
+        calendarTitle: "Select a date range",
+        announceChanges: true
+      });
+    }
+
+    var mobileRangeState = window.matchMedia("(max-width: 700px)").matches;
+    window.addEventListener("resize", function () {
+      var next = window.matchMedia("(max-width: 700px)").matches;
+      if (next === mobileRangeState) return;
+      mobileRangeState = next;
+      initResponsiveRangeDemo();
+    });
+
+    initResponsiveRangeDemo();
 
     pick("#demo-multiple", {
       mode: "multiple",
@@ -669,6 +1035,65 @@
       minuteIncrement: 15,
       dateFormat: "Y-m-d H:i",
       calendarTitle: "Select date and stepped time (24h)",
+      announceChanges: true
+    });
+
+    pick("#demo-business-hours", {
+      enableTime: true,
+      dateFormat: "Y-m-d H:i",
+      defaultDate: "2026-07-06 09:00",
+      timeRules: [
+        { days: [1, 2, 3, 4, 5], from: "08:00", to: "17:00" },
+        { days: [6], from: "10:00", to: "14:00" }
+      ],
+      calendarTitle: "Business hours schedule",
+      announceChanges: true
+    });
+
+    pick("#demo-business-hours-de", {
+      locale: "de",
+      enableTime: true,
+      time_24hr: true,
+      dateFormat: "d.m.Y H:i",
+      timeRules: [
+        { days: [1, 2, 3, 4, 5], from: "08:00", to: "17:00" },
+        { days: [6], from: "10:00", to: "14:00" }
+      ],
+      calendarTitle: "Termine innerhalb der Oeffnungszeiten",
+      announceChanges: true
+    });
+
+    pick("#demo-month-year-wheel", {
+      dateFormat: "Y-m-d",
+      monthYearWheel: true,
+      yearRange: { past: 10, future: 10 },
+      yearWheelManualInput: true,
+      calendarTitle: "Month and year wheel",
+      announceChanges: true
+    });
+
+    pick("#demo-birthday", {
+      dateFormat: "Y-m-d",
+      monthYearWheel: true,
+      yearRange: { past: 100, future: 0 },
+      yearWheelManualInput: true,
+      maxDate: "today",
+      calendarTitle: "Birth date",
+      announceChanges: true
+    });
+
+    pick("#demo-appointment", {
+      enableTime: true,
+      dateFormat: "Y-m-d H:i",
+      monthYearWheel: true,
+      yearRange: { past: 1, future: 2 },
+      yearWheelManualInput: true,
+      minuteIncrement: 15,
+      timeRules: [
+        { days: [1, 2, 3, 4, 5], from: "08:00", to: "17:00" }
+      ],
+      minDate: "today",
+      calendarTitle: "Appointment booking",
       announceChanges: true
     });
 
@@ -763,6 +1188,58 @@
     optFocus.addEventListener("change", initOptionalPicker);
     initOptionalPicker();
 
+    function announceDemoShortcut(message) {
+      var live = document.getElementById("demo-shortcuts-live");
+      if (!live) return;
+      live.textContent = "";
+      window.setTimeout(function () {
+        live.textContent = message;
+      }, 10);
+    }
+
+    function focusDemoField(selector, label) {
+      var el = document.querySelector(selector);
+      if (!el) return;
+      if (typeof el.scrollIntoView === "function") {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      if (typeof el.focus === "function") {
+        el.focus();
+      }
+      announceDemoShortcut("Shortcut: " + label);
+    }
+
+    document.addEventListener("keydown", function (event) {
+      if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+        return;
+      }
+
+      var key = (event.key || "").toLowerCase();
+      if (key === "1") {
+        event.preventDefault();
+        focusDemoField("#demo-single", "Single Date + Time");
+      } else if (key === "2") {
+        event.preventDefault();
+        focusDemoField("#demo-time-wheel", "Time Wheel");
+      } else if (key === "3") {
+        event.preventDefault();
+        focusDemoField("#demo-month-year-wheel", "Month and Year Wheel");
+      } else if (key === "4") {
+        event.preventDefault();
+        focusDemoField("#demo-business-hours-de", "DE Business Hours");
+      } else if (key === "0") {
+        event.preventDefault();
+        focusDemoField("#demo-optional", "Optional Playground");
+      } else if (key === "k") {
+        event.preventDefault();
+        var section = document.getElementById("demo-a11y-shortcuts");
+        if (section && typeof section.scrollIntoView === "function") {
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        announceDemoShortcut("Shortcut: Accessibility section");
+      }
+    });
+
     var themeSelect = document.getElementById("theme");
     var accentSelect = document.getElementById("accent");
     var motionSelect = document.getElementById("motion");
@@ -794,7 +1271,7 @@
             monthBg: "#1a2433",
             dayFg: "#e4ecfa",
             border: "#3f4e67",
-            monthFg: "#e7eeff",
+            monthFg: "#f1f6ff",
             weekdaysFg: "#b4c2dd",
             calendarBg: "#141b27"
           }
@@ -806,7 +1283,7 @@
             monthBg: "#f9f3e8",
             dayFg: "#2b2f3a",
             border: "#d9d0be",
-            monthFg: "#3f3228",
+            monthFg: "#2c2118",
             weekdaysFg: "#715d4f",
             calendarBg: "#fffefb"
           },
@@ -816,7 +1293,7 @@
             monthBg: "#312b25",
             dayFg: "#f3eadf",
             border: "#5f5448",
-            monthFg: "#f4e8da",
+            monthFg: "#fff4e9",
             weekdaysFg: "#d2beaa",
             calendarBg: "#201c18"
           }
@@ -828,8 +1305,8 @@
             monthBg: "#e9eef7",
             dayFg: "#111827",
             border: "#7d8ca7",
-            monthFg: "#0f172a",
-            weekdaysFg: "#22314c",
+            monthFg: "#0a1428",
+            weekdaysFg: "#14233e",
             calendarBg: "#ffffff"
           },
           dark: {
@@ -911,7 +1388,7 @@
       applyDesignPreset(designSelect.value);
     });
 
-    applyDesignPreset("balanced");
+    applyDesignPreset("contrast");
   </script>
 </body>
 </html>

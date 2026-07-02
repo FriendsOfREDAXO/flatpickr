@@ -93,6 +93,11 @@ var l10n_default = (() => {
     monthAriaLabel: "Month",
     hourAriaLabel: "Hour",
     minuteAriaLabel: "Minute",
+    timeLabel: "Time",
+    timePickerAriaLabel: "Time picker popover",
+    doneButtonLabel: "Done",
+    closeTimePickerAriaLabel: "Close time picker",
+    selectedTimeAriaLabel: "Selected time",
     time_24hr: false
   };
   var default_default = english;

@@ -7,6 +7,23 @@ a11y_datetime is an accessibility-focused fork of flatpickr.
 The addon package name stays `flatpickr` on purpose to keep existing REDAXO installations, installer updates, and project references fully compatible.
 Internally, the frontend assets have been migrated to `a11y_datetime`.
 
+## Differences from original flatpickr
+
+This addon uses the `a11y_datetime` fork and is no longer a strict visual/behavioral 1:1 clone of original flatpickr in every detail.
+
+Key differences:
+
+- Accessibility-first behavior (ARIA, keyboard flow, live announcements).
+- Additional fork options are passed through via `data-*` attributes.
+- Some defaults intentionally differ from original flatpickr.
+
+Examples of changed/new defaults:
+
+- `focusOpens`: default `false`
+- `announceChanges`: default `true`
+- `monthYearWheel`: default `true`
+- `showMonthNavArrows`: default `false` (arrows are optional)
+
 ## a11y_datetime Links
 
 Website: https://friendsofredaxo.github.io/a11y_datetime/
@@ -71,6 +88,61 @@ If you want the legacy behavior for a specific field, enable it explicitly:
 ```json
 {"class":"flatpickr","data-focusOpens":"true"}
 ```
+
+## Weekday time windows (data-timeRules)
+
+You can pass the new `timeRules` option as JSON via `data-timeRules`.
+
+Example: Monday-Friday 08:00-17:00, Saturday 10:00-14:00.
+
+```json
+{"class":"flatpickr","data-enableTime":"true","data-timeRules":"[{\"days\":[1,2,3,4,5],\"from\":\"08:00\",\"to\":\"17:00\"},{\"days\":[6],\"from\":\"10:00\",\"to\":\"14:00\"}]"}
+```
+
+Note: weekday indices follow JavaScript (`0`=Sunday, `1`=Monday, ..., `6`=Saturday).
+
+Important: If `data-timeRules` is set and a weekday has no matching rule, that weekday becomes not selectable.
+In the example above, Sunday (`0`) is disabled.
+
+## Month/year wheel (data-monthYearWheel)
+
+You can enable the header month/year wheel per field.
+
+```json
+{"class":"flatpickr","data-monthYearWheel":"true","data-yearRange":"{\"past\":10,\"future\":10}","data-yearWheelManualInput":"true"}
+```
+
+`data-yearRange` expects a JSON object with `past` and `future`.
+
+You can re-enable header arrows explicitly:
+
+```json
+{"class":"flatpickr","data-monthYearWheel":"true","data-showMonthNavArrows":"true"}
+```
+
+Show multiple calendar pages side-by-side (useful for ranges):
+
+```json
+{"class":"flatpickr_range","data-showMonths":"3","data-rangefield":"#id"}
+```
+
+## New/extended addon parameters (data-*)
+
+These `data-*` attributes are supported in addition to classic flatpickr usage:
+
+| Attribute | Option | Type |
+|---|---|---|
+| `data-announceChanges` | `announceChanges` | `true`/`false` |
+| `data-focusOpens` | `focusOpens` | `true`/`false` |
+| `data-showTitleBar` | `showTitleBar` | `true`/`false` |
+| `data-showCloseButton` | `showCloseButton` | `true`/`false` |
+| `data-initialDayFocus` | `initialDayFocus` | `today`/`selected`/`firstAvailable` |
+| `data-timeRules` | `timeRules` | JSON array |
+| `data-monthYearWheel` | `monthYearWheel` | `true`/`false` |
+| `data-showMonthNavArrows` | `showMonthNavArrows` | `true`/`false` |
+| `data-showMonths` | `showMonths` | Integer (`1`, `2`, `3`, ...) |
+| `data-yearRange` | `yearRange` | JSON object `{past,future}` |
+| `data-yearWheelManualInput` | `yearWheelManualInput` | `true`/`false` |
 
 ## Disable dates
 
