@@ -56,6 +56,14 @@ export var German = {
     doneButtonLabel: "Fertig",
     closeTimePickerAriaLabel: "Zeitauswahl schließen",
     selectedTimeAriaLabel: "Ausgewählte Zeit",
+    keyboardHelpAriaLabel: "Tastaturhilfe",
+    keyboardShortcutsTitle: "Tastaturkürzel",
+    keyboardShortcutFocus: "Tab / Umschalt+Tab: Fokus bewegen",
+    keyboardShortcutArrows: "Pfeiltasten: Tage oder Wheel-Werte navigieren",
+    keyboardShortcutPage: "Bild auf / Bild ab: Monat/Jahr im Wheel wechseln",
+    keyboardShortcutHomeEnd: "Pos1 / Ende: Erstes/letztes Monat oder Jahr",
+    keyboardShortcutSelect: "Enter / Leertaste: Auswählen oder bestätigen",
+    keyboardShortcutEscape: "Esc: Popover/Kalender schließen",
     time_24hr: true,
 };
 fp.l10ns.de = German;

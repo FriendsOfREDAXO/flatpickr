@@ -191,6 +191,14 @@ var __a11y_datetime_bundle = (() => {
     doneButtonLabel: "Done",
     closeTimePickerAriaLabel: "Close time picker",
     selectedTimeAriaLabel: "Selected time",
+    keyboardHelpAriaLabel: "Keyboard help",
+    keyboardShortcutsTitle: "Keyboard shortcuts",
+    keyboardShortcutFocus: "Tab / Shift+Tab: Move focus",
+    keyboardShortcutArrows: "Arrow keys: Navigate days or wheel values",
+    keyboardShortcutPage: "PageUp / PageDown: Month/Year step in wheel",
+    keyboardShortcutHomeEnd: "Home / End: Jump to first/last month or year",
+    keyboardShortcutSelect: "Enter / Space: Select or confirm",
+    keyboardShortcutEscape: "Esc: Close popover/calendar",
     time_24hr: false
   };
   var default_default = english;
@@ -1359,6 +1367,14 @@ var __a11y_datetime_bundle = (() => {
       self._input.setAttribute("aria-controls", self.calendarContainer.id);
       self._input.setAttribute("aria-expanded", "false");
       if (!self.config.noCalendar) {
+        const keyboardHelpAriaLabel = self.l10n.keyboardHelpAriaLabel || "Keyboard help";
+        const keyboardShortcutsTitle = self.l10n.keyboardShortcutsTitle || "Keyboard shortcuts";
+        const keyboardShortcutFocus = self.l10n.keyboardShortcutFocus || "Tab / Shift+Tab: Move focus";
+        const keyboardShortcutArrows = self.l10n.keyboardShortcutArrows || "Arrow keys: Navigate days or wheel values";
+        const keyboardShortcutPage = self.l10n.keyboardShortcutPage || "PageUp / PageDown: Month/Year step in wheel";
+        const keyboardShortcutHomeEnd = self.l10n.keyboardShortcutHomeEnd || "Home / End: Jump to first/last month or year";
+        const keyboardShortcutSelect = self.l10n.keyboardShortcutSelect || "Enter / Space: Select or confirm";
+        const keyboardShortcutEscape = self.l10n.keyboardShortcutEscape || "Esc: Close popover/calendar";
         keyboardHelpButton = createElement(
           "button",
           "flatpickr-keyboard-help-button",
@@ -1367,7 +1383,7 @@ var __a11y_datetime_bundle = (() => {
         keyboardHelpButton.type = "button";
         keyboardHelpButton.setAttribute("aria-haspopup", "dialog");
         keyboardHelpButton.setAttribute("aria-expanded", "false");
-        keyboardHelpButton.setAttribute("aria-label", "Keyboard help");
+        keyboardHelpButton.setAttribute("aria-label", keyboardHelpAriaLabel);
         keyboardHelpButton.tabIndex = 0;
         keyboardHelpPanel = createElement(
           "div",
@@ -1376,7 +1392,7 @@ var __a11y_datetime_bundle = (() => {
         keyboardHelpPanel.id = `${calendarInstanceId}-keyboard-help`;
         keyboardHelpPanel.setAttribute("role", "note");
         keyboardHelpPanel.setAttribute("hidden", "hidden");
-        keyboardHelpPanel.innerHTML = "<strong>Keyboard shortcuts</strong><ul><li>Tab / Shift+Tab: Move focus</li><li>Arrow keys: Navigate days or wheel values</li><li>PageUp / PageDown: Month/Year step in wheel</li><li>Home / End: Jump to first/last month or year</li><li>Enter / Space: Select or confirm</li><li>Esc: Close popover/calendar</li></ul>";
+        keyboardHelpPanel.innerHTML = `<strong>${keyboardShortcutsTitle}</strong><ul><li>${keyboardShortcutFocus}</li><li>${keyboardShortcutArrows}</li><li>${keyboardShortcutPage}</li><li>${keyboardShortcutHomeEnd}</li><li>${keyboardShortcutSelect}</li><li>${keyboardShortcutEscape}</li></ul>`;
         keyboardHelpButton.setAttribute("aria-controls", keyboardHelpPanel.id);
         bind(keyboardHelpButton, "click", () => {
           const isOpen = (keyboardHelpButton == null ? void 0 : keyboardHelpButton.getAttribute("aria-expanded")) === "true";

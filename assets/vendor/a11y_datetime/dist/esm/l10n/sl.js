@@ -48,6 +48,14 @@ export var Slovenian = {
     },
     firstDayOfWeek: 1,
     rangeSeparator: " do ",
+    keyboardHelpAriaLabel: "Pomoč za tipkovnico",
+    keyboardShortcutsTitle: "Bližnjice na tipkovnici",
+    keyboardShortcutFocus: "Tab / Shift+Tab: premik fokusa",
+    keyboardShortcutArrows: "Puščice: krmarjenje po dnevih ali vrednostih kolesca",
+    keyboardShortcutPage: "Page Up / Page Down: menjava meseca/leta v kolescu",
+    keyboardShortcutHomeEnd: "Home / End: prvi/zadnji mesec ali leto",
+    keyboardShortcutSelect: "Enter / Preslednica: izberi ali potrdi",
+    keyboardShortcutEscape: "Esc: zapri pojavno okno/koledar",
     time_24hr: true,
     ordinal: function () {
         return ".";

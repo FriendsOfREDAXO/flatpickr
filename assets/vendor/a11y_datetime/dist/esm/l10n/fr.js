@@ -56,6 +56,14 @@ export var French = {
     weekAbbreviation: "Sem",
     scrollTitle: "Défiler pour augmenter la valeur",
     toggleTitle: "Cliquer pour basculer",
+    keyboardHelpAriaLabel: "Aide clavier",
+    keyboardShortcutsTitle: "Raccourcis clavier",
+    keyboardShortcutFocus: "Tab / Maj+Tab : déplacer le focus",
+    keyboardShortcutArrows: "Flèches : naviguer entre jours ou valeurs du sélecteur",
+    keyboardShortcutPage: "Page préc./Page suiv. : changer mois/année dans le sélecteur",
+    keyboardShortcutHomeEnd: "Début / Fin : premier/dernier mois ou année",
+    keyboardShortcutSelect: "Entrée / Espace : sélectionner ou confirmer",
+    keyboardShortcutEscape: "Échap : fermer la fenêtre/calendrier",
     time_24hr: true,
 };
 fp.l10ns.fr = French;

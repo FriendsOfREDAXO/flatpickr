@@ -76,7 +76,15 @@ var l10n_ja = (() => {
     amPM: ["\u5348\u524D", "\u5348\u5F8C"],
     yearAriaLabel: "\u5E74",
     hourAriaLabel: "\u6642\u9593",
-    minuteAriaLabel: "\u5206"
+    minuteAriaLabel: "\u5206",
+    keyboardHelpAriaLabel: "\u30AD\u30FC\u30DC\u30FC\u30C9\u30D8\u30EB\u30D7",
+    keyboardShortcutsTitle: "\u30AD\u30FC\u30DC\u30FC\u30C9\u30B7\u30E7\u30FC\u30C8\u30AB\u30C3\u30C8",
+    keyboardShortcutFocus: "Tab / Shift+Tab: \u30D5\u30A9\u30FC\u30AB\u30B9\u3092\u79FB\u52D5",
+    keyboardShortcutArrows: "\u77E2\u5370\u30AD\u30FC: \u65E5\u4ED8\u307E\u305F\u306F\u30DB\u30A4\u30FC\u30EB\u306E\u5024\u3092\u79FB\u52D5",
+    keyboardShortcutPage: "Page Up / Page Down: \u30DB\u30A4\u30FC\u30EB\u3067\u6708/\u5E74\u3092\u5909\u66F4",
+    keyboardShortcutHomeEnd: "Home / End: \u6700\u521D/\u6700\u5F8C\u306E\u6708\u307E\u305F\u306F\u5E74\u3078",
+    keyboardShortcutSelect: "Enter / Space: \u9078\u629E\u307E\u305F\u306F\u78BA\u5B9A",
+    keyboardShortcutEscape: "Esc: \u30DD\u30C3\u30D7\u30AA\u30FC\u30D0\u30FC/\u30AB\u30EC\u30F3\u30C0\u30FC\u3092\u9589\u3058\u308B"
   };
   fp.l10ns.ja = Japanese;
   var ja_default = fp.l10ns;

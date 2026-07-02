@@ -80,6 +80,14 @@ var l10n_fr = (() => {
     weekAbbreviation: "Sem",
     scrollTitle: "D\xE9filer pour augmenter la valeur",
     toggleTitle: "Cliquer pour basculer",
+    keyboardHelpAriaLabel: "Aide clavier",
+    keyboardShortcutsTitle: "Raccourcis clavier",
+    keyboardShortcutFocus: "Tab / Maj+Tab : d\xE9placer le focus",
+    keyboardShortcutArrows: "Fl\xE8ches : naviguer entre jours ou valeurs du s\xE9lecteur",
+    keyboardShortcutPage: "Page pr\xE9c./Page suiv. : changer mois/ann\xE9e dans le s\xE9lecteur",
+    keyboardShortcutHomeEnd: "D\xE9but / Fin : premier/dernier mois ou ann\xE9e",
+    keyboardShortcutSelect: "Entr\xE9e / Espace : s\xE9lectionner ou confirmer",
+    keyboardShortcutEscape: "\xC9chap : fermer la fen\xEAtre/calendrier",
     time_24hr: true
   };
   fp.l10ns.fr = French;

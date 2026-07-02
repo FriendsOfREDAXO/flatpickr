@@ -72,6 +72,14 @@ var l10n_sl = (() => {
     },
     firstDayOfWeek: 1,
     rangeSeparator: " do ",
+    keyboardHelpAriaLabel: "Pomo\u010D za tipkovnico",
+    keyboardShortcutsTitle: "Bli\u017Enjice na tipkovnici",
+    keyboardShortcutFocus: "Tab / Shift+Tab: premik fokusa",
+    keyboardShortcutArrows: "Pu\u0161\u010Dice: krmarjenje po dnevih ali vrednostih kolesca",
+    keyboardShortcutPage: "Page Up / Page Down: menjava meseca/leta v kolescu",
+    keyboardShortcutHomeEnd: "Home / End: prvi/zadnji mesec ali leto",
+    keyboardShortcutSelect: "Enter / Preslednica: izberi ali potrdi",
+    keyboardShortcutEscape: "Esc: zapri pojavno okno/koledar",
     time_24hr: true,
     ordinal: function() {
       return ".";

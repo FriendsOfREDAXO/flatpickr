@@ -75,6 +75,14 @@ var l10n_es = (() => {
     },
     firstDayOfWeek: 1,
     rangeSeparator: " a ",
+    keyboardHelpAriaLabel: "Ayuda de teclado",
+    keyboardShortcutsTitle: "Atajos de teclado",
+    keyboardShortcutFocus: "Tab / May\xFAs+Tab: mover el foco",
+    keyboardShortcutArrows: "Flechas: navegar d\xEDas o valores de rueda",
+    keyboardShortcutPage: "ReP\xE1g / AvP\xE1g: cambiar mes/a\xF1o en la rueda",
+    keyboardShortcutHomeEnd: "Inicio / Fin: primer/\xFAltimo mes o a\xF1o",
+    keyboardShortcutSelect: "Enter / Espacio: seleccionar o confirmar",
+    keyboardShortcutEscape: "Esc: cerrar ventana emergente/calendario",
     time_24hr: true
   };
   fp.l10ns.es = Spanish;

@@ -53,6 +53,14 @@ export var Japanese = {
     yearAriaLabel: "年",
     hourAriaLabel: "時間",
     minuteAriaLabel: "分",
+    keyboardHelpAriaLabel: "キーボードヘルプ",
+    keyboardShortcutsTitle: "キーボードショートカット",
+    keyboardShortcutFocus: "Tab / Shift+Tab: フォーカスを移動",
+    keyboardShortcutArrows: "矢印キー: 日付またはホイールの値を移動",
+    keyboardShortcutPage: "Page Up / Page Down: ホイールで月/年を変更",
+    keyboardShortcutHomeEnd: "Home / End: 最初/最後の月または年へ",
+    keyboardShortcutSelect: "Enter / Space: 選択または確定",
+    keyboardShortcutEscape: "Esc: ポップオーバー/カレンダーを閉じる",
 };
 fp.l10ns.ja = Japanese;
 export default fp.l10ns;

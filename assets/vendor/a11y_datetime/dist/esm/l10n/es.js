@@ -51,6 +51,14 @@ export var Spanish = {
     },
     firstDayOfWeek: 1,
     rangeSeparator: " a ",
+    keyboardHelpAriaLabel: "Ayuda de teclado",
+    keyboardShortcutsTitle: "Atajos de teclado",
+    keyboardShortcutFocus: "Tab / Mayús+Tab: mover el foco",
+    keyboardShortcutArrows: "Flechas: navegar días o valores de rueda",
+    keyboardShortcutPage: "RePág / AvPág: cambiar mes/año en la rueda",
+    keyboardShortcutHomeEnd: "Inicio / Fin: primer/último mes o año",
+    keyboardShortcutSelect: "Enter / Espacio: seleccionar o confirmar",
+    keyboardShortcutEscape: "Esc: cerrar ventana emergente/calendario",
     time_24hr: true,
 };
 fp.l10ns.es = Spanish;

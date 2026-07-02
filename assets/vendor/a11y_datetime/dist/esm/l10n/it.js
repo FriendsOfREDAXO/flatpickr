@@ -52,6 +52,14 @@ export var Italian = {
     weekAbbreviation: "Se",
     scrollTitle: "Scrolla per aumentare",
     toggleTitle: "Clicca per cambiare",
+    keyboardHelpAriaLabel: "Aiuto tastiera",
+    keyboardShortcutsTitle: "Scorciatoie da tastiera",
+    keyboardShortcutFocus: "Tab / Maiusc+Tab: sposta il focus",
+    keyboardShortcutArrows: "Frecce: naviga giorni o valori della ruota",
+    keyboardShortcutPage: "PagSu / PagGiù: cambia mese/anno nella ruota",
+    keyboardShortcutHomeEnd: "Home / Fine: primo/ultimo mese o anno",
+    keyboardShortcutSelect: "Invio / Spazio: seleziona o conferma",
+    keyboardShortcutEscape: "Esc: chiudi popover/calendario",
     time_24hr: true,
 };
 fp.l10ns.it = Italian;

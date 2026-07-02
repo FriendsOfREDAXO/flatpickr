@@ -50,6 +50,14 @@ export var MandarinTraditional = {
     weekAbbreviation: "週",
     scrollTitle: "滾動切換",
     toggleTitle: "點擊切換 12/24 小時時制",
+    keyboardHelpAriaLabel: "鍵盤說明",
+    keyboardShortcutsTitle: "鍵盤快速鍵",
+    keyboardShortcutFocus: "Tab / Shift+Tab：移動焦點",
+    keyboardShortcutArrows: "方向鍵：導覽日期或滾輪數值",
+    keyboardShortcutPage: "Page Up / Page Down：在滾輪中切換月份/年份",
+    keyboardShortcutHomeEnd: "Home / End：跳到第一個/最後一個月份或年份",
+    keyboardShortcutSelect: "Enter / 空白鍵：選取或確認",
+    keyboardShortcutEscape: "Esc：關閉彈出層/日曆",
 };
 fp.l10ns.zh_tw = MandarinTraditional;
 export default fp.l10ns;

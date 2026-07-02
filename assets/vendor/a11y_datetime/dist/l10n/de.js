@@ -80,6 +80,14 @@ var l10n_de = (() => {
     doneButtonLabel: "Fertig",
     closeTimePickerAriaLabel: "Zeitauswahl schlie\xDFen",
     selectedTimeAriaLabel: "Ausgew\xE4hlte Zeit",
+    keyboardHelpAriaLabel: "Tastaturhilfe",
+    keyboardShortcutsTitle: "Tastaturk\xFCrzel",
+    keyboardShortcutFocus: "Tab / Umschalt+Tab: Fokus bewegen",
+    keyboardShortcutArrows: "Pfeiltasten: Tage oder Wheel-Werte navigieren",
+    keyboardShortcutPage: "Bild auf / Bild ab: Monat/Jahr im Wheel wechseln",
+    keyboardShortcutHomeEnd: "Pos1 / Ende: Erstes/letztes Monat oder Jahr",
+    keyboardShortcutSelect: "Enter / Leertaste: Ausw\xE4hlen oder best\xE4tigen",
+    keyboardShortcutEscape: "Esc: Popover/Kalender schlie\xDFen",
     time_24hr: true
   };
   fp.l10ns.de = German;

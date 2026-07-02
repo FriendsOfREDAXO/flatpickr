@@ -98,6 +98,14 @@ var l10n_default = (() => {
     doneButtonLabel: "Done",
     closeTimePickerAriaLabel: "Close time picker",
     selectedTimeAriaLabel: "Selected time",
+    keyboardHelpAriaLabel: "Keyboard help",
+    keyboardShortcutsTitle: "Keyboard shortcuts",
+    keyboardShortcutFocus: "Tab / Shift+Tab: Move focus",
+    keyboardShortcutArrows: "Arrow keys: Navigate days or wheel values",
+    keyboardShortcutPage: "PageUp / PageDown: Month/Year step in wheel",
+    keyboardShortcutHomeEnd: "Home / End: Jump to first/last month or year",
+    keyboardShortcutSelect: "Enter / Space: Select or confirm",
+    keyboardShortcutEscape: "Esc: Close popover/calendar",
     time_24hr: false
   };
   var default_default = english;

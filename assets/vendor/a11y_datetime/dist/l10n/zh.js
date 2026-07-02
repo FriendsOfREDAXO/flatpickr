@@ -73,7 +73,15 @@ var l10n_zh = (() => {
     rangeSeparator: " \u81F3 ",
     weekAbbreviation: "\u5468",
     scrollTitle: "\u6EDA\u52A8\u5207\u6362",
-    toggleTitle: "\u70B9\u51FB\u5207\u6362 12/24 \u5C0F\u65F6\u65F6\u5236"
+    toggleTitle: "\u70B9\u51FB\u5207\u6362 12/24 \u5C0F\u65F6\u65F6\u5236",
+    keyboardHelpAriaLabel: "\u952E\u76D8\u5E2E\u52A9",
+    keyboardShortcutsTitle: "\u952E\u76D8\u5FEB\u6377\u952E",
+    keyboardShortcutFocus: "Tab / Shift+Tab\uFF1A\u79FB\u52A8\u7126\u70B9",
+    keyboardShortcutArrows: "\u65B9\u5411\u952E\uFF1A\u5BFC\u822A\u65E5\u671F\u6216\u6EDA\u8F6E\u6570\u503C",
+    keyboardShortcutPage: "Page Up / Page Down\uFF1A\u5728\u6EDA\u8F6E\u4E2D\u5207\u6362\u6708\u4EFD/\u5E74\u4EFD",
+    keyboardShortcutHomeEnd: "Home / End\uFF1A\u8DF3\u5230\u9996\u4E2A/\u6700\u540E\u4E00\u4E2A\u6708\u4EFD\u6216\u5E74\u4EFD",
+    keyboardShortcutSelect: "Enter / \u7A7A\u683C\uFF1A\u9009\u62E9\u6216\u786E\u8BA4",
+    keyboardShortcutEscape: "Esc\uFF1A\u5173\u95ED\u5F39\u51FA\u5C42/\u65E5\u5386"
   };
   fp.l10ns.zh = Mandarin;
   var zh_default = fp.l10ns;

@@ -20,6 +20,9 @@ Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 ### Documentation
 - README.de und README.md um `data-showMonthNavArrows` und `data-showMonths` inkl. Beispiel für 3-Monats-Range erweitert.
 
+### QA
+- Keyboard-Hilfe-Übersetzungen für EN/DE/FR/ES/IT/SL/JA/ZH synchronisiert und geprüft (Build erfolgreich; Dist-Locale-Dateien für ES/IT/SL/JA/ZH/ZH-TW vorhanden; Browser-Laufzeittest in den vorhandenen Demo-Locale-Beispielen für DE/FR/JA durchgeführt).
+
 ## [2.0.1] - 2026-07-01
 
 ### Changed

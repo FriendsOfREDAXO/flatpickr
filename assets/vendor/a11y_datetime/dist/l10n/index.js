@@ -791,6 +791,14 @@ var l10n_index = (() => {
     doneButtonLabel: "Fertig",
     closeTimePickerAriaLabel: "Zeitauswahl schlie\xDFen",
     selectedTimeAriaLabel: "Ausgew\xE4hlte Zeit",
+    keyboardHelpAriaLabel: "Tastaturhilfe",
+    keyboardShortcutsTitle: "Tastaturk\xFCrzel",
+    keyboardShortcutFocus: "Tab / Umschalt+Tab: Fokus bewegen",
+    keyboardShortcutArrows: "Pfeiltasten: Tage oder Wheel-Werte navigieren",
+    keyboardShortcutPage: "Bild auf / Bild ab: Monat/Jahr im Wheel wechseln",
+    keyboardShortcutHomeEnd: "Pos1 / Ende: Erstes/letztes Monat oder Jahr",
+    keyboardShortcutSelect: "Enter / Leertaste: Ausw\xE4hlen oder best\xE4tigen",
+    keyboardShortcutEscape: "Esc: Popover/Kalender schlie\xDFen",
     time_24hr: true
   };
   fp13.l10ns.de = German;
@@ -871,6 +879,14 @@ var l10n_index = (() => {
     doneButtonLabel: "Done",
     closeTimePickerAriaLabel: "Close time picker",
     selectedTimeAriaLabel: "Selected time",
+    keyboardHelpAriaLabel: "Keyboard help",
+    keyboardShortcutsTitle: "Keyboard shortcuts",
+    keyboardShortcutFocus: "Tab / Shift+Tab: Move focus",
+    keyboardShortcutArrows: "Arrow keys: Navigate days or wheel values",
+    keyboardShortcutPage: "PageUp / PageDown: Month/Year step in wheel",
+    keyboardShortcutHomeEnd: "Home / End: Jump to first/last month or year",
+    keyboardShortcutSelect: "Enter / Space: Select or confirm",
+    keyboardShortcutEscape: "Esc: Close popover/calendar",
     time_24hr: false
   };
 
@@ -986,6 +1002,14 @@ var l10n_index = (() => {
     },
     firstDayOfWeek: 1,
     rangeSeparator: " a ",
+    keyboardHelpAriaLabel: "Ayuda de teclado",
+    keyboardShortcutsTitle: "Atajos de teclado",
+    keyboardShortcutFocus: "Tab / May\xFAs+Tab: mover el foco",
+    keyboardShortcutArrows: "Flechas: navegar d\xEDas o valores de rueda",
+    keyboardShortcutPage: "ReP\xE1g / AvP\xE1g: cambiar mes/a\xF1o en la rueda",
+    keyboardShortcutHomeEnd: "Inicio / Fin: primer/\xFAltimo mes o a\xF1o",
+    keyboardShortcutSelect: "Enter / Espacio: seleccionar o confirmar",
+    keyboardShortcutEscape: "Esc: cerrar ventana emergente/calendario",
     time_24hr: true
   };
   fp15.l10ns.es = Spanish;
@@ -1280,6 +1304,14 @@ var l10n_index = (() => {
     weekAbbreviation: "Sem",
     scrollTitle: "D\xE9filer pour augmenter la valeur",
     toggleTitle: "Cliquer pour basculer",
+    keyboardHelpAriaLabel: "Aide clavier",
+    keyboardShortcutsTitle: "Raccourcis clavier",
+    keyboardShortcutFocus: "Tab / Maj+Tab : d\xE9placer le focus",
+    keyboardShortcutArrows: "Fl\xE8ches : naviguer entre jours ou valeurs du s\xE9lecteur",
+    keyboardShortcutPage: "Page pr\xE9c./Page suiv. : changer mois/ann\xE9e dans le s\xE9lecteur",
+    keyboardShortcutHomeEnd: "D\xE9but / Fin : premier/dernier mois ou ann\xE9e",
+    keyboardShortcutSelect: "Entr\xE9e / Espace : s\xE9lectionner ou confirmer",
+    keyboardShortcutEscape: "\xC9chap : fermer la fen\xEAtre/calendrier",
     time_24hr: true
   };
   fp20.l10ns.fr = French;
@@ -1784,6 +1816,14 @@ var l10n_index = (() => {
     weekAbbreviation: "Se",
     scrollTitle: "Scrolla per aumentare",
     toggleTitle: "Clicca per cambiare",
+    keyboardHelpAriaLabel: "Aiuto tastiera",
+    keyboardShortcutsTitle: "Scorciatoie da tastiera",
+    keyboardShortcutFocus: "Tab / Maiusc+Tab: sposta il focus",
+    keyboardShortcutArrows: "Frecce: naviga giorni o valori della ruota",
+    keyboardShortcutPage: "PagSu / PagGi\xF9: cambia mese/anno nella ruota",
+    keyboardShortcutHomeEnd: "Home / Fine: primo/ultimo mese o anno",
+    keyboardShortcutSelect: "Invio / Spazio: seleziona o conferma",
+    keyboardShortcutEscape: "Esc: chiudi popover/calendario",
     time_24hr: true
   };
   fp29.l10ns.it = Italian;
@@ -1842,7 +1882,15 @@ var l10n_index = (() => {
     amPM: ["\u5348\u524D", "\u5348\u5F8C"],
     yearAriaLabel: "\u5E74",
     hourAriaLabel: "\u6642\u9593",
-    minuteAriaLabel: "\u5206"
+    minuteAriaLabel: "\u5206",
+    keyboardHelpAriaLabel: "\u30AD\u30FC\u30DC\u30FC\u30C9\u30D8\u30EB\u30D7",
+    keyboardShortcutsTitle: "\u30AD\u30FC\u30DC\u30FC\u30C9\u30B7\u30E7\u30FC\u30C8\u30AB\u30C3\u30C8",
+    keyboardShortcutFocus: "Tab / Shift+Tab: \u30D5\u30A9\u30FC\u30AB\u30B9\u3092\u79FB\u52D5",
+    keyboardShortcutArrows: "\u77E2\u5370\u30AD\u30FC: \u65E5\u4ED8\u307E\u305F\u306F\u30DB\u30A4\u30FC\u30EB\u306E\u5024\u3092\u79FB\u52D5",
+    keyboardShortcutPage: "Page Up / Page Down: \u30DB\u30A4\u30FC\u30EB\u3067\u6708/\u5E74\u3092\u5909\u66F4",
+    keyboardShortcutHomeEnd: "Home / End: \u6700\u521D/\u6700\u5F8C\u306E\u6708\u307E\u305F\u306F\u5E74\u3078",
+    keyboardShortcutSelect: "Enter / Space: \u9078\u629E\u307E\u305F\u306F\u78BA\u5B9A",
+    keyboardShortcutEscape: "Esc: \u30DD\u30C3\u30D7\u30AA\u30FC\u30D0\u30FC/\u30AB\u30EC\u30F3\u30C0\u30FC\u3092\u9589\u3058\u308B"
   };
   fp30.l10ns.ja = Japanese;
   var ja_default = fp30.l10ns;
@@ -3028,6 +3076,14 @@ var l10n_index = (() => {
     },
     firstDayOfWeek: 1,
     rangeSeparator: " do ",
+    keyboardHelpAriaLabel: "Pomo\u010D za tipkovnico",
+    keyboardShortcutsTitle: "Bli\u017Enjice na tipkovnici",
+    keyboardShortcutFocus: "Tab / Shift+Tab: premik fokusa",
+    keyboardShortcutArrows: "Pu\u0161\u010Dice: krmarjenje po dnevih ali vrednostih kolesca",
+    keyboardShortcutPage: "Page Up / Page Down: menjava meseca/leta v kolescu",
+    keyboardShortcutHomeEnd: "Home / End: prvi/zadnji mesec ali leto",
+    keyboardShortcutSelect: "Enter / Preslednica: izberi ali potrdi",
+    keyboardShortcutEscape: "Esc: zapri pojavno okno/koledar",
     time_24hr: true,
     ordinal: function() {
       return ".";
@@ -3608,7 +3664,15 @@ var l10n_index = (() => {
     rangeSeparator: " \u81F3 ",
     weekAbbreviation: "\u5468",
     scrollTitle: "\u6EDA\u52A8\u5207\u6362",
-    toggleTitle: "\u70B9\u51FB\u5207\u6362 12/24 \u5C0F\u65F6\u65F6\u5236"
+    toggleTitle: "\u70B9\u51FB\u5207\u6362 12/24 \u5C0F\u65F6\u65F6\u5236",
+    keyboardHelpAriaLabel: "\u952E\u76D8\u5E2E\u52A9",
+    keyboardShortcutsTitle: "\u952E\u76D8\u5FEB\u6377\u952E",
+    keyboardShortcutFocus: "Tab / Shift+Tab\uFF1A\u79FB\u52A8\u7126\u70B9",
+    keyboardShortcutArrows: "\u65B9\u5411\u952E\uFF1A\u5BFC\u822A\u65E5\u671F\u6216\u6EDA\u8F6E\u6570\u503C",
+    keyboardShortcutPage: "Page Up / Page Down\uFF1A\u5728\u6EDA\u8F6E\u4E2D\u5207\u6362\u6708\u4EFD/\u5E74\u4EFD",
+    keyboardShortcutHomeEnd: "Home / End\uFF1A\u8DF3\u5230\u9996\u4E2A/\u6700\u540E\u4E00\u4E2A\u6708\u4EFD\u6216\u5E74\u4EFD",
+    keyboardShortcutSelect: "Enter / \u7A7A\u683C\uFF1A\u9009\u62E9\u6216\u786E\u8BA4",
+    keyboardShortcutEscape: "Esc\uFF1A\u5173\u95ED\u5F39\u51FA\u5C42/\u65E5\u5386"
   };
   fp61.l10ns.zh = Mandarin;
   var zh_default = fp61.l10ns;
@@ -3663,7 +3727,15 @@ var l10n_index = (() => {
     rangeSeparator: " \u81F3 ",
     weekAbbreviation: "\u9031",
     scrollTitle: "\u6EFE\u52D5\u5207\u63DB",
-    toggleTitle: "\u9EDE\u64CA\u5207\u63DB 12/24 \u5C0F\u6642\u6642\u5236"
+    toggleTitle: "\u9EDE\u64CA\u5207\u63DB 12/24 \u5C0F\u6642\u6642\u5236",
+    keyboardHelpAriaLabel: "\u9375\u76E4\u8AAA\u660E",
+    keyboardShortcutsTitle: "\u9375\u76E4\u5FEB\u901F\u9375",
+    keyboardShortcutFocus: "Tab / Shift+Tab\uFF1A\u79FB\u52D5\u7126\u9EDE",
+    keyboardShortcutArrows: "\u65B9\u5411\u9375\uFF1A\u5C0E\u89BD\u65E5\u671F\u6216\u6EFE\u8F2A\u6578\u503C",
+    keyboardShortcutPage: "Page Up / Page Down\uFF1A\u5728\u6EFE\u8F2A\u4E2D\u5207\u63DB\u6708\u4EFD/\u5E74\u4EFD",
+    keyboardShortcutHomeEnd: "Home / End\uFF1A\u8DF3\u5230\u7B2C\u4E00\u500B/\u6700\u5F8C\u4E00\u500B\u6708\u4EFD\u6216\u5E74\u4EFD",
+    keyboardShortcutSelect: "Enter / \u7A7A\u767D\u9375\uFF1A\u9078\u53D6\u6216\u78BA\u8A8D",
+    keyboardShortcutEscape: "Esc\uFF1A\u95DC\u9589\u5F48\u51FA\u5C64/\u65E5\u66C6"
   };
   fp62.l10ns.zh_tw = MandarinTraditional;
   var zh_tw_default = fp62.l10ns;
