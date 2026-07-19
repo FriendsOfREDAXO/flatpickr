@@ -2,6 +2,19 @@
 
 Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 
+## [Unreleased]
+
+### Added
+- Flatpickr-Initializer reicht jetzt sämtliche relevanten Vendor-Optionen (a11y_datetime / flatpickr) als `data-*` Attribute an den Picker weiter. Neben den bisher gepflegten Optionen sind das u. a. `data-allowInput`, `data-allowInvalidPreload`, `data-animate`, `data-announceChanges`, `data-autoFillDefaultTime`, `data-clickOpens`, `data-closeOnSelect`, `data-disableMobile`, `data-enableSeconds`, `data-inline`, `data-shorthandCurrentMonth`, `data-showCloseButton`, `data-showTitleBar`, `data-static`, `data-weekNumbers`, `data-wrap`, `data-altInput`, `data-time_24hr`, `data-altInputClass`, `data-ariaDateFormat`, `data-calendarTitle`, `data-conjunction`, `data-dateFormat`, `data-defaultDate`, `data-initialDayFocus`, `data-maxDate`, `data-maxTime`, `data-minDate`, `data-minTime`, `data-mode`, `data-monthSelectorType`, `data-nextArrow`, `data-now`, `data-position`, `data-prevArrow`, `data-defaultHour`, `data-defaultMinute`, `data-defaultSeconds`, `data-hourIncrement`, `data-minuteIncrement` sowie `data-enable` (kommaseparierte Liste erlaubter Datumsangaben).
+- Neue Doku-Sektion in `README.md` und `README.de.md`, die Addon-Defaults und alle durchgereichten Optionen dokumentiert.
+
+### Fixed
+- Flatpickr-Initializer unterstützt jetzt `data-noCalendar`, sodass bei aktivierter Uhrzeit (`data-enableTime="true"`) ein reines Time-Picker-Feld ohne Kalender möglich ist. Bei Kombination beider Optionen wird der Default für `dateFormat`/`altFormat` auf `H:i` gesetzt.
+- Range-Picker verwenden jetzt denselben Options-Builder wie Einzelfelder und unterstützen damit alle Vendor-Optionen konsistent.
+
+### Changed
+- Interne Refaktorisierung: gemeinsame Options-Zusammenstellung für Einzel- und Range-Picker.
+
 ## [2.1.0]
 
 ### Changed

@@ -119,6 +119,15 @@ Einfach das data-altFormat setzen 😀.
 {"class": "flatpickr", "data-altFormat": "j. F, Y"}
 ```
 
+## Nur Uhrzeit (ohne Kalender)
+
+Wenn man nur einen Time-Picker ohne Kalender möchte, kombiniert man `data-enableTime="true"` mit `data-noCalendar="true"`.
+Sind beide Optionen gesetzt, werden `dateFormat` und `altFormat` per Default auf `H:i` gesetzt.
+
+```json
+{"class": "flatpickr", "data-locale": "de", "data-enableTime": "true", "data-noCalendar": "true"}
+```
+
 ## Öffnen bei Fokus (optional)
 
 Standardmäßig öffnet der Picker beim Tab-Fokus nicht automatisch.
@@ -165,23 +174,76 @@ Mehrere Kalenderblaetter nebeneinander anzeigen (praktisch fuer Range):
 {"class":"flatpickr_range","data-showMonths":"3","data-rangefield":"#id"}
 ```
 
-## Neue/erweiterte Parameter im Addon (data-*)
+## Unterstützte `data-*` Attribute
 
-Diese `data-*` Attribute werden zusaetzlich zum klassischen flatpickr-Umfang unterstuetzt:
+Alle relevanten Optionen des Vendors (a11y_datetime / flatpickr) können pro Feld über `data-*` Attribute gesetzt werden.
+Der Attributname entspricht dem Optionsnamen (z. B. `data-enableTime`, `data-time_24hr`).
 
-| Attribut | Entspricht Option | Typ |
+### Addon-Defaults (weichen von den Vendor-Defaults ab)
+
+Diese Optionen werden vom Addon immer gesetzt und können über das entsprechende `data-*` Attribut überschrieben werden:
+
+| Attribut | Option | Typ | Default |
+|---|---|---|---|
+| `data-locale` | `locale` | Locale-Key (z. B. `de`, `en`) | `de` |
+| `data-altInput` | `altInput` | `true`/`false` | `true` |
+| `data-altFormat` | `altFormat` | Format-String | `j. F, Y H:i` (bzw. `H:i` bei Time-only) |
+| `data-time_24hr` | `time_24hr` | `true`/`false` | `true` |
+| `data-focusOpens` | `focusOpens` | `true`/`false` | `false` |
+| `data-monthYearWheel` | `monthYearWheel` | `true`/`false` | `true` |
+| `data-showMonthNavArrows` | `showMonthNavArrows` | `true`/`false` | `false` |
+| `data-showMonths` | `showMonths` | Integer (`1`, `2`, `3`, ...) | `1` |
+| `data-yearWheelManualInput` | `yearWheelManualInput` | `true`/`false` | `true` |
+| `data-yearRange` | `yearRange` | JSON-Objekt `{"past":N,"future":N}` | `{"past":10,"future":10}` |
+| `data-enableTime` | `enableTime` | `true`/`false` | `false` |
+| `data-noCalendar` | `noCalendar` | `true`/`false` | `false` |
+| `data-timeRules` | `timeRules` | JSON-Array | `[]` |
+| `data-disabled` | `disable` | Kommaseparierte Datumsliste | `[]` |
+
+### Durchgereichte Optionen (nur aktiv, wenn Attribut gesetzt)
+
+Für alle weiteren unterstützten Vendor-Optionen kann ein `data-<option>` Attribut gesetzt werden – der Wert wird an den Picker weitergereicht. Fehlt das Attribut, gilt der Vendor-Default.
+
+**Boolean-Optionen** (`true`/`false`):
+
+`data-allowInput`, `data-allowInvalidPreload`, `data-animate`, `data-announceChanges`, `data-autoFillDefaultTime`, `data-clickOpens`, `data-closeOnSelect`, `data-disableMobile`, `data-enableSeconds`, `data-inline`, `data-shorthandCurrentMonth`, `data-showCloseButton`, `data-showTitleBar`, `data-static`, `data-weekNumbers`, `data-wrap`
+
+**String-Optionen**:
+
+| Attribut | Option | Erlaubte Werte / Format |
 |---|---|---|
-| `data-announceChanges` | `announceChanges` | `true`/`false` |
-| `data-focusOpens` | `focusOpens` | `true`/`false` |
-| `data-showTitleBar` | `showTitleBar` | `true`/`false` |
-| `data-showCloseButton` | `showCloseButton` | `true`/`false` |
-| `data-initialDayFocus` | `initialDayFocus` | `today`/`selected`/`firstAvailable` |
-| `data-timeRules` | `timeRules` | JSON-Array |
-| `data-monthYearWheel` | `monthYearWheel` | `true`/`false` |
-| `data-showMonthNavArrows` | `showMonthNavArrows` | `true`/`false` |
-| `data-showMonths` | `showMonths` | Integer (`1`, `2`, `3`, ...) |
-| `data-yearRange` | `yearRange` | JSON-Objekt `{past,future}` |
-| `data-yearWheelManualInput` | `yearWheelManualInput` | `true`/`false` |
+| `data-altInputClass` | `altInputClass` | CSS-Klasse |
+| `data-ariaDateFormat` | `ariaDateFormat` | Format-String |
+| `data-calendarTitle` | `calendarTitle` | Text |
+| `data-conjunction` | `conjunction` | Trenner zwischen mehreren Daten |
+| `data-dateFormat` | `dateFormat` | Format-String |
+| `data-defaultDate` | `defaultDate` | Datums-String |
+| `data-initialDayFocus` | `initialDayFocus` | `today` / `selected` / `firstAvailable` |
+| `data-maxDate` | `maxDate` | Datums-String |
+| `data-maxTime` | `maxTime` | Zeit-String (`HH:MM`) |
+| `data-minDate` | `minDate` | Datums-String |
+| `data-minTime` | `minTime` | Zeit-String (`HH:MM`) |
+| `data-mode` | `mode` | `single` / `multiple` / `range` / `time` |
+| `data-monthSelectorType` | `monthSelectorType` | `dropdown` / `static` |
+| `data-nextArrow` | `nextArrow` | HTML/Text für den Vor-Pfeil |
+| `data-now` | `now` | Datums-String |
+| `data-position` | `position` | `auto`, `above`, `below`, `auto left`, ..., `below right` |
+| `data-prevArrow` | `prevArrow` | HTML/Text für den Zurück-Pfeil |
+
+**Integer-/Zahl-Optionen**:
+
+`data-defaultHour`, `data-defaultMinute`, `data-defaultSeconds`, `data-hourIncrement`, `data-minuteIncrement`
+
+**Listen-Optionen** (kommasepariert):
+
+| Attribut | Option |
+|---|---|
+| `data-disabled` | `disable` |
+| `data-enable` | `enable` |
+
+Range-Picker (`.flatpickr_range` / `.a11y_datetime_range`) unterstützen dieselben Attribute plus `data-rangefield` (CSS-Selektor des zweiten Inputs).
+
+Hooks (`onChange`, `onOpen`, ...) können nicht über `data-*` Attribute konfiguriert werden.
 
 ## Tage deaktivieren
 
