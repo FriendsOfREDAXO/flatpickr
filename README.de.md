@@ -174,14 +174,14 @@ Mehrere Kalenderblaetter nebeneinander anzeigen (praktisch fuer Range):
 {"class":"flatpickr_range","data-showMonths":"3","data-rangefield":"#id"}
 ```
 
-## Unterstuetzte `data-*` Attribute
+## Unterstützte `data-*` Attribute
 
-Alle relevanten Optionen des Vendors (a11y_datetime / flatpickr) koennen pro Feld ueber `data-*` Attribute gesetzt werden.
-Der Attributname entspricht dem Optionsnamen (Gross-/Kleinschreibung beachten, z. B. `data-enableTime`, `data-time_24hr`).
+Alle relevanten Optionen des Vendors (a11y_datetime / flatpickr) können pro Feld über `data-*` Attribute gesetzt werden.
+Der Attributname entspricht dem Optionsnamen (Groß-/Kleinschreibung beachten, z. B. `data-enableTime`, `data-time_24hr`).
 
 ### Addon-Defaults (weichen von den Vendor-Defaults ab)
 
-Diese Optionen werden vom Addon immer gesetzt und koennen ueber das entsprechende `data-*` Attribut ueberschrieben werden:
+Diese Optionen werden vom Addon immer gesetzt und können über das entsprechende `data-*` Attribut überschrieben werden:
 
 | Attribut | Option | Typ | Default |
 |---|---|---|---|
@@ -202,7 +202,7 @@ Diese Optionen werden vom Addon immer gesetzt und koennen ueber das entsprechend
 
 ### Durchgereichte Optionen (nur aktiv, wenn Attribut gesetzt)
 
-Fuer alle weiteren unterstuetzten Vendor-Optionen kann ein `data-<option>` Attribut gesetzt werden – der Wert wird an den Picker weitergereicht. Fehlt das Attribut, gilt der Vendor-Default.
+Für alle weiteren unterstützten Vendor-Optionen kann ein `data-<option>` Attribut gesetzt werden – der Wert wird an den Picker weitergereicht. Fehlt das Attribut, gilt der Vendor-Default.
 
 **Boolean-Optionen** (`true`/`false`):
 
@@ -225,10 +225,10 @@ Fuer alle weiteren unterstuetzten Vendor-Optionen kann ein `data-<option>` Attri
 | `data-minTime` | `minTime` | Zeit-String (`HH:MM`) |
 | `data-mode` | `mode` | `single` / `multiple` / `range` / `time` |
 | `data-monthSelectorType` | `monthSelectorType` | `dropdown` / `static` |
-| `data-nextArrow` | `nextArrow` | HTML/Text fuer den Vor-Pfeil |
+| `data-nextArrow` | `nextArrow` | HTML/Text für den Vor-Pfeil |
 | `data-now` | `now` | Datums-String |
 | `data-position` | `position` | `auto`, `above`, `below`, `auto left`, ..., `below right` |
-| `data-prevArrow` | `prevArrow` | HTML/Text fuer den Zurueck-Pfeil |
+| `data-prevArrow` | `prevArrow` | HTML/Text für den Zurück-Pfeil |
 
 **Integer-/Zahl-Optionen**:
 
@@ -241,9 +241,9 @@ Fuer alle weiteren unterstuetzten Vendor-Optionen kann ein `data-<option>` Attri
 | `data-disabled` | `disable` |
 | `data-enable` | `enable` |
 
-Range-Picker (`.flatpickr_range` / `.a11y_datetime_range`) unterstuetzen dieselben Attribute plus `data-rangefield` (CSS-Selektor des zweiten Inputs).
+Range-Picker (`.flatpickr_range` / `.a11y_datetime_range`) unterstützen dieselben Attribute plus `data-rangefield` (CSS-Selektor des zweiten Inputs).
 
-Hooks (`onChange`, `onOpen`, ...) koennen nicht ueber `data-*` Attribute konfiguriert werden.
+Hooks (`onChange`, `onOpen`, ...) können nicht über `data-*` Attribute konfiguriert werden.
 
 ## Tage deaktivieren
 

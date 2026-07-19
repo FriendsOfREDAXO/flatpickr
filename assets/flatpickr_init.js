@@ -175,15 +175,6 @@ $(document).on('rex:ready', function () {
         ensureTimeOnlyTabCycle(instance);
     };
 
-    var parseNumber = function (value, fallbackValue) {
-        if (value === null || value === undefined || value === '') {
-            return fallbackValue;
-        }
-
-        var parsed = parseFloat(value);
-        return isNaN(parsed) ? fallbackValue : parsed;
-    };
-
     var parseInteger = function (value, fallbackValue) {
         if (value === null || value === undefined || value === '') {
             return fallbackValue;
@@ -325,7 +316,7 @@ $(document).on('rex:ready', function () {
         passthroughIntegerOptions.forEach(function (name) {
             var raw = element.getAttribute('data-' + name);
             if (raw !== null && raw !== '') {
-                options[name] = parseNumber(raw, options[name]);
+                options[name] = parseInteger(raw, options[name]);
             }
         });
 
