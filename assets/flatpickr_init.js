@@ -180,6 +180,7 @@ $(document).on('rex:ready', function () {
     pickr_elements.forEach(function (element) {
         var clocale = element.getAttribute('data-locale') || 'de';
         var cenableTime = parseBool(element.getAttribute('data-enableTime'), false);
+        var cnoCalendar = parseBool(element.getAttribute('data-noCalendar'), false);
         var cfocusOpens = parseBool(element.getAttribute('data-focusOpens'), false);
         var cmonthYearWheel = parseBool(element.getAttribute('data-monthYearWheel'), true);
         var cshowMonthNavArrows = parseBool(element.getAttribute('data-showMonthNavArrows'), false);
@@ -192,7 +193,9 @@ $(document).on('rex:ready', function () {
         };
         cparsedYearRange.past = parseInt(cyearRange.past, 10) || 10;
         cparsedYearRange.future = parseInt(cyearRange.future, 10) || 10;
-        var caltFormat = element.getAttribute('data-altFormat') || "j. F, Y H:i";
+        var cdefaultAltFormat = (cnoCalendar && cenableTime) ? "H:i" : "j. F, Y H:i";
+        var caltFormat = element.getAttribute('data-altFormat') || cdefaultAltFormat;
+        var cdateFormat = element.getAttribute('data-dateFormat') || ((cnoCalendar && cenableTime) ? "H:i" : null);
         var ctimeRules = parseJsonArray(element.getAttribute('data-timeRules'), []);
         var disabled = element.getAttribute('data-disabled') || "";
 
@@ -200,9 +203,9 @@ $(document).on('rex:ready', function () {
             var disabled_list = disabled.split(',');
         }
         else { disabled_list = []; }
-        pickerFactory(element,
-            {
+        var pickerOptions = {
                 enableTime: cenableTime,
+                noCalendar: cnoCalendar,
                 focusOpens: cfocusOpens,
                 monthYearWheel: cmonthYearWheel,
                 showMonthNavArrows: cshowMonthNavArrows,
@@ -221,8 +224,11 @@ $(document).on('rex:ready', function () {
                 onOpen: function (_, __, instance) {
                     applyAccessibilityPatches(instance, clocale);
                 }
-            }
-        );
+            };
+        if (cdateFormat) {
+            pickerOptions.dateFormat = cdateFormat;
+        }
+        pickerFactory(element, pickerOptions);
     });
 
 
@@ -233,6 +239,7 @@ $(document).on('rex:ready', function () {
     pickr_elements2.forEach(function (element) {
         var clocale = element.getAttribute('data-locale') || 'de';
         var cenableTime = parseBool(element.getAttribute('data-enableTime'), false);
+        var cnoCalendar = parseBool(element.getAttribute('data-noCalendar'), false);
         var cfocusOpens = parseBool(element.getAttribute('data-focusOpens'), false);
         var cmonthYearWheel = parseBool(element.getAttribute('data-monthYearWheel'), true);
         var cshowMonthNavArrows = parseBool(element.getAttribute('data-showMonthNavArrows'), false);
@@ -245,7 +252,9 @@ $(document).on('rex:ready', function () {
         };
         cparsedYearRange.past = parseInt(cyearRange.past, 10) || 10;
         cparsedYearRange.future = parseInt(cyearRange.future, 10) || 10;
-        var caltFormat = element.getAttribute('data-altFormat') || "j. F, Y H:i";
+        var cdefaultAltFormat = (cnoCalendar && cenableTime) ? "H:i" : "j. F, Y H:i";
+        var caltFormat = element.getAttribute('data-altFormat') || cdefaultAltFormat;
+        var cdateFormat = element.getAttribute('data-dateFormat') || ((cnoCalendar && cenableTime) ? "H:i" : null);
         var ctimeRules = parseJsonArray(element.getAttribute('data-timeRules'), []);
         var rangeField = element.getAttribute('data-rangefield') || "";
         var disabled = element.getAttribute('data-disabled') || "";
@@ -255,9 +264,9 @@ $(document).on('rex:ready', function () {
         }
         else { disabled_list = []; }
         if (rangeField != "" && rangePluginFactory) {
-            pickerFactory(element,
-                {
+            var pickerOptions = {
                     enableTime: cenableTime,
+                    noCalendar: cnoCalendar,
                     focusOpens: cfocusOpens,
                     monthYearWheel: cmonthYearWheel,
                     showMonthNavArrows: cshowMonthNavArrows,
@@ -277,7 +286,11 @@ $(document).on('rex:ready', function () {
                     onOpen: function (_, __, instance) {
                         applyAccessibilityPatches(instance, clocale);
                     }
-                });
+                };
+            if (cdateFormat) {
+                pickerOptions.dateFormat = cdateFormat;
+            }
+            pickerFactory(element, pickerOptions);
         }
     });
 

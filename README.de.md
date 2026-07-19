@@ -119,6 +119,15 @@ Einfach das data-altFormat setzen 😀.
 {"class": "flatpickr", "data-altFormat": "j. F, Y"}
 ```
 
+## Nur Uhrzeit (ohne Kalender)
+
+Wenn man nur einen Time-Picker ohne Kalender möchte, kombiniert man `data-enableTime="true"` mit `data-noCalendar="true"`.
+Sind beide Optionen gesetzt, werden `dateFormat` und `altFormat` per Default auf `H:i` gesetzt.
+
+```json
+{"class": "flatpickr", "data-locale": "de", "data-enableTime": "true", "data-noCalendar": "true"}
+```
+
 ## Öffnen bei Fokus (optional)
 
 Standardmäßig öffnet der Picker beim Tab-Fokus nicht automatisch.
@@ -182,6 +191,7 @@ Diese `data-*` Attribute werden zusaetzlich zum klassischen flatpickr-Umfang unt
 | `data-showMonths` | `showMonths` | Integer (`1`, `2`, `3`, ...) |
 | `data-yearRange` | `yearRange` | JSON-Objekt `{past,future}` |
 | `data-yearWheelManualInput` | `yearWheelManualInput` | `true`/`false` |
+| `data-noCalendar` | `noCalendar` | `true`/`false` |
 
 ## Tage deaktivieren
 

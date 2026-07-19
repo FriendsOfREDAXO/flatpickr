@@ -2,6 +2,11 @@
 
 Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 
+## [Unreleased]
+
+### Fixed
+- Flatpickr-Initializer unterstützt jetzt `data-noCalendar`, sodass bei aktivierter Uhrzeit (`data-enableTime="true"`) ein reines Time-Picker-Feld ohne Kalender möglich ist. Bei Kombination beider Optionen wird der Default für `dateFormat`/`altFormat` auf `H:i` gesetzt.
+
 ## [2.1.0]
 
 ### Changed
