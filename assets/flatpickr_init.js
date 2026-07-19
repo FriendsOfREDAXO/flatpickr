@@ -175,123 +175,180 @@ $(document).on('rex:ready', function () {
         ensureTimeOnlyTabCycle(instance);
     };
 
+    var parseNumber = function (value, fallbackValue) {
+        if (value === null || value === undefined || value === '') {
+            return fallbackValue;
+        }
+
+        var parsed = parseFloat(value);
+        return isNaN(parsed) ? fallbackValue : parsed;
+    };
+
+    var parseInteger = function (value, fallbackValue) {
+        if (value === null || value === undefined || value === '') {
+            return fallbackValue;
+        }
+
+        var parsed = parseInt(value, 10);
+        return isNaN(parsed) ? fallbackValue : parsed;
+    };
+
+    var parseCommaList = function (value) {
+        if (value === null || value === undefined || value === '') {
+            return [];
+        }
+
+        return String(value).split(',').map(function (item) {
+            return item.trim();
+        }).filter(function (item) {
+            return item !== '';
+        });
+    };
+
+    // Pass-through options: only forwarded when the corresponding data-* attribute
+    // is present on the element. Vendor defaults apply otherwise.
+    var passthroughBooleanOptions = [
+        'allowInput',
+        'allowInvalidPreload',
+        'altInput',
+        'animate',
+        'announceChanges',
+        'autoFillDefaultTime',
+        'clickOpens',
+        'closeOnSelect',
+        'disableMobile',
+        'enableSeconds',
+        'inline',
+        'shorthandCurrentMonth',
+        'showCloseButton',
+        'showTitleBar',
+        'static',
+        'time_24hr',
+        'weekNumbers',
+        'wrap'
+    ];
+
+    var passthroughStringOptions = [
+        'altInputClass',
+        'ariaDateFormat',
+        'calendarTitle',
+        'conjunction',
+        'dateFormat',
+        'defaultDate',
+        'initialDayFocus',
+        'maxDate',
+        'maxTime',
+        'minDate',
+        'minTime',
+        'mode',
+        'monthSelectorType',
+        'nextArrow',
+        'now',
+        'position',
+        'prevArrow'
+    ];
+
+    var passthroughIntegerOptions = [
+        'defaultHour',
+        'defaultMinute',
+        'defaultSeconds',
+        'hourIncrement',
+        'minuteIncrement'
+    ];
+
+    var buildBaseOptions = function (element) {
+        var locale = element.getAttribute('data-locale') || 'de';
+        var enableTime = parseBool(element.getAttribute('data-enableTime'), false);
+        var noCalendar = parseBool(element.getAttribute('data-noCalendar'), false);
+        var focusOpens = parseBool(element.getAttribute('data-focusOpens'), false);
+        var monthYearWheel = parseBool(element.getAttribute('data-monthYearWheel'), true);
+        var showMonthNavArrows = parseBool(element.getAttribute('data-showMonthNavArrows'), false);
+        var showMonths = Math.max(1, parseInteger(element.getAttribute('data-showMonths'), 1));
+        var yearWheelManualInput = parseBool(element.getAttribute('data-yearWheelManualInput'), true);
+        var yearRangeRaw = parseJsonObject(element.getAttribute('data-yearRange'), {});
+        var yearRange = {
+            past: parseInteger(yearRangeRaw.past, 10),
+            future: parseInteger(yearRangeRaw.future, 10)
+        };
+        var defaultAltFormat = (noCalendar && enableTime) ? 'H:i' : 'j. F, Y H:i';
+        var altFormat = element.getAttribute('data-altFormat') || defaultAltFormat;
+        var timeRules = parseJsonArray(element.getAttribute('data-timeRules'), []);
+        var disableList = parseCommaList(element.getAttribute('data-disabled'));
+        var enableList = parseCommaList(element.getAttribute('data-enable'));
+
+        var options = {
+            enableTime: enableTime,
+            noCalendar: noCalendar,
+            focusOpens: focusOpens,
+            monthYearWheel: monthYearWheel,
+            showMonthNavArrows: showMonthNavArrows,
+            showMonths: showMonths,
+            yearWheelManualInput: yearWheelManualInput,
+            yearRange: yearRange,
+            altInput: true,
+            altFormat: altFormat,
+            time_24hr: true,
+            timeRules: timeRules,
+            disable: disableList,
+            locale: locale,
+            onReady: function (_, __, instance) {
+                applyAccessibilityPatches(instance, locale);
+            },
+            onOpen: function (_, __, instance) {
+                applyAccessibilityPatches(instance, locale);
+            }
+        };
+
+        // Time-only default for dateFormat, may be overridden by data-dateFormat below.
+        if (noCalendar && enableTime) {
+            options.dateFormat = 'H:i';
+        }
+
+        if (enableList.length > 0) {
+            options.enable = enableList;
+        }
+
+        passthroughBooleanOptions.forEach(function (name) {
+            var raw = element.getAttribute('data-' + name);
+            if (raw !== null && raw !== '') {
+                options[name] = parseBool(raw, options[name]);
+            }
+        });
+
+        passthroughStringOptions.forEach(function (name) {
+            var raw = element.getAttribute('data-' + name);
+            if (raw !== null && raw !== '') {
+                options[name] = raw;
+            }
+        });
+
+        passthroughIntegerOptions.forEach(function (name) {
+            var raw = element.getAttribute('data-' + name);
+            if (raw !== null && raw !== '') {
+                options[name] = parseNumber(raw, options[name]);
+            }
+        });
+
+        return options;
+    };
+
     var pickr_elements = document.querySelectorAll('.flatpickr, .a11y_datetime');
 
     pickr_elements.forEach(function (element) {
-        var clocale = element.getAttribute('data-locale') || 'de';
-        var cenableTime = parseBool(element.getAttribute('data-enableTime'), false);
-        var cnoCalendar = parseBool(element.getAttribute('data-noCalendar'), false);
-        var cfocusOpens = parseBool(element.getAttribute('data-focusOpens'), false);
-        var cmonthYearWheel = parseBool(element.getAttribute('data-monthYearWheel'), true);
-        var cshowMonthNavArrows = parseBool(element.getAttribute('data-showMonthNavArrows'), false);
-        var cshowMonths = Math.max(1, parseInt(element.getAttribute('data-showMonths'), 10) || 1);
-        var cyearWheelManualInput = parseBool(element.getAttribute('data-yearWheelManualInput'), true);
-        var cyearRange = parseJsonObject(element.getAttribute('data-yearRange'), {});
-        var cparsedYearRange = {
-            past: 10,
-            future: 10
-        };
-        cparsedYearRange.past = parseInt(cyearRange.past, 10) || 10;
-        cparsedYearRange.future = parseInt(cyearRange.future, 10) || 10;
-        var cdefaultAltFormat = (cnoCalendar && cenableTime) ? "H:i" : "j. F, Y H:i";
-        var caltFormat = element.getAttribute('data-altFormat') || cdefaultAltFormat;
-        var cdateFormat = element.getAttribute('data-dateFormat') || ((cnoCalendar && cenableTime) ? "H:i" : null);
-        var ctimeRules = parseJsonArray(element.getAttribute('data-timeRules'), []);
-        var disabled = element.getAttribute('data-disabled') || "";
-
-        if (disabled && disabled != "") {
-            var disabled_list = disabled.split(',');
-        }
-        else { disabled_list = []; }
-        var pickerOptions = {
-                enableTime: cenableTime,
-                noCalendar: cnoCalendar,
-                focusOpens: cfocusOpens,
-                monthYearWheel: cmonthYearWheel,
-                showMonthNavArrows: cshowMonthNavArrows,
-                showMonths: cshowMonths,
-                yearWheelManualInput: cyearWheelManualInput,
-                yearRange: cparsedYearRange,
-                altInput: true,
-                altFormat: caltFormat,
-                time_24hr: true,
-                timeRules: ctimeRules,
-                disable: disabled_list,
-                locale: clocale,
-                onReady: function (_, __, instance) {
-                    applyAccessibilityPatches(instance, clocale);
-                },
-                onOpen: function (_, __, instance) {
-                    applyAccessibilityPatches(instance, clocale);
-                }
-            };
-        if (cdateFormat) {
-            pickerOptions.dateFormat = cdateFormat;
-        }
-        pickerFactory(element, pickerOptions);
+        pickerFactory(element, buildBaseOptions(element));
     });
-
-
-
 
     var pickr_elements2 = document.querySelectorAll('.flatpickr_range, .a11y_datetime_range');
 
     pickr_elements2.forEach(function (element) {
-        var clocale = element.getAttribute('data-locale') || 'de';
-        var cenableTime = parseBool(element.getAttribute('data-enableTime'), false);
-        var cnoCalendar = parseBool(element.getAttribute('data-noCalendar'), false);
-        var cfocusOpens = parseBool(element.getAttribute('data-focusOpens'), false);
-        var cmonthYearWheel = parseBool(element.getAttribute('data-monthYearWheel'), true);
-        var cshowMonthNavArrows = parseBool(element.getAttribute('data-showMonthNavArrows'), false);
-        var cshowMonths = Math.max(1, parseInt(element.getAttribute('data-showMonths'), 10) || 1);
-        var cyearWheelManualInput = parseBool(element.getAttribute('data-yearWheelManualInput'), true);
-        var cyearRange = parseJsonObject(element.getAttribute('data-yearRange'), {});
-        var cparsedYearRange = {
-            past: 10,
-            future: 10
-        };
-        cparsedYearRange.past = parseInt(cyearRange.past, 10) || 10;
-        cparsedYearRange.future = parseInt(cyearRange.future, 10) || 10;
-        var cdefaultAltFormat = (cnoCalendar && cenableTime) ? "H:i" : "j. F, Y H:i";
-        var caltFormat = element.getAttribute('data-altFormat') || cdefaultAltFormat;
-        var cdateFormat = element.getAttribute('data-dateFormat') || ((cnoCalendar && cenableTime) ? "H:i" : null);
-        var ctimeRules = parseJsonArray(element.getAttribute('data-timeRules'), []);
-        var rangeField = element.getAttribute('data-rangefield') || "";
-        var disabled = element.getAttribute('data-disabled') || "";
+        var rangeField = element.getAttribute('data-rangefield') || '';
+        if (rangeField === '' || !rangePluginFactory) {
+            return;
+        }
 
-        if (disabled && disabled != "") {
-            var disabled_list = disabled.split(',');
-        }
-        else { disabled_list = []; }
-        if (rangeField != "" && rangePluginFactory) {
-            var pickerOptions = {
-                    enableTime: cenableTime,
-                    noCalendar: cnoCalendar,
-                    focusOpens: cfocusOpens,
-                    monthYearWheel: cmonthYearWheel,
-                    showMonthNavArrows: cshowMonthNavArrows,
-                    showMonths: cshowMonths,
-                    yearWheelManualInput: cyearWheelManualInput,
-                    yearRange: cparsedYearRange,
-                    "plugins": [new rangePluginFactory({ input: rangeField })],
-                    altInput: true,
-                    altFormat: caltFormat,
-                    time_24hr: true,
-                    timeRules: ctimeRules,
-                    disable: disabled_list,
-                    locale: clocale,
-                    onReady: function (_, __, instance) {
-                        applyAccessibilityPatches(instance, clocale);
-                    },
-                    onOpen: function (_, __, instance) {
-                        applyAccessibilityPatches(instance, clocale);
-                    }
-                };
-            if (cdateFormat) {
-                pickerOptions.dateFormat = cdateFormat;
-            }
-            pickerFactory(element, pickerOptions);
-        }
+        var options = buildBaseOptions(element);
+        options.plugins = [new rangePluginFactory({ input: rangeField })];
+        pickerFactory(element, options);
     });
 
 });
