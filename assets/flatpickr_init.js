@@ -302,7 +302,7 @@ $(document).on('rex:ready', function () {
         passthroughBooleanOptions.forEach(function (name) {
             var raw = element.getAttribute('data-' + name);
             if (raw !== null && raw !== '') {
-                options[name] = parseBool(raw, options[name]);
+                options[name] = parseBool(raw, undefined);
             }
         });
 
@@ -316,7 +316,7 @@ $(document).on('rex:ready', function () {
         passthroughIntegerOptions.forEach(function (name) {
             var raw = element.getAttribute('data-' + name);
             if (raw !== null && raw !== '') {
-                options[name] = parseInteger(raw, options[name]);
+                options[name] = parseInteger(raw, undefined);
             }
         });
 
