@@ -138,7 +138,7 @@ Show multiple calendar pages side-by-side (useful for ranges):
 ## Supported `data-*` attributes
 
 All relevant options of the vendor (a11y_datetime / flatpickr) can be set per field via `data-*` attributes.
-The attribute name mirrors the option name (case-sensitive, e.g. `data-enableTime`, `data-time_24hr`).
+The attribute name mirrors the option name (e.g. `data-enableTime`, `data-time_24hr`).
 
 ### Addon defaults (differ from vendor defaults)
 
