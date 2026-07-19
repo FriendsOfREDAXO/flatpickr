@@ -13,7 +13,7 @@ Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 - Range-Picker verwenden jetzt denselben Options-Builder wie Einzelfelder und unterstützen damit alle Vendor-Optionen konsistent.
 
 ### Changed
-- Interne Refaktorisierung: gemeinsame Options-Zusammenstellung fuer Einzel- und Range-Picker.
+- Interne Refaktorisierung: gemeinsame Options-Zusammenstellung für Einzel- und Range-Picker.
 
 ## [2.1.0]
 
