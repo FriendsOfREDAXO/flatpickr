@@ -177,7 +177,7 @@ Mehrere Kalenderblaetter nebeneinander anzeigen (praktisch fuer Range):
 ## Unterstützte `data-*` Attribute
 
 Alle relevanten Optionen des Vendors (a11y_datetime / flatpickr) können pro Feld über `data-*` Attribute gesetzt werden.
-Der Attributname entspricht dem Optionsnamen (Groß-/Kleinschreibung beachten, z. B. `data-enableTime`, `data-time_24hr`).
+Der Attributname entspricht dem Optionsnamen (z. B. `data-enableTime`, `data-time_24hr`).
 
 ### Addon-Defaults (weichen von den Vendor-Defaults ab)
 
