@@ -1,5 +1,5 @@
 package: flatpickr
-version: '2.2.1'
+version: '2.2.2'
 author: 'Friends Of REDAXO'
 supportpage: https://github.com/FriendsOfREDAXO/a11y_datetime
 load: late
