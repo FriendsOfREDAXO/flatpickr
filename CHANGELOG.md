@@ -2,8 +2,6 @@
 
 Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 
-## [2.2.0]
-
 ## [2.2.2] - 2026-07-20
 
 ### Added
