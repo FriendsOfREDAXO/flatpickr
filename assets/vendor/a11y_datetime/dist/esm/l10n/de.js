@@ -56,6 +56,7 @@ export var German = {
     doneButtonLabel: "Fertig",
     closeTimePickerAriaLabel: "Zeitauswahl schließen",
     selectedTimeAriaLabel: "Ausgewählte Zeit",
+    secondAriaLabel: "Sekunde",
     keyboardHelpAriaLabel: "Tastaturhilfe",
     keyboardShortcutsTitle: "Tastaturkürzel",
     keyboardShortcutFocus: "Tab / Umschalt+Tab: Fokus bewegen",

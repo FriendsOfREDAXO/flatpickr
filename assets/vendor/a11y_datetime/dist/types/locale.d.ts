@@ -58,6 +58,7 @@ export type Locale = {
     monthAriaLabel: string;
     hourAriaLabel: string;
     minuteAriaLabel: string;
+    secondAriaLabel?: string;
     timeLabel: string;
     timePickerAriaLabel: string;
     doneButtonLabel: string;
@@ -85,6 +86,7 @@ export type CustomLocale = {
     monthAriaLabel?: string;
     hourAriaLabel?: string;
     minuteAriaLabel?: string;
+    secondAriaLabel?: string;
     timeLabel?: string;
     timePickerAriaLabel?: string;
     doneButtonLabel?: string;

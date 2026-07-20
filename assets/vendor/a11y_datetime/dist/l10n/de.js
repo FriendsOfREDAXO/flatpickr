@@ -80,6 +80,7 @@ var l10n_de = (() => {
     doneButtonLabel: "Fertig",
     closeTimePickerAriaLabel: "Zeitauswahl schlie\xDFen",
     selectedTimeAriaLabel: "Ausgew\xE4hlte Zeit",
+    secondAriaLabel: "Sekunde",
     keyboardHelpAriaLabel: "Tastaturhilfe",
     keyboardShortcutsTitle: "Tastaturk\xFCrzel",
     keyboardShortcutFocus: "Tab / Umschalt+Tab: Fokus bewegen",

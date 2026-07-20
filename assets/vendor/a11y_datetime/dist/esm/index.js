@@ -59,6 +59,7 @@ function FlatpickrInstance(element, instanceConfig) {
     var timeWheelTrigger;
     var timeWheelHourOptions = [];
     var timeWheelMinuteOptions = [];
+    var timeWheelSecondOptions = [];
     var timeWheelAmPmOptions = [];
     var monthYearWheelPopover;
     var monthYearWheelTrigger;
@@ -68,6 +69,7 @@ function FlatpickrInstance(element, instanceConfig) {
     var monthScrollAnimationTimer;
     var keyboardHelpButton;
     var keyboardHelpPanel;
+    var configuredShowMonths = 1;
     var calendarInstanceId = "a11y-dt-".concat(Math.random()
         .toString(36)
         .slice(2, 10));
@@ -120,6 +122,30 @@ function FlatpickrInstance(element, instanceConfig) {
         var _a;
         return (((_a = self.calendarContainer) === null || _a === void 0 ? void 0 : _a.getRootNode())
             .activeElement || document.activeElement);
+    }
+    function getResponsiveShowMonths(maxShowMonths) {
+        var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
+        if (maxShowMonths <= 1)
+            return 1;
+        if (viewportWidth > 0 && viewportWidth < 640)
+            return 1;
+        if (viewportWidth > 0 && viewportWidth < 960)
+            return Math.min(maxShowMonths, 2);
+        return maxShowMonths;
+    }
+    function syncResponsiveShowMonths() {
+        var nextShowMonths = getResponsiveShowMonths(configuredShowMonths);
+        if (self.config.showMonths !== nextShowMonths) {
+            self.config.showMonths = nextShowMonths;
+            return true;
+        }
+        return false;
+    }
+    function needsResponsiveMonthRedraw() {
+        if (self.config.noCalendar || self.isMobile)
+            return false;
+        var renderedMonthCount = self.monthElements ? self.monthElements.length : 0;
+        return renderedMonthCount !== self.config.showMonths;
     }
     function bindToInstance(fn) {
         return fn.bind(self);
@@ -343,6 +369,13 @@ function FlatpickrInstance(element, instanceConfig) {
             option.classList.toggle("is-disabled", !enabled);
             option.setAttribute("aria-disabled", enabled ? "false" : "true");
         });
+        timeWheelSecondOptions.forEach(function (option) {
+            var second = parseInt(option.dataset.value || "0", 10) || 0;
+            var enabled = isTimeWithinBounds(currentHour, currentMinute, second);
+            option.disabled = !enabled;
+            option.classList.toggle("is-disabled", !enabled);
+            option.setAttribute("aria-disabled", enabled ? "false" : "true");
+        });
         timeWheelAmPmOptions.forEach(function (option) {
             var meridiem = String(option.dataset.value || "");
             var hour = ampm2military(activeHour, meridiem || self.l10n.amPM[0]);
@@ -460,12 +493,18 @@ function FlatpickrInstance(element, instanceConfig) {
         }
         markWheelSelection(timeWheelHourOptions, hourValue);
         markWheelSelection(timeWheelMinuteOptions, minuteValue);
+        if (self.secondElement !== undefined) {
+            markWheelSelection(timeWheelSecondOptions, String(parseInt(self.secondElement.value, 10) || 0));
+        }
         if (self.amPM !== undefined) {
             markWheelSelection(timeWheelAmPmOptions, String(self.amPM.textContent || ""));
         }
         updateTimeWheelDisabledOptions();
         if (timeWheelTrigger) {
             var label = "".concat(pad(self.hourElement.value), ":").concat(pad(self.minuteElement.value));
+            if (self.secondElement !== undefined) {
+                label += ":".concat(pad(self.secondElement.value));
+            }
             if (self.amPM !== undefined && self.amPM.textContent) {
                 label += " ".concat(self.amPM.textContent);
             }
@@ -475,6 +514,7 @@ function FlatpickrInstance(element, instanceConfig) {
         if (timeWheelPopover.classList.contains("is-open")) {
             centerWheelSelection(timeWheelHourOptions);
             centerWheelSelection(timeWheelMinuteOptions);
+            centerWheelSelection(timeWheelSecondOptions);
             centerWheelSelection(timeWheelAmPmOptions);
         }
     }
@@ -490,6 +530,7 @@ function FlatpickrInstance(element, instanceConfig) {
             window.requestAnimationFrame(function () {
                 centerWheelSelection(timeWheelHourOptions);
                 centerWheelSelection(timeWheelMinuteOptions);
+                centerWheelSelection(timeWheelSecondOptions);
                 centerWheelSelection(timeWheelAmPmOptions);
             });
             var initialFocus = timeWheelHourOptions.find(function (option) { return option.tabIndex === 0; }) ||
@@ -508,6 +549,8 @@ function FlatpickrInstance(element, instanceConfig) {
             timeWheelHourOptions[0] ||
             timeWheelMinuteOptions.find(function (option) { return option.tabIndex === 0; }) ||
             timeWheelMinuteOptions[0] ||
+            timeWheelSecondOptions.find(function (option) { return option.tabIndex === 0; }) ||
+            timeWheelSecondOptions[0] ||
             timeWheelAmPmOptions.find(function (option) { return option.tabIndex === 0; }) ||
             timeWheelAmPmOptions[0] ||
             self.hourElement);
@@ -619,6 +662,21 @@ function FlatpickrInstance(element, instanceConfig) {
         });
         timeWheelMinuteOptions = minuteColumn.options;
         wheelContent.appendChild(minuteColumn.column);
+        if (self.config.enableSeconds) {
+            var secondValues = Array.from({ length: 60 }, function (_, i) { return String(i); });
+            var secondColumn = buildColumn("flatpickr-time-wheel-column flatpickr-time-wheel-seconds", self.l10n.secondAriaLabel || "Second", secondValues, function (value) {
+                if (!self.secondElement)
+                    return;
+                self.secondElement.value = pad(value);
+                updateTime();
+                syncTimeWheelPopover();
+            });
+            timeWheelSecondOptions = secondColumn.options;
+            wheelContent.appendChild(secondColumn.column);
+        }
+        else {
+            timeWheelSecondOptions = [];
+        }
         if (!self.config.time_24hr && self.amPM !== undefined) {
             var amPmValues = [self.l10n.amPM[0], self.l10n.amPM[1]];
             var amPmColumn_1 = createElement("div", "flatpickr-time-wheel-column flatpickr-time-wheel-ampm");
@@ -2463,6 +2521,11 @@ function FlatpickrInstance(element, instanceConfig) {
         });
     }
     function onResize() {
+        syncResponsiveShowMonths();
+        if (configuredShowMonths > 1 && needsResponsiveMonthRedraw()) {
+            redraw();
+        }
+        setCalendarWidth();
         if (self.isOpen && !self.config.static && !self.config.inline)
             positionCalendar();
     }
@@ -2490,6 +2553,10 @@ function FlatpickrInstance(element, instanceConfig) {
             return;
         }
         var wasOpen = self.isOpen;
+        syncResponsiveShowMonths();
+        if (needsResponsiveMonthRedraw()) {
+            redraw();
+        }
         self.isOpen = true;
         if (!wasOpen) {
             self.calendarContainer.classList.add("open");
@@ -2559,6 +2626,18 @@ function FlatpickrInstance(element, instanceConfig) {
             "yearWheelManualInput",
         ];
         var userConfig = __assign(__assign({}, JSON.parse(JSON.stringify(element.dataset || {}))), instanceConfig);
+        var datasetConfig = element.dataset;
+        if (typeof userConfig.showMonths === "undefined" && datasetConfig.showmonths) {
+            userConfig.showMonths = Number(datasetConfig.showmonths);
+        }
+        if (typeof userConfig.yearRange === "undefined" && datasetConfig.yearrange) {
+            try {
+                userConfig.yearRange = JSON.parse(datasetConfig.yearrange);
+            }
+            catch (e) {
+                userConfig.yearRange = datasetConfig.yearrange;
+            }
+        }
         var formats = {};
         self.config.parseDate = userConfig.parseDate;
         self.config.formatDate = userConfig.formatDate;
@@ -2619,6 +2698,8 @@ function FlatpickrInstance(element, instanceConfig) {
             self.config[boolOpts[i]] =
                 self.config[boolOpts[i]] === true ||
                     self.config[boolOpts[i]] === "true";
+        configuredShowMonths = Math.max(1, Number(self.config.showMonths || 1));
+        self.config.showMonths = getResponsiveShowMonths(configuredShowMonths);
         self.config.monthYearWheel = true;
         if (userConfig.yearRange && typeof userConfig.yearRange === "object") {
             var range = userConfig.yearRange;
@@ -2777,9 +2858,11 @@ function FlatpickrInstance(element, instanceConfig) {
     function redraw() {
         if (self.config.noCalendar || self.isMobile)
             return;
+        syncResponsiveShowMonths();
         buildMonthSwitch();
         updateNavigationCurrentMonth();
         buildDays();
+        setCalendarWidth();
     }
     function focusAndClose() {
         self._input.focus();
@@ -2869,7 +2952,15 @@ function FlatpickrInstance(element, instanceConfig) {
     }
     var CALLBACKS = {
         locale: [setupLocale, updateWeekdays],
-        showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
+        showMonths: [
+            function () {
+                configuredShowMonths = Math.max(1, Number(self.config.showMonths || 1));
+                self.config.showMonths = getResponsiveShowMonths(configuredShowMonths);
+            },
+            buildMonths,
+            setCalendarWidth,
+            buildWeekdays,
+        ],
         minDate: [jumpToDate],
         maxDate: [jumpToDate],
         positionElement: [updatePositionElement],
@@ -2989,6 +3080,9 @@ function FlatpickrInstance(element, instanceConfig) {
                 : self.input.value);
         if (preloadedDate)
             setSelectedDate(preloadedDate, self.config.dateFormat);
+        if (preloadedDate && self.selectedDates.length === 0 && self._input) {
+            self._input.value = "";
+        }
         self._initialDate =
             self.selectedDates.length > 0
                 ? self.selectedDates[0]
@@ -3039,6 +3133,12 @@ function FlatpickrInstance(element, instanceConfig) {
             self.input.setAttribute("type", "hidden");
             if (!self.config.static && self.input.parentNode)
                 self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
+        }
+        if (self.config.inline) {
+            self.input.type = "hidden";
+            if (self.altInput !== undefined) {
+                self.altInput.type = "hidden";
+            }
         }
         if (!self.config.allowInput)
             self._input.setAttribute("readonly", "readonly");

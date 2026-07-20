@@ -1,5 +1,5 @@
 "use strict";
-/* a11y_datetime v5.2.3, based on flatpickr, @license MIT */
+/* a11y_datetime v5.2.4, based on flatpickr, @license MIT */
 var __a11y_datetime_bundle = (() => {
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -186,6 +186,7 @@ var __a11y_datetime_bundle = (() => {
     monthAriaLabel: "Month",
     hourAriaLabel: "Hour",
     minuteAriaLabel: "Minute",
+    secondAriaLabel: "Second",
     timeLabel: "Time",
     timePickerAriaLabel: "Time picker popover",
     doneButtonLabel: "Done",
@@ -585,6 +586,7 @@ var __a11y_datetime_bundle = (() => {
     let timeWheelTrigger;
     let timeWheelHourOptions = [];
     let timeWheelMinuteOptions = [];
+    let timeWheelSecondOptions = [];
     let timeWheelAmPmOptions = [];
     let monthYearWheelPopover;
     let monthYearWheelTrigger;
@@ -594,6 +596,7 @@ var __a11y_datetime_bundle = (() => {
     let monthScrollAnimationTimer;
     let keyboardHelpButton;
     let keyboardHelpPanel;
+    let configuredShowMonths = 1;
     const calendarInstanceId = `a11y-dt-${Math.random().toString(36).slice(2, 10)}`;
     function announce(message) {
       if (!self.config.announceChanges || !liveRegion || !message || !self.isOpen)
@@ -643,6 +646,30 @@ var __a11y_datetime_bundle = (() => {
     function getClosestActiveElement() {
       var _a;
       return ((_a = self.calendarContainer) == null ? void 0 : _a.getRootNode()).activeElement || document.activeElement;
+    }
+    function getResponsiveShowMonths(maxShowMonths) {
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
+      if (maxShowMonths <= 1)
+        return 1;
+      if (viewportWidth > 0 && viewportWidth < 640)
+        return 1;
+      if (viewportWidth > 0 && viewportWidth < 960)
+        return Math.min(maxShowMonths, 2);
+      return maxShowMonths;
+    }
+    function syncResponsiveShowMonths() {
+      const nextShowMonths = getResponsiveShowMonths(configuredShowMonths);
+      if (self.config.showMonths !== nextShowMonths) {
+        self.config.showMonths = nextShowMonths;
+        return true;
+      }
+      return false;
+    }
+    function needsResponsiveMonthRedraw() {
+      if (self.config.noCalendar || self.isMobile)
+        return false;
+      const renderedMonthCount = self.monthElements ? self.monthElements.length : 0;
+      return renderedMonthCount !== self.config.showMonths;
     }
     function bindToInstance(fn) {
       return fn.bind(self);
@@ -853,6 +880,13 @@ var __a11y_datetime_bundle = (() => {
         option.classList.toggle("is-disabled", !enabled);
         option.setAttribute("aria-disabled", enabled ? "false" : "true");
       });
+      timeWheelSecondOptions.forEach((option) => {
+        const second = parseInt(option.dataset.value || "0", 10) || 0;
+        const enabled = isTimeWithinBounds(currentHour, currentMinute, second);
+        option.disabled = !enabled;
+        option.classList.toggle("is-disabled", !enabled);
+        option.setAttribute("aria-disabled", enabled ? "false" : "true");
+      });
       timeWheelAmPmOptions.forEach((option) => {
         const meridiem = String(option.dataset.value || "");
         const hour = ampm2military(activeHour, meridiem || self.l10n.amPM[0]);
@@ -980,6 +1014,12 @@ var __a11y_datetime_bundle = (() => {
       }
       markWheelSelection(timeWheelHourOptions, hourValue);
       markWheelSelection(timeWheelMinuteOptions, minuteValue);
+      if (self.secondElement !== void 0) {
+        markWheelSelection(
+          timeWheelSecondOptions,
+          String(parseInt(self.secondElement.value, 10) || 0)
+        );
+      }
       if (self.amPM !== void 0) {
         markWheelSelection(
           timeWheelAmPmOptions,
@@ -989,6 +1029,9 @@ var __a11y_datetime_bundle = (() => {
       updateTimeWheelDisabledOptions();
       if (timeWheelTrigger) {
         let label = `${pad(self.hourElement.value)}:${pad(self.minuteElement.value)}`;
+        if (self.secondElement !== void 0) {
+          label += `:${pad(self.secondElement.value)}`;
+        }
         if (self.amPM !== void 0 && self.amPM.textContent) {
           label += ` ${self.amPM.textContent}`;
         }
@@ -1001,6 +1044,7 @@ var __a11y_datetime_bundle = (() => {
       if (timeWheelPopover.classList.contains("is-open")) {
         centerWheelSelection(timeWheelHourOptions);
         centerWheelSelection(timeWheelMinuteOptions);
+        centerWheelSelection(timeWheelSecondOptions);
         centerWheelSelection(timeWheelAmPmOptions);
       }
     }
@@ -1016,6 +1060,7 @@ var __a11y_datetime_bundle = (() => {
         window.requestAnimationFrame(() => {
           centerWheelSelection(timeWheelHourOptions);
           centerWheelSelection(timeWheelMinuteOptions);
+          centerWheelSelection(timeWheelSecondOptions);
           centerWheelSelection(timeWheelAmPmOptions);
         });
         const initialFocus = timeWheelHourOptions.find((option) => option.tabIndex === 0) || timeWheelHourOptions[0];
@@ -1029,7 +1074,7 @@ var __a11y_datetime_bundle = (() => {
       }
     }
     function getTimeWheelFocusTarget() {
-      return timeWheelHourOptions.find((option) => option.tabIndex === 0) || timeWheelHourOptions[0] || timeWheelMinuteOptions.find((option) => option.tabIndex === 0) || timeWheelMinuteOptions[0] || timeWheelAmPmOptions.find((option) => option.tabIndex === 0) || timeWheelAmPmOptions[0] || self.hourElement;
+      return timeWheelHourOptions.find((option) => option.tabIndex === 0) || timeWheelHourOptions[0] || timeWheelMinuteOptions.find((option) => option.tabIndex === 0) || timeWheelMinuteOptions[0] || timeWheelSecondOptions.find((option) => option.tabIndex === 0) || timeWheelSecondOptions[0] || timeWheelAmPmOptions.find((option) => option.tabIndex === 0) || timeWheelAmPmOptions[0] || self.hourElement;
     }
     function getPopoverFocusableElements(popover) {
       return Array.from(
@@ -1168,6 +1213,25 @@ var __a11y_datetime_bundle = (() => {
       );
       timeWheelMinuteOptions = minuteColumn.options;
       wheelContent.appendChild(minuteColumn.column);
+      if (self.config.enableSeconds) {
+        const secondValues = Array.from({ length: 60 }, (_, i) => String(i));
+        const secondColumn = buildColumn(
+          "flatpickr-time-wheel-column flatpickr-time-wheel-seconds",
+          self.l10n.secondAriaLabel || "Second",
+          secondValues,
+          (value) => {
+            if (!self.secondElement)
+              return;
+            self.secondElement.value = pad(value);
+            updateTime();
+            syncTimeWheelPopover();
+          }
+        );
+        timeWheelSecondOptions = secondColumn.options;
+        wheelContent.appendChild(secondColumn.column);
+      } else {
+        timeWheelSecondOptions = [];
+      }
       if (!self.config.time_24hr && self.amPM !== void 0) {
         const amPmValues = [self.l10n.amPM[0], self.l10n.amPM[1]];
         const amPmColumn = createElement(
@@ -3064,6 +3128,11 @@ var __a11y_datetime_bundle = (() => {
       });
     }
     function onResize() {
+      syncResponsiveShowMonths();
+      if (configuredShowMonths > 1 && needsResponsiveMonthRedraw()) {
+        redraw();
+      }
+      setCalendarWidth();
       if (self.isOpen && !self.config.static && !self.config.inline)
         positionCalendar();
     }
@@ -3089,6 +3158,10 @@ var __a11y_datetime_bundle = (() => {
         return;
       }
       const wasOpen = self.isOpen;
+      syncResponsiveShowMonths();
+      if (needsResponsiveMonthRedraw()) {
+        redraw();
+      }
       self.isOpen = true;
       if (!wasOpen) {
         self.calendarContainer.classList.add("open");
@@ -3161,6 +3234,17 @@ var __a11y_datetime_bundle = (() => {
         ...JSON.parse(JSON.stringify(element.dataset || {})),
         ...instanceConfig
       };
+      const datasetConfig = element.dataset;
+      if (typeof userConfig.showMonths === "undefined" && datasetConfig.showmonths) {
+        userConfig.showMonths = Number(datasetConfig.showmonths);
+      }
+      if (typeof userConfig.yearRange === "undefined" && datasetConfig.yearrange) {
+        try {
+          userConfig.yearRange = JSON.parse(datasetConfig.yearrange);
+        } catch (e) {
+          userConfig.yearRange = datasetConfig.yearrange;
+        }
+      }
       const formats2 = {};
       self.config.parseDate = userConfig.parseDate;
       self.config.formatDate = userConfig.formatDate;
@@ -3214,6 +3298,8 @@ var __a11y_datetime_bundle = (() => {
       Object.assign(self.config, formats2, userConfig);
       for (let i = 0; i < boolOpts.length; i++)
         self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
+      configuredShowMonths = Math.max(1, Number(self.config.showMonths || 1));
+      self.config.showMonths = getResponsiveShowMonths(configuredShowMonths);
       self.config.monthYearWheel = true;
       if (userConfig.yearRange && typeof userConfig.yearRange === "object") {
         const range = userConfig.yearRange;
@@ -3362,9 +3448,11 @@ var __a11y_datetime_bundle = (() => {
     function redraw() {
       if (self.config.noCalendar || self.isMobile)
         return;
+      syncResponsiveShowMonths();
       buildMonthSwitch();
       updateNavigationCurrentMonth();
       buildDays();
+      setCalendarWidth();
     }
     function focusAndClose() {
       self._input.focus();
@@ -3439,7 +3527,15 @@ var __a11y_datetime_bundle = (() => {
     }
     const CALLBACKS = {
       locale: [setupLocale, updateWeekdays],
-      showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
+      showMonths: [
+        () => {
+          configuredShowMonths = Math.max(1, Number(self.config.showMonths || 1));
+          self.config.showMonths = getResponsiveShowMonths(configuredShowMonths);
+        },
+        buildMonths,
+        setCalendarWidth,
+        buildWeekdays
+      ],
       minDate: [jumpToDate],
       maxDate: [jumpToDate],
       positionElement: [updatePositionElement],
@@ -3543,6 +3639,9 @@ var __a11y_datetime_bundle = (() => {
       const preloadedDate = self.config.defaultDate || ((self.input.nodeName === "INPUT" || self.input.nodeName === "TEXTAREA") && self.input.placeholder && self.input.value === self.input.placeholder ? null : self.input.value);
       if (preloadedDate)
         setSelectedDate(preloadedDate, self.config.dateFormat);
+      if (preloadedDate && self.selectedDates.length === 0 && self._input) {
+        self._input.value = "";
+      }
       self._initialDate = self.selectedDates.length > 0 ? self.selectedDates[0] : self.config.minDate && self.config.minDate.getTime() > self.now.getTime() ? self.config.minDate : self.config.maxDate && self.config.maxDate.getTime() < self.now.getTime() ? self.config.maxDate : self.now;
       self.currentYear = self._initialDate.getFullYear();
       self.currentMonth = self._initialDate.getMonth();
@@ -3582,6 +3681,12 @@ var __a11y_datetime_bundle = (() => {
             self.altInput,
             self.input.nextSibling
           );
+      }
+      if (self.config.inline) {
+        self.input.type = "hidden";
+        if (self.altInput !== void 0) {
+          self.altInput.type = "hidden";
+        }
       }
       if (!self.config.allowInput)
         self._input.setAttribute("readonly", "readonly");

@@ -221,6 +221,7 @@ var plugins_minMaxTimePlugin = (() => {
     monthAriaLabel: "Month",
     hourAriaLabel: "Hour",
     minuteAriaLabel: "Minute",
+    secondAriaLabel: "Second",
     timeLabel: "Time",
     timePickerAriaLabel: "Time picker popover",
     doneButtonLabel: "Done",

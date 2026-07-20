@@ -46,6 +46,50 @@ You can also use the new class name:
 {"class": "a11y_datetime","data-locale":"de","data-enableTime":"true"}
 ```
 
+### Dedicated YForm field `flatpickr`
+
+The addon ships with its own YForm value field `flatpickr` for common picker setups directly in YForm Manager.
+
+Covered standard modes:
+
+- Date
+- Date & time
+- Time
+- Date range
+
+Covered standard settings:
+
+- Locale
+- `dateFormat` / `altFormat`
+- `minuteIncrement`
+- `enableSeconds`
+- `time_24hr`
+- `allowInput`
+- `focusOpens`
+- `inline`
+- `monthYearWheel`
+- `showMonthNavArrows`
+- `showMonths` - maximum number of calendar panels shown at the same time; on narrow widths it is automatically reduced to 1 or 2
+- `yearWheelManualInput`
+- `yearRange` - year range relative to today, e.g. `{"past":10,"future":10}` for 10 years back and 10 years ahead
+- fixed disabled dates
+
+For special cases, the field also provides an expert JSON textarea. That JSON is merged after the common settings.
+
+`dateFormat` can often stay empty. In that case, the storage format is chosen automatically based on the selected field type.
+`altFormat` controls the visible display, including the list view. If `altFormat` is filled, that format string is used for list output.
+
+External disabled-date logic can be attached via a global JavaScript callback path such as `window.MyApp.flatpickrDisabledDates`. The callback may return:
+
+- an array of disable values
+- a Flatpickr disable callback function
+
+Notes:
+
+- For date ranges, the database column should be `varchar` or `text`.
+- Set the database field type manually to match the selected field type: Date = `date`, Date & Time = `datetime`, Time = `time`, Date range = `varchar` or `text`.
+- Inline editing in YForm list view is intentionally not part of this first version; the list view currently provides a compact preview instead of fragile direct editing.
+
 ## Howto use in Modules
 
 ```html
@@ -69,7 +113,6 @@ or
 ```json
 {"class": "a11y_datetime_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
 ```
-
 ## Set the view just for date fields. 
 
 If you don't want to see the time in a date-field, don't use the timepicker and set an alternative View.

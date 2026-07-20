@@ -1,5 +1,10 @@
 <?php
 $addon = rex_addon::get('flatpickr');
+
+if (rex_addon::get('yform')->isAvailable()) {
+    rex_yform::addTemplatePath($addon->getPath('ytemplates'));
+}
+
 if (rex::isBackend() && is_object(rex::getUser())) {
     rex_view::addCssFile($addon->getAssetsUrl('vendor/a11y_datetime/dist/a11y_datetime.min.css'));
     rex_view::addCssFile($addon->getAssetsUrl('vendor/a11y_datetime/dist/themes/dark.css'));

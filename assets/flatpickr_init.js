@@ -196,6 +196,91 @@ $(document).on('rex:ready', function () {
         });
     };
 
+    var resolveGlobalPath = function (path) {
+        if (typeof path !== 'string' || path.trim() === '') {
+            return null;
+        }
+
+        var normalized = path.replace(/^window\./, '');
+        var cursor = window;
+        var parts = normalized.split('.');
+
+        for (var i = 0; i < parts.length; i++) {
+            var part = parts[i];
+            if (!part || cursor[part] === undefined || cursor[part] === null) {
+                return null;
+            }
+            cursor = cursor[part];
+        }
+
+        return cursor;
+    };
+
+    var mergePickerOptions = function (baseOptions, extraOptions) {
+        if (!extraOptions || typeof extraOptions !== 'object') {
+            return baseOptions;
+        }
+
+        Object.keys(extraOptions).forEach(function (key) {
+            if (key === 'disable' && Array.isArray(extraOptions.disable)) {
+                var existingDisable = Array.isArray(baseOptions.disable) ? baseOptions.disable : [];
+                baseOptions.disable = existingDisable.concat(extraOptions.disable);
+                return;
+            }
+
+            if (key === 'enable' && Array.isArray(extraOptions.enable)) {
+                var existingEnable = Array.isArray(baseOptions.enable) ? baseOptions.enable : [];
+                baseOptions.enable = existingEnable.concat(extraOptions.enable);
+                return;
+            }
+
+            baseOptions[key] = extraOptions[key];
+        });
+
+        return baseOptions;
+    };
+
+    var applyDisableCallback = function (element, options) {
+        var callbackPath = element.getAttribute('data-flatpickr-disable-callback');
+        if (!callbackPath) {
+            return options;
+        }
+
+        var callback = resolveGlobalPath(callbackPath);
+        if (typeof callback !== 'function') {
+            return options;
+        }
+
+        var result = callback(element, options);
+        if (result === null || result === undefined) {
+            return options;
+        }
+
+        var existingDisable = Array.isArray(options.disable) ? options.disable.slice() : [];
+
+        if (Array.isArray(result)) {
+            options.disable = existingDisable.concat(result);
+            return options;
+        }
+
+        if (typeof result === 'function') {
+            existingDisable.push(result);
+            options.disable = existingDisable;
+            return options;
+        }
+
+        if (typeof result === 'string') {
+            options.disable = existingDisable.concat(parseCommaList(result));
+            return options;
+        }
+
+        if (result && Array.isArray(result.disable)) {
+            options.disable = existingDisable.concat(result.disable);
+        }
+
+        return options;
+    };
+
     // Pass-through options: only forwarded when the corresponding data-* attribute
     // is present on the element. Vendor defaults apply otherwise.
     var passthroughBooleanOptions = [
@@ -319,6 +404,14 @@ $(document).on('rex:ready', function () {
                 options[name] = parseInteger(raw, undefined);
             }
         });
+
+        var expertJson = element.getAttribute('data-flatpickr-expert-json');
+        var expertOptions = parseJsonObject(expertJson, null);
+        if (expertOptions) {
+            mergePickerOptions(options, expertOptions);
+        }
+
+        applyDisableCallback(element, options);
 
         return options;
     };

@@ -9,9 +9,10 @@ Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 ### Added
 - Flatpickr-Initializer reicht jetzt sämtliche relevanten Vendor-Optionen (a11y_datetime / flatpickr) als `data-*` Attribute an den Picker weiter. Neben den bisher gepflegten Optionen sind das u. a. `data-allowInput`, `data-allowInvalidPreload`, `data-animate`, `data-announceChanges`, `data-autoFillDefaultTime`, `data-clickOpens`, `data-closeOnSelect`, `data-disableMobile`, `data-enableSeconds`, `data-inline`, `data-shorthandCurrentMonth`, `data-showCloseButton`, `data-showTitleBar`, `data-static`, `data-weekNumbers`, `data-wrap`, `data-altInput`, `data-time_24hr`, `data-altInputClass`, `data-ariaDateFormat`, `data-calendarTitle`, `data-conjunction`, `data-dateFormat`, `data-defaultDate`, `data-initialDayFocus`, `data-maxDate`, `data-maxTime`, `data-minDate`, `data-minTime`, `data-mode`, `data-monthSelectorType`, `data-nextArrow`, `data-now`, `data-position`, `data-prevArrow`, `data-defaultHour`, `data-defaultMinute`, `data-defaultSeconds`, `data-hourIncrement`, `data-minuteIncrement` sowie `data-enable` (kommaseparierte Liste erlaubter Datumsangaben).
 - Neue Doku-Sektion in `README.md` und `README.de.md`, die Addon-Defaults und alle durchgereichten Optionen dokumentiert.
+- Neues YForm-Value-Feld `flatpickr` für Datum, Datum/Uhrzeit, Uhrzeit und Datumsbereich mit Standard-Settings, Expert-JSON und externer Disable-Callback-Unterstützung.
 
 ### Changed
-- Vendor-Stand auf a11y_datetime 5.2.3 aktualisiert.
+- Vendor-Stand auf a11y_datetime 5.2.4 aktualisiert.
 - Interne Refaktorisierung: gemeinsame Options-Zusammenstellung für Einzel- und Range-Picker.
 
 ### Fixed
@@ -19,6 +20,14 @@ Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 - Range-Picker verwenden jetzt denselben Options-Builder wie Einzelfelder und unterstützen damit alle Vendor-Optionen konsistent.
 - Time-only Picker übernimmt jetzt den neuen Minuten-Default (`minuteIncrement = 1`) aus dem Vendor.
 - Wheel-Controls profitieren vom Vendor-Fix gegen globale Framework-Styles im Host-Umfeld.
+- a11y_datetime (Vendor): Responsive Mehrmonats-Layout stabilisiert. Bei Wechsel der Viewportbreite werden Kalender-, Monats- und Wochentags-Container jetzt konsistent synchronisiert; verbleibende Multi-Month-Breiten und überlappende Monatsüberschriften (insbesondere in Safari) werden zuverlässig zurückgesetzt.
+- a11y_datetime (Vendor): Bei reduzierter Monatsanzahl werden überzählige Monats- und Weekday-Gruppen gezielt ausgeblendet, sodass kein „leeres“ oder überlagertes zweites/drittes Blatt sichtbar bleibt.
+
+### Changed
+- YForm-Value `flatpickr`: Suchfeld und Suchfilter orientieren sich jetzt am konfigurierten `picker_type` statt pauschal am Text-Filter.
+  - `date`/`date_range` nutzen die YForm-`date`-Suchlogik
+  - `datetime` nutzt die YForm-`datetime`-Suchlogik
+  - `time` nutzt die YForm-`time`-Suchlogik
 
 ## [2.1.0]
 

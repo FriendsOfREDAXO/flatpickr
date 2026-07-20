@@ -62,9 +62,12 @@ $addon = rex_addon::get('flatpickr');
 ?>
 <link rel="stylesheet" href="<?= $addon->getAssetsUrl('vendor/a11y_datetime/dist/a11y_datetime.min.css') ?>">
 <script src="<?= $addon->getAssetsUrl('vendor/a11y_datetime/dist/a11y_datetime.min.js') ?>"></script>
+`dateFormat` kann in vielen Fällen leer bleiben. Dann wird das Speicherformat passend zum Feldtyp automatisch gesetzt.
+`altFormat` steuert die sichtbare Darstellung, auch in der Listenansicht. Wenn `altFormat` gepflegt ist, wird dieser Formatstring fuer die Listenanzeige verwendet.
+
 <script src="<?= $addon->getAssetsUrl('vendor/a11y_datetime/dist/l10n/de.js') ?>"></script>
 <script src="<?= $addon->getAssetsUrl('vendor/a11y_datetime/dist/plugins/rangePlugin.js') ?>"></script>
-<script src="<?= $addon->getAssetsUrl('flatpickr_init.js') ?>"></script>
+- Setze den Datenbankfeldtyp manuell, um dem ausgewählten Feldtyp zu entsprechen: Datum = `date`, Datum & Uhrzeit = `datetime`, Zeit = `time`, Datumsbereich = `varchar` oder `text`.
 ```
 
 ### Beispiel-Input im Frontend
@@ -91,6 +94,50 @@ Alternativ mit neuem Klassennamen:
 {"class": "a11y_datetime", "data-locale": "de", "data-enableTime": "true"}
 ```
 
+### Eigenes YForm-Feld `flatpickr`
+
+Das Addon liefert ein eigenes YForm-Value-Feld `flatpickr` für typische Picker-Konfigurationen direkt im Manager.
+
+Abgedeckte Standard-Modi:
+
+- Datum
+- Datum & Uhrzeit
+- Uhrzeit
+- Datumsbereich
+
+Abgedeckte Standard-Settings:
+
+- Locale
+- `dateFormat` / `altFormat`
+- `minuteIncrement`
+- `enableSeconds`
+- `time_24hr`
+- `allowInput`
+- `focusOpens`
+- `inline`
+- `monthYearWheel`
+- `showMonthNavArrows`
+- `showMonths` - Maximale Anzahl der gleichzeitig sichtbaren Kalenderblätter; auf schmalen Breiten wird automatisch auf 1 oder 2 reduziert
+- `yearWheelManualInput`
+- `yearRange` - Jahresbereich relativ zu heute, z. B. `{"past":10,"future":10}` fuer 10 Jahre zurück und 10 Jahre voraus
+- feste Ausschlussdaten
+
+Für Sonderfälle gibt es zusätzlich ein Feld für Expert-JSON. Dieses JSON wird nach den Standard-Settings gemerged.
+
+`dateFormat` kann in vielen Fällen leer bleiben. Dann wird das Speicherformat passend zum Feldtyp automatisch gesetzt.
+`altFormat` steuert die sichtbare Darstellung, auch in der Listenansicht. Wenn `altFormat` gepflegt ist, wird dieser Formatstring fuer die Listenanzeige verwendet.
+
+Externe Ausschlusslogik kann über einen globalen JavaScript-Callback eingebunden werden. Der Callback-Pfad wird im Feld hinterlegt, zum Beispiel `window.MyApp.flatpickrDisabledDates`. Rückgabe möglich als:
+
+- Array von Disable-Werten
+- Flatpickr-Disable-Funktion
+
+Hinweis:
+
+- Für den Typ Datumsbereich sollte die Datenbankspalte `varchar` oder `text` sein.
+- Den Datenbankfeldtyp bitte manuell passend zum gewählten Feldtyp setzen: Datum = `date`, Datum & Uhrzeit = `datetime`, Zeit = `time`, Datumsbereich = `varchar` oder `text`.
+- Inline-Edit in der YForm-Listenansicht ist bewusst nicht Teil dieser ersten Version; die Listenansicht liefert derzeit eine kompakte Vorschau statt einer fragilen Direktbearbeitung.
+
 ## Verwendung in Modulen
 
 ```html
@@ -100,12 +147,8 @@ Alternativ mit neuem Klassennamen:
 ## Erstellen eines RangeField über 2 Input-Felder 
 
 ```json
-{"class": "flatpickr_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
-```
-
 oder
 
-```json
 {"class": "a11y_datetime_range","data-locale":"de","data-enableTime":"true", "data-rangefield":"#id"}
 ```
 
