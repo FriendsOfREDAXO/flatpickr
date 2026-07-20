@@ -1,5 +1,5 @@
 "use strict";
-/* a11y_datetime v5.2.4, based on flatpickr, @license MIT */
+/* a11y_datetime v5.2.6, based on flatpickr, @license MIT */
 var __a11y_datetime_bundle = (() => {
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -676,23 +676,71 @@ var __a11y_datetime_bundle = (() => {
     }
     function setCalendarWidth() {
       const config = self.config;
-      if (config.weekNumbers === false && config.showMonths === 1) {
+      if (config.noCalendar === true) {
         return;
-      } else if (config.noCalendar !== true) {
-        window.requestAnimationFrame(function() {
-          if (self.calendarContainer !== void 0) {
-            self.calendarContainer.style.visibility = "hidden";
-            self.calendarContainer.style.display = "block";
-          }
-          if (self.daysContainer !== void 0) {
-            const daysWidth = (self.days.offsetWidth + 1) * config.showMonths;
-            self.daysContainer.style.width = daysWidth + "px";
-            self.calendarContainer.style.width = daysWidth + (self.weekWrapper !== void 0 ? self.weekWrapper.offsetWidth : 0) + "px";
-            self.calendarContainer.style.removeProperty("visibility");
-            self.calendarContainer.style.removeProperty("display");
-          }
-        });
       }
+      window.requestAnimationFrame(function() {
+        if (self.calendarContainer !== void 0) {
+          self.calendarContainer.style.visibility = "hidden";
+          self.calendarContainer.style.display = "block";
+        }
+        if (!self.calendarContainer) {
+          return;
+        }
+        const firstDayContainer = self.calendarContainer.querySelector(
+          ".dayContainer"
+        );
+        const monthCount = Math.max(1, Number(config.showMonths || 1));
+        const monthWidth = firstDayContainer ? Math.round(firstDayContainer.getBoundingClientRect().width) : 0;
+        const monthElements = self.monthNav ? Array.from(self.monthNav.querySelectorAll(".flatpickr-month")) : [];
+        const weekdayGroups = self.weekdayContainer ? Array.from(
+          self.weekdayContainer.querySelectorAll(".flatpickr-weekdaycontainer")
+        ) : [];
+        monthElements.forEach((monthEl, index) => {
+          monthEl.style.display = index < monthCount ? "" : "none";
+        });
+        weekdayGroups.forEach((weekdayEl, index) => {
+          weekdayEl.style.display = index < monthCount ? "" : "none";
+        });
+        if (monthCount === 1 && config.weekNumbers === false) {
+          if (self.daysContainer) {
+            self.daysContainer.style.removeProperty("width");
+          }
+          if (self.rContainer) {
+            self.rContainer.style.removeProperty("width");
+          }
+          if (self.monthNav) {
+            self.monthNav.style.removeProperty("width");
+          }
+          if (self.weekdayContainer) {
+            self.weekdayContainer.style.removeProperty("width");
+          }
+          self.calendarContainer.style.removeProperty("width");
+          self.calendarContainer.classList.remove("multiMonth");
+          self.calendarContainer.style.removeProperty("visibility");
+          self.calendarContainer.style.removeProperty("display");
+          return;
+        }
+        const daysWidth = monthWidth > 0 ? monthWidth * monthCount : self.days !== void 0 ? (self.days.offsetWidth + 1) * monthCount : 0;
+        if (daysWidth > 0) {
+          if (self.daysContainer) {
+            self.daysContainer.style.width = daysWidth + "px";
+          }
+          if (self.rContainer) {
+            self.rContainer.style.width = daysWidth + "px";
+          }
+          if (self.monthNav) {
+            self.monthNav.style.width = daysWidth + "px";
+          }
+          if (self.weekdayContainer) {
+            self.weekdayContainer.style.width = daysWidth + "px";
+          }
+          self.calendarContainer.classList.toggle("multiMonth", monthCount > 1);
+          self.calendarContainer.style.width = daysWidth + (self.weekWrapper !== void 0 ? self.weekWrapper.offsetWidth : 0) + "px";
+        }
+        self.calendarContainer.style.removeProperty("visibility");
+        self.calendarContainer.style.removeProperty("display");
+      });
     }
     function updateTime(e) {
       if (self.selectedDates.length === 0) {
@@ -2719,11 +2767,7 @@ var __a11y_datetime_bundle = (() => {
               self.config.altInput ? self.config.altFormat : self.config.dateFormat
             );
           }
-          if (self.timeContainer !== void 0 && self.minuteElement !== void 0 && self.hourElement !== void 0 && self.input.value !== "" && self.input.value !== void 0) {
-            updateTime();
-          }
-          self.close();
-          if (self.config && self.config.mode === "range" && self.selectedDates.length === 1)
+          if (self.timeContainer !== void 0 && self.minuteElement !== void 0 && self.hourElement !== void 0 && self.input.value !== "" && self.input.value !== void 0 && self.config && self.config.mode === "range" && self.selectedDates.length === 1)
             self.clear(false);
         }
       }
@@ -3314,9 +3358,10 @@ var __a11y_datetime_bundle = (() => {
       HOOKS.filter((hook) => self.config[hook] !== void 0).forEach((hook) => {
         self.config[hook] = arrayify(self.config[hook] || []).map(bindToInstance);
       });
-      self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      const supportsNativeMobile = !self.config.disableMobile && !self.config.inline && !self.config.disable.length && !self.config.enable && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
+      self.isMobile = supportsNativeMobile && self.config.mode === "single";
       for (let i = 0; i < self.config.plugins.length; i++) {
         const pluginConf = self.config.plugins[i](self) || {};
         for (const key in pluginConf) {

@@ -2,6 +2,17 @@
 
 Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 
+## [2.2.3] - 2026-07-20
+
+### Added
+- Vendor-Stand auf a11y_datetime v5.2.6 aktualisiert.
+
+### Changed
+- Interne Dokumentation und Release-Hinweise auf den neuen a11y_datetime-Stand angehoben.
+
+### Fixed
+- Aktuelle a11y_datetime-Builds und Demo-Artefakte werden wieder mit dem Flatpickr-Vendor synchron ausgeliefert.
+
 ## [2.2.2] - 2026-07-20
 
 ### Added

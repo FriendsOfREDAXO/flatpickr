@@ -152,29 +152,80 @@ function FlatpickrInstance(element, instanceConfig) {
     }
     function setCalendarWidth() {
         var config = self.config;
-        if (config.weekNumbers === false && config.showMonths === 1) {
+        if (config.noCalendar === true) {
             return;
         }
-        else if (config.noCalendar !== true) {
-            window.requestAnimationFrame(function () {
-                if (self.calendarContainer !== undefined) {
-                    self.calendarContainer.style.visibility = "hidden";
-                    self.calendarContainer.style.display = "block";
-                }
-                if (self.daysContainer !== undefined) {
-                    var daysWidth = (self.days.offsetWidth + 1) * config.showMonths;
-                    self.daysContainer.style.width = daysWidth + "px";
-                    self.calendarContainer.style.width =
-                        daysWidth +
-                            (self.weekWrapper !== undefined
-                                ? self.weekWrapper.offsetWidth
-                                : 0) +
-                            "px";
-                    self.calendarContainer.style.removeProperty("visibility");
-                    self.calendarContainer.style.removeProperty("display");
-                }
+        window.requestAnimationFrame(function () {
+            if (self.calendarContainer !== undefined) {
+                self.calendarContainer.style.visibility = "hidden";
+                self.calendarContainer.style.display = "block";
+            }
+            if (!self.calendarContainer) {
+                return;
+            }
+            var firstDayContainer = self.calendarContainer.querySelector(".dayContainer");
+            var monthCount = Math.max(1, Number(config.showMonths || 1));
+            var monthWidth = firstDayContainer
+                ? Math.round(firstDayContainer.getBoundingClientRect().width)
+                : 0;
+            var monthElements = self.monthNav
+                ? Array.from(self.monthNav.querySelectorAll(".flatpickr-month"))
+                : [];
+            var weekdayGroups = self.weekdayContainer
+                ? Array.from(self.weekdayContainer.querySelectorAll(".flatpickr-weekdaycontainer"))
+                : [];
+            monthElements.forEach(function (monthEl, index) {
+                monthEl.style.display = index < monthCount ? "" : "none";
             });
-        }
+            weekdayGroups.forEach(function (weekdayEl, index) {
+                weekdayEl.style.display = index < monthCount ? "" : "none";
+            });
+            if (monthCount === 1 && config.weekNumbers === false) {
+                if (self.daysContainer) {
+                    self.daysContainer.style.removeProperty("width");
+                }
+                if (self.rContainer) {
+                    self.rContainer.style.removeProperty("width");
+                }
+                if (self.monthNav) {
+                    self.monthNav.style.removeProperty("width");
+                }
+                if (self.weekdayContainer) {
+                    self.weekdayContainer.style.removeProperty("width");
+                }
+                self.calendarContainer.style.removeProperty("width");
+                self.calendarContainer.classList.remove("multiMonth");
+                self.calendarContainer.style.removeProperty("visibility");
+                self.calendarContainer.style.removeProperty("display");
+                return;
+            }
+            var daysWidth = monthWidth > 0
+                ? monthWidth * monthCount
+                : self.days !== undefined
+                    ? (self.days.offsetWidth + 1) * monthCount
+                    : 0;
+            if (daysWidth > 0) {
+                if (self.daysContainer) {
+                    self.daysContainer.style.width = daysWidth + "px";
+                }
+                if (self.rContainer) {
+                    self.rContainer.style.width = daysWidth + "px";
+                }
+                if (self.monthNav) {
+                    self.monthNav.style.width = daysWidth + "px";
+                }
+                if (self.weekdayContainer) {
+                    self.weekdayContainer.style.width = daysWidth + "px";
+                }
+                self.calendarContainer.classList.toggle("multiMonth", monthCount > 1);
+                self.calendarContainer.style.width =
+                    daysWidth +
+                        (self.weekWrapper !== undefined ? self.weekWrapper.offsetWidth : 0) +
+                        "px";
+            }
+            self.calendarContainer.style.removeProperty("visibility");
+            self.calendarContainer.style.removeProperty("display");
+        });
     }
     function updateTime(e) {
         if (self.selectedDates.length === 0) {
@@ -2023,11 +2074,8 @@ function FlatpickrInstance(element, instanceConfig) {
                     self.minuteElement !== undefined &&
                     self.hourElement !== undefined &&
                     self.input.value !== "" &&
-                    self.input.value !== undefined) {
-                    updateTime();
-                }
-                self.close();
-                if (self.config &&
+                    self.input.value !== undefined &&
+                    self.config &&
                     self.config.mode === "range" &&
                     self.selectedDates.length === 1)
                     self.clear(false);
@@ -2714,14 +2762,15 @@ function FlatpickrInstance(element, instanceConfig) {
         HOOKS.filter(function (hook) { return self.config[hook] !== undefined; }).forEach(function (hook) {
             self.config[hook] = arrayify(self.config[hook] || []).map(bindToInstance);
         });
+        var supportsNativeMobile = !self.config.disableMobile &&
+            !self.config.inline &&
+            !self.config.disable.length &&
+            !self.config.enable &&
+            !self.config.weekNumbers &&
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         self.isMobile =
-            !self.config.disableMobile &&
-                !self.config.inline &&
-                self.config.mode === "single" &&
-                !self.config.disable.length &&
-                !self.config.enable &&
-                !self.config.weekNumbers &&
-                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            supportsNativeMobile &&
+                self.config.mode === "single";
         for (var i = 0; i < self.config.plugins.length; i++) {
             var pluginConf = self.config.plugins[i](self) || {};
             for (var key in pluginConf) {

@@ -431,6 +431,16 @@
       color: var(--muted);
     }
 
+    .range-desktop-only {
+      display: block;
+    }
+
+    .range-mobile-only {
+      display: none;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
     @media (max-width: 700px) {
       .wrap {
         margin: 1rem auto;
@@ -439,8 +449,16 @@
       .hero {
         padding: 1rem;
       }
-    }
 
+      .range-desktop-only {
+        display: none;
+      }
+
+      .range-mobile-only {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+    }
     :root[data-a11y-datetime-preset="modern"] .flatpickr-calendar {
       --a11y-dt-font-size: 13px;
       --a11y-dt-shadow: 0 1px 4px rgba(52, 63, 80, 0.06);
@@ -662,12 +680,14 @@
           <p class="desc">Check-in / check-out flow with three visible months for faster range selection.</p>
           <label for="demo-range">Start and end date</label>
           <input id="demo-range" placeholder="Select date range" />
+          <p class="mobile-note">Desktop: 3 months side-by-side. Mobile: the same one-field range picker with a single visible month.</p>
           <details>
             <summary>Show setup code</summary>
             <pre aria-label="range picker code"><code>pick("#demo-range", {
   mode: "range",
   showMonths: 3,
   dateFormat: "Y-m-d",
+  disableMobile: true,
   calendarTitle: "Select a date range",
   announceChanges: true
 });</code></pre>
@@ -1124,59 +1144,14 @@
       announceChanges: true
     });
 
-    var rangePluginFactory =
-      typeof window.rangePlugin === "function"
-        ? window.rangePlugin
-        : typeof window.plugins_rangePlugin !== "undefined" &&
-          window.plugins_rangePlugin &&
-          typeof window.plugins_rangePlugin.default === "function"
-        ? window.plugins_rangePlugin.default
-        : undefined;
-
-    function destroyPickerIfExists(selector) {
-      var el = document.querySelector(selector);
-      if (!el || !el._flatpickr) return;
-      el._flatpickr.destroy();
-    }
-
-    function initResponsiveRangeDemo() {
-      var isMobileRange = window.matchMedia("(max-width: 700px)").matches;
-
-      destroyPickerIfExists("#demo-range");
-      destroyPickerIfExists("#demo-range-from");
-
-      if (isMobileRange && rangePluginFactory) {
-        pick("#demo-range-from", {
-          mode: "range",
-          plugins: [new rangePluginFactory({ input: "#demo-range-to" })],
-          showMonths: 1,
-          dateFormat: "Y-m-d",
-          disableMobile: true,
-          calendarTitle: "Select start and end date",
-          announceChanges: true
-        });
-        return;
-      }
-
-      pick("#demo-range", {
-        mode: "range",
-        showMonths: 3,
-        dateFormat: "Y-m-d",
-        disableMobile: true,
-        calendarTitle: "Select a date range",
-        announceChanges: true
-      });
-    }
-
-    var mobileRangeState = window.matchMedia("(max-width: 700px)").matches;
-    window.addEventListener("resize", function () {
-      var next = window.matchMedia("(max-width: 700px)").matches;
-      if (next === mobileRangeState) return;
-      mobileRangeState = next;
-      initResponsiveRangeDemo();
+    pick("#demo-range", {
+      mode: "range",
+      showMonths: 3,
+      dateFormat: "Y-m-d",
+      disableMobile: true,
+      calendarTitle: "Select a date range",
+      announceChanges: true
     });
-
-    initResponsiveRangeDemo();
 
     pick("#demo-multiple", {
       mode: "multiple",
