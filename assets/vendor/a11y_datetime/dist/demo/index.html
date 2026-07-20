@@ -12,55 +12,75 @@
 
   <style>
     :root {
-      --surface: #edf2f8;
+      --surface: #f3f6fb;
       --card: #ffffff;
-      --card-soft: #ffffff;
-      --text: #1d2f49;
-      --muted: #4d617e;
-      --border: #ced9e8;
-      --ring: #0b4f97;
+      --card-soft: #eef2f8;
+      --text: #343f50;
+      --muted: #6f7d90;
+      --border: #c8d2e0;
+      --ring: #ef7f1a;
       --control-bg: #ffffff;
-      --summary-fg: #30415f;
-      --code-bg: #0f1624;
-      --code-fg: #d8e3ff;
+      --hero-shadow: 0 2px 10px rgba(52, 63, 80, 0.08);
+      --summary-fg: #343f50;
+      --code-bg: #1d2735;
+      --code-fg: #e5ecf7;
       --section-gap: 1.25rem;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --surface: #0c1224;
-        --card: #121d35;
-        --card-soft: #182742;
-        --text: #e9f1ff;
-        --muted: #b4c4df;
-        --border: #2b3f63;
-        --ring: #58a9ff;
-        --control-bg: #0f1a31;
-        --summary-fg: #c3d7fb;
-        --code-bg: #0d1a34;
-        --code-fg: #d0e4ff;
+        --surface: #141c28;
+        --card: #1c2635;
+        --card-soft: #202b3b;
+        --text: #e7edf7;
+        --muted: #a9b5c7;
+        --border: #495a74;
+        --ring: #f19442;
+        --control-bg: #1a2230;
+        --hero-shadow: 0 8px 22px rgba(0, 0, 0, 0.34);
+        --summary-fg: #d8e1ef;
+        --code-bg: #101722;
+        --code-fg: #d7e2f2;
       }
+    }
+
+    :root[data-a11y-datetime-theme="light"] {
+      --surface: #f3f6fb;
+      --card: #ffffff;
+      --card-soft: #eef2f8;
+      --text: #343f50;
+      --muted: #6f7d90;
+      --border: #c8d2e0;
+      --ring: #ef7f1a;
+      --control-bg: #ffffff;
+      --hero-shadow: 0 2px 10px rgba(52, 63, 80, 0.08);
+      --summary-fg: #343f50;
+      --code-bg: #1d2735;
+      --code-fg: #e5ecf7;
+    }
+
+    :root[data-a11y-datetime-theme="dark"] {
+      --surface: #141c28;
+      --card: #1c2635;
+      --card-soft: #202b3b;
+      --text: #e7edf7;
+      --muted: #a9b5c7;
+      --border: #495a74;
+      --ring: #f19442;
+      --control-bg: #1a2230;
+      --hero-shadow: 0 8px 22px rgba(0, 0, 0, 0.34);
+      --summary-fg: #d8e1ef;
+      --code-bg: #101722;
+      --code-fg: #d7e2f2;
     }
 
     body {
       margin: 0;
       color: var(--text);
-      font-family: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+      font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
       color-scheme: light dark;
-      background:
-        radial-gradient(circle at 8% -15%, #c9ddf7 0%, transparent 40%),
-        radial-gradient(circle at 100% 0%, #d7ebff 0%, transparent 36%),
-        var(--surface);
+      background: var(--surface);
       min-height: 100vh;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background:
-          radial-gradient(circle at 12% -18%, #213464 0%, transparent 38%),
-          radial-gradient(circle at 96% -8%, #0f6e8b 0%, transparent 35%),
-          var(--surface);
-      }
     }
 
     .wrap {
@@ -72,10 +92,10 @@
     .hero {
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 1.25rem 1.25rem 1rem;
-      background: linear-gradient(135deg, #184f8f 0%, #1f5fa9 55%, #2474b8 100%);
-      color: #eef4ff;
-      box-shadow: 0 18px 42px rgba(16, 30, 58, 0.2);
+      padding: 1.2rem 1.2rem 1rem;
+      background: var(--card);
+      color: var(--text);
+      box-shadow: var(--hero-shadow);
       margin-bottom: var(--section-gap);
     }
 
@@ -85,10 +105,76 @@
       line-height: 1.15;
     }
 
+    .hero-top {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+      box-shadow: 0 7px 16px rgba(31, 48, 74, 0.18);
+    }
+
+    .hero-copy {
+      flex: 1 1 320px;
+    }
+
     .meta {
-      color: #d8e7ff;
+      color: var(--muted);
       margin: 0.5rem 0 0;
       max-width: 70ch;
+    }
+
+    .hero-tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 0.7rem;
+      margin-top: 0.85rem;
+    }
+
+    .hero-tool-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .switch-group {
+      display: inline-flex;
+      gap: 0.25rem;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+      border-radius: 12px;
+      padding: 0.16rem;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    .switch-group button {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 0.34rem 0.68rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .switch-group button.is-active {
+      background: var(--control-bg);
+      border-color: var(--border);
+      box-shadow: 0 3px 10px rgba(52, 63, 80, 0.2);
     }
 
     .badge-row {
@@ -99,13 +185,13 @@
     }
 
     .badge {
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--border);
       border-radius: 999px;
       font-size: 0.8rem;
       letter-spacing: 0.02em;
       padding: 0.25rem 0.65rem;
-      color: #e8f2ff;
-      background: rgba(14, 38, 74, 0.35);
+      color: var(--text);
+      background: var(--card-soft);
     }
 
     .hero-links {
@@ -117,9 +203,9 @@
 
     .hero-links a {
       text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.82);
-      background: rgba(255, 255, 255, 0.95);
-      color: #0f3d70;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+      color: var(--text);
       border-radius: 999px;
       padding: 0.32rem 0.72rem;
       font-size: 0.82rem;
@@ -354,13 +440,87 @@
         padding: 1rem;
       }
     }
+
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-calendar {
+      --a11y-dt-font-size: 13px;
+      --a11y-dt-shadow: 0 1px 4px rgba(52, 63, 80, 0.06);
+    }
+
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-calendar,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-day,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-current-month .flatpickr-monthDropdown-months,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-close-button,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-keyboard-help-button,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-time-wheel-trigger,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-am-pm {
+      border-radius: 1px;
+    }
+
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-months {
+      border-bottom: 1px solid var(--a11y-dt-calendar-border);
+    }
+
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-current-month .flatpickr-monthDropdown-months {
+      border: 1px solid var(--a11y-dt-calendar-border);
+      background: var(--a11y-dt-month-bg);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding: 0.12rem 0.7rem;
+      border-radius: 2px;
+    }
+
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-close-button,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-keyboard-help-button,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-time-wheel-trigger,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-am-pm {
+      border: 1px solid var(--a11y-dt-calendar-border);
+      background: var(--a11y-dt-calendar-bg);
+    }
+
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-day.today:not(.selected):not(.startRange):not(.endRange) {
+      border-color: var(--a11y-dt-selected-bg);
+      color: var(--a11y-dt-day-fg);
+    }
+
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-day.selected,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-day.startRange,
+    :root[data-a11y-datetime-preset="modern"] .flatpickr-day.endRange {
+      box-shadow: inset 0 0 0 2px var(--a11y-dt-calendar-bg);
+    }
   </style>
 </head>
 <body>
   <main class="wrap" aria-label="a11y_datetime demo page">
     <header class="hero">
-      <h1>a11y_datetime</h1>
-      <p class="meta">An accessibility-first fork based on flatpickr with keyboard-friendly navigation, reduced-motion support, and CSS-variable driven theming.</p>
+      <div class="hero-top">
+        <img
+          class="hero-logo"
+          src="https://raw.githubusercontent.com/FriendsOfREDAXO/friendsofredaxo.github.io/assets/v2/FOR-badge-dark-rgb.png"
+          alt="Friends of REDAXO Logo"
+          loading="lazy"
+        />
+        <div class="hero-copy">
+          <h1>a11y_datetime</h1>
+          <p class="meta" id="hero-meta">An accessibility-first fork based on flatpickr with keyboard-friendly navigation, reduced-motion support, and CSS-variable driven theming.</p>
+        </div>
+      </div>
+      <div class="hero-tools" aria-label="Global controls">
+        <div>
+          <span class="hero-tool-label" id="global-theme-label">Dark / Light</span>
+          <div class="switch-group" role="group" aria-label="Global dark light switch" id="global-theme-switch">
+            <button type="button" data-theme-mode="system" class="is-active">System</button>
+            <button type="button" data-theme-mode="light">Light</button>
+            <button type="button" data-theme-mode="dark">Dark</button>
+          </div>
+        </div>
+        <div>
+          <span class="hero-tool-label" id="global-language-label">Language</span>
+          <div class="switch-group" role="group" aria-label="Global language switch" id="global-language-switch">
+            <button type="button" data-language="en" class="is-active">English</button>
+            <button type="button" data-language="de">Deutsch</button>
+          </div>
+        </div>
+      </div>
       <div class="badge-row" aria-label="feature highlights">
         <span class="badge">Keyboard-first</span>
         <span class="badge">Screen-reader friendly</span>
@@ -407,17 +567,25 @@
           <select id="design" aria-label="Calendar design preset">
             <option value="balanced">Balanced</option>
             <option value="soft">Soft Editorial</option>
+            <option value="modern">Modern</option>
             <option value="contrast" selected>High Contrast</option>
           </select>
         </div>
+        <div>
+          <label for="shadow">Shadow</label>
+          <select id="shadow" aria-label="Calendar shadow">
+            <option value="none">None</option>
+            <option value="subtle" selected>Subtle</option>
+          </select>
+        </div>
       </div>
-      <p class="hint">Tip: These controls change CSS variables live so you can inspect what a11y_datetime looks like in different design systems.</p>
+      <p class="hint" id="controls-hint">Tip: These controls change CSS variables live so you can inspect what a11y_datetime looks like in different design systems.</p>
     </section>
 
     <section class="panel" aria-labelledby="examples-heading">
       <h2 id="examples-heading">Interactive Examples + Code</h2>
-      <h3 class="group-title">Type A: Core Selection</h3>
-      <p class="group-note">Single, range, multiple, and locale basics for general date/time usage.</p>
+      <h3 class="group-title" id="group-a-title">Type A: Core Selection</h3>
+      <p class="group-note" id="group-a-note">Single, range, multiple, and locale basics for general date/time usage.</p>
       <div class="demo-grid">
         <article class="card">
           <h3>Single Date + Time</h3>
@@ -436,9 +604,9 @@
         </article>
 
         <article class="card">
-          <h3>Multilanguage: Deutsch</h3>
+          <h3>Multilanguage: German</h3>
           <p class="desc">German locale with day-month-year formatting and 24h time.</p>
-          <label for="demo-locale-de">Termin (DE)</label>
+          <label for="demo-locale-de">Appointment (DE)</label>
           <input id="demo-locale-de" placeholder="TT.MM.JJJJ HH:mm" />
           <details>
             <summary>Show setup code</summary>
@@ -602,9 +770,9 @@
         </article>
 
         <article class="card">
-          <h3>Wochentag-Zeitfenster (DE)</h3>
-          <p class="desc">Montag-Freitag 08:00-17:00, Samstag 10:00-14:00. Sonntag ist in diesem Beispiel deaktiviert.</p>
-          <label for="demo-business-hours-de">Termin (Deutsch)</label>
+          <h3>Weekday Time Windows (DE)</h3>
+          <p class="desc">Monday-Friday 08:00-17:00, Saturday 10:00-14:00. Sunday is disabled in this example.</p>
+          <label for="demo-business-hours-de">Appointment (German)</label>
           <input id="demo-business-hours-de" placeholder="TT.MM.JJJJ HH:mm" />
           <details>
             <summary>Show setup code</summary>
@@ -863,6 +1031,11 @@
           <p>Stronger borders and day contrast for demanding accessibility baselines.</p>
           <code>--a11y-dt-day-fg / --a11y-dt-calendar-border</code>
         </div>
+        <div class="theme-chip">
+          <strong>Modern</strong>
+          <p>Rams-inspired reduction: calm neutrals, clear hierarchy, minimal visual noise.</p>
+          <code>--a11y-dt-calendar-bg / --a11y-dt-selected-bg</code>
+        </div>
       </div>
       <p class="foot">All variations are done without changing picker internals, only through configuration and CSS variables.</p>
     </section>
@@ -894,7 +1067,7 @@
         <div class="shortcut-item"><span>Focus Single Date + Time</span><kbd>Alt+1</kbd></div>
         <div class="shortcut-item"><span>Focus Time Wheel Demo</span><kbd>Alt+2</kbd></div>
         <div class="shortcut-item"><span>Focus Month/Year Wheel Demo</span><kbd>Alt+3</kbd></div>
-        <div class="shortcut-item"><span>Focus DE Business Hours Demo</span><kbd>Alt+4</kbd></div>
+        <div class="shortcut-item"><span>Focus German Business Hours Demo</span><kbd>Alt+4</kbd></div>
         <div class="shortcut-item"><span>Focus Optional Playground</span><kbd>Alt+0</kbd></div>
         <div class="shortcut-item"><span>Jump to this section</span><kbd>Alt+K</kbd></div>
       </div>
@@ -1244,12 +1417,64 @@
     var accentSelect = document.getElementById("accent");
     var motionSelect = document.getElementById("motion");
     var designSelect = document.getElementById("design");
+    var shadowSelect = document.getElementById("shadow");
+    var globalThemeButtons = Array.prototype.slice.call(document.querySelectorAll("#global-theme-switch [data-theme-mode]"));
+    var globalLanguageButtons = Array.prototype.slice.call(document.querySelectorAll("#global-language-switch [data-language]"));
     var systemThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     function getResolvedThemeMode() {
       if (themeSelect.value === "dark") return "dark";
       if (themeSelect.value === "light") return "light";
       return systemThemeQuery.matches ? "dark" : "light";
+    }
+
+    function applyAccentSelection() {
+      var mode = getResolvedThemeMode();
+      var accentTokens = {
+        default: {
+          light: { selectedBg: "#0b5fd3", todayColor: "#0b5fd3", focusRing: "2px solid #0b5fd3" },
+          dark: { selectedBg: "#66a6ff", todayColor: "#66a6ff", focusRing: "2px solid #66a6ff" }
+        },
+        sunset: {
+          light: { selectedBg: "#e67817", todayColor: "#cc5e00", focusRing: "2px solid #e67817" },
+          dark: { selectedBg: "#ff8e46", todayColor: "#ff8e46", focusRing: "2px solid #ff8e46" }
+        },
+        ocean: {
+          light: { selectedBg: "#0d8bd8", todayColor: "#0667a3", focusRing: "2px solid #0d8bd8" },
+          dark: { selectedBg: "#44b7ff", todayColor: "#44b7ff", focusRing: "2px solid #44b7ff" }
+        },
+        forest: {
+          light: { selectedBg: "#2f8f3e", todayColor: "#1f6a2c", focusRing: "2px solid #2f8f3e" },
+          dark: { selectedBg: "#5ec86f", todayColor: "#5ec86f", focusRing: "2px solid #5ec86f" }
+        },
+        berry: {
+          light: { selectedBg: "#c03a8a", todayColor: "#8f1f64", focusRing: "2px solid #c03a8a" },
+          dark: { selectedBg: "#e36ab2", todayColor: "#e36ab2", focusRing: "2px solid #e36ab2" }
+        }
+      };
+
+      var selected = accentTokens[accentSelect.value] || accentTokens.default;
+      var token = selected[mode] || selected.light;
+      document.documentElement.style.setProperty("--a11y-dt-selected-bg", token.selectedBg);
+      document.documentElement.style.setProperty("--a11y-dt-today-color", token.todayColor);
+      document.documentElement.style.setProperty("--a11y-dt-focus-ring", token.focusRing);
+    }
+
+    function applyShadowSelection() {
+      if (!shadowSelect) return;
+      var mode = getResolvedThemeMode();
+      var shadowMode = shadowSelect.value;
+
+      if (shadowMode === "none") {
+        document.documentElement.style.setProperty("--a11y-dt-shadow", "none");
+        return;
+      }
+
+      if (mode === "dark") {
+        document.documentElement.style.setProperty("--a11y-dt-shadow", "0 18px 42px rgba(0, 0, 0, 0.52)");
+      } else {
+        document.documentElement.style.setProperty("--a11y-dt-shadow", "0 14px 34px rgba(20, 34, 56, 0.24)");
+      }
     }
 
     function applyDesignPreset(preset) {
@@ -1298,6 +1523,38 @@
             calendarBg: "#201c18"
           }
         },
+        modern: {
+          light: {
+            radius: "0.2rem",
+            dayBg: "#ffffff",
+            monthBg: "#f8f9fb",
+            dayFg: "#2f3642",
+            border: "#c7ccd4",
+            monthFg: "#2f3642",
+            weekdaysFg: "#697487",
+            calendarBg: "#fcfdff",
+            selectedBg: "#ff6a2a",
+            todayColor: "#ff6a2a",
+            focusRing: "2px solid #ff6a2a",
+            shadow: "0 1px 4px rgba(52, 63, 80, 0.06)",
+            fontSize: "13px"
+          },
+          dark: {
+            radius: "0.2rem",
+            dayBg: "#1a202b",
+            monthBg: "#1e2633",
+            dayFg: "#e4ebf6",
+            border: "#536077",
+            monthFg: "#e4ebf6",
+            weekdaysFg: "#a2afc4",
+            calendarBg: "#131a26",
+            selectedBg: "#ff7a3d",
+            todayColor: "#ff7a3d",
+            focusRing: "2px solid #ff7a3d",
+            shadow: "0 6px 16px rgba(0, 0, 0, 0.28)",
+            fontSize: "13px"
+          }
+        },
         contrast: {
           light: {
             radius: "0.35rem",
@@ -1325,6 +1582,7 @@
       var mode = getResolvedThemeMode();
       var tokenSet = presets[preset] || presets.balanced;
       var token = tokenSet[mode] || tokenSet.light;
+      document.documentElement.setAttribute("data-a11y-datetime-preset", preset);
       document.documentElement.style.setProperty("--a11y-dt-radius", token.radius);
       document.documentElement.style.setProperty("--a11y-dt-day-bg", token.dayBg);
       document.documentElement.style.setProperty("--a11y-dt-month-bg", token.monthBg);
@@ -1333,6 +1591,21 @@
       document.documentElement.style.setProperty("--a11y-dt-month-fg", token.monthFg);
       document.documentElement.style.setProperty("--a11y-dt-weekdays-fg", token.weekdaysFg);
       document.documentElement.style.setProperty("--a11y-dt-calendar-bg", token.calendarBg);
+      if (token.selectedBg) {
+        document.documentElement.style.setProperty("--a11y-dt-selected-bg", token.selectedBg);
+      }
+      if (token.todayColor) {
+        document.documentElement.style.setProperty("--a11y-dt-today-color", token.todayColor);
+      }
+      if (token.focusRing) {
+        document.documentElement.style.setProperty("--a11y-dt-focus-ring", token.focusRing);
+      }
+      if (token.shadow) {
+        document.documentElement.style.setProperty("--a11y-dt-shadow", token.shadow);
+      }
+      if (token.fontSize) {
+        document.documentElement.style.setProperty("--a11y-dt-font-size", token.fontSize);
+      }
     }
 
     themeSelect.addEventListener("change", function () {
@@ -1342,14 +1615,80 @@
       } else {
         document.documentElement.setAttribute("data-a11y-datetime-theme", selected);
       }
-
+      globalThemeButtons.forEach(function(btn) {
+        btn.classList.toggle("is-active", btn.getAttribute("data-theme-mode") === selected);
+      });
       applyDesignPreset(designSelect.value);
+      applyAccentSelection();
+      applyShadowSelection();
+    });
+
+    globalThemeButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var mode = button.getAttribute("data-theme-mode") || "system";
+        themeSelect.value = mode;
+        if (mode === "system") {
+          document.documentElement.removeAttribute("data-a11y-datetime-theme");
+        } else {
+          document.documentElement.setAttribute("data-a11y-datetime-theme", mode);
+        }
+        globalThemeButtons.forEach(function(btn) {
+          btn.classList.toggle("is-active", btn === button);
+        });
+        applyDesignPreset(designSelect.value);
+        applyAccentSelection();
+        applyShadowSelection();
+      });
+    });
+
+    function applyPageLanguage(lang) {
+      document.documentElement.lang = lang;
+      var meta = document.getElementById("hero-meta");
+      var controlsHeading = document.getElementById("controls-heading");
+      var controlsHint = document.getElementById("controls-hint");
+      var examplesHeading = document.getElementById("examples-heading");
+      var groupATitle = document.getElementById("group-a-title");
+      var groupANote = document.getElementById("group-a-note");
+      var themeLabel = document.getElementById("global-theme-label");
+      var languageLabel = document.getElementById("global-language-label");
+      if (!meta) return;
+      if (lang === "de") {
+        meta.textContent = "Ein barriereorientierter Fork von flatpickr mit tastaturfreundlicher Navigation, Reduced-Motion-Unterstützung und CSS-Variablen-Theming.";
+        if (controlsHeading) controlsHeading.textContent = "Live-Designsteuerung";
+        if (controlsHint) controlsHint.textContent = "Tipp: Diese Steuerung ändert CSS-Variablen live, damit du a11y_datetime in verschiedenen Designsystemen direkt prüfen kannst.";
+        if (examplesHeading) examplesHeading.textContent = "Interaktive Beispiele + Code";
+        if (groupATitle) groupATitle.textContent = "Typ A: Kernauswahl";
+        if (groupANote) groupANote.textContent = "Single, Range, Multiple und Locale-Grundlagen für allgemeine Datum/Zeit-Workflows.";
+        if (themeLabel) themeLabel.textContent = "Hell / Dunkel";
+        if (languageLabel) languageLabel.textContent = "Sprache";
+      } else {
+        meta.textContent = "An accessibility-first fork based on flatpickr with keyboard-friendly navigation, reduced-motion support, and CSS-variable driven theming.";
+        if (controlsHeading) controlsHeading.textContent = "Live Design Controls";
+        if (controlsHint) controlsHint.textContent = "Tip: These controls change CSS variables live so you can inspect what a11y_datetime looks like in different design systems.";
+        if (examplesHeading) examplesHeading.textContent = "Interactive Examples + Code";
+        if (groupATitle) groupATitle.textContent = "Type A: Core Selection";
+        if (groupANote) groupANote.textContent = "Single, range, multiple, and locale basics for general date/time usage.";
+        if (themeLabel) themeLabel.textContent = "Dark / Light";
+        if (languageLabel) languageLabel.textContent = "Language";
+      }
+    }
+
+    globalLanguageButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var lang = button.getAttribute("data-language") || "en";
+        globalLanguageButtons.forEach(function(btn) {
+          btn.classList.toggle("is-active", btn === button);
+        });
+        applyPageLanguage(lang);
+      });
     });
 
     if (systemThemeQuery && systemThemeQuery.addEventListener) {
       systemThemeQuery.addEventListener("change", function () {
         if (themeSelect.value === "system") {
           applyDesignPreset(designSelect.value);
+          applyAccentSelection();
+          applyShadowSelection();
         }
       });
     }
@@ -1366,29 +1705,25 @@
     });
 
     accentSelect.addEventListener("change", function () {
-      var accentTokens = {
-        sunset: { selectedBg: "#e67817", todayColor: "#cc5e00" },
-        ocean: { selectedBg: "#0d8bd8", todayColor: "#0667a3" },
-        forest: { selectedBg: "#2f8f3e", todayColor: "#1f6a2c" },
-        berry: { selectedBg: "#c03a8a", todayColor: "#8f1f64" }
-      };
-
-      var selectedAccent = accentTokens[accentSelect.value];
-
-      if (selectedAccent) {
-        document.documentElement.style.setProperty("--a11y-dt-selected-bg", selectedAccent.selectedBg);
-        document.documentElement.style.setProperty("--a11y-dt-today-color", selectedAccent.todayColor);
-      } else {
-        document.documentElement.style.removeProperty("--a11y-dt-selected-bg");
-        document.documentElement.style.removeProperty("--a11y-dt-today-color");
-      }
+      applyAccentSelection();
     });
 
     designSelect.addEventListener("change", function () {
       applyDesignPreset(designSelect.value);
+      applyAccentSelection();
+      applyShadowSelection();
     });
 
+    shadowSelect.addEventListener("change", function () {
+      applyShadowSelection();
+    });
+
+    designSelect.value = "contrast";
+    shadowSelect.value = "subtle";
+    applyPageLanguage("en");
     applyDesignPreset("contrast");
+    applyAccentSelection();
+    applyShadowSelection();
   </script>
 </body>
 </html>

@@ -410,6 +410,7 @@
   background: var(--a11y-dt-month-bg);
   border-top: 1px solid var(--a11y-dt-calendar-border);
   border-bottom: 0;
+  margin-bottom: 0.18rem;
   position: relative;
   z-index: 5;
 }
@@ -587,6 +588,7 @@
   font-weight: 300;
   color: inherit;
   position: absolute;
+  top: -2px;
   width: 82%;
   left: 12.5%;
   padding: 7.48px 0 0 0;
@@ -803,7 +805,7 @@
           align-items: center;
   height: auto;
   min-height: var(--a11y-dt-weekdays-height);
-  padding: 0.2rem 0 0.3rem;
+  padding: 0.35rem 0 0.3rem;
   border-bottom: 1px solid var(--a11y-dt-calendar-border);
 }
 .flatpickr-weekdays .flatpickr-weekdaycontainer {
@@ -1231,6 +1233,9 @@ span.flatpickr-weekday {
   border: 1px solid var(--a11y-dt-calendar-border);
   background: var(--a11y-dt-calendar-bg);
   color: var(--a11y-dt-day-fg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  line-height: 1.25;
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 0.96rem;
@@ -1381,6 +1386,9 @@ span.flatpickr-weekday {
   border-radius: 999px;
   background: var(--a11y-dt-calendar-bg);
   color: var(--a11y-dt-day-fg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  line-height: 1.25;
   font-size: 0.88rem;
   font-weight: 600;
   padding: 6px 12px;
@@ -1400,6 +1408,9 @@ span.flatpickr-weekday {
   border: 1px solid var(--a11y-dt-calendar-border);
   background: var(--a11y-dt-calendar-bg);
   color: var(--a11y-dt-month-fg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  line-height: 1.25;
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 0.96rem;
@@ -1546,6 +1557,9 @@ span.flatpickr-weekday {
   border-radius: 10px;
   background: var(--a11y-dt-calendar-bg);
   color: var(--a11y-dt-day-fg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  line-height: 1.25;
   padding: 6px 10px;
   font-size: 0.9rem;
 }
@@ -1557,6 +1571,9 @@ span.flatpickr-weekday {
   border-radius: 999px;
   background: var(--a11y-dt-calendar-bg);
   color: var(--a11y-dt-day-fg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  line-height: 1.25;
   font-size: 0.88rem;
   font-weight: 600;
   padding: 6px 12px;
@@ -1579,6 +1596,9 @@ span.flatpickr-weekday {
   border: 1px solid var(--a11y-dt-calendar-border);
   background: var(--a11y-dt-calendar-bg);
   color: var(--a11y-dt-month-fg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  line-height: 1.25;
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 0.96rem;
@@ -1725,6 +1745,9 @@ span.flatpickr-weekday {
   border-radius: 10px;
   background: var(--a11y-dt-calendar-bg);
   color: var(--a11y-dt-day-fg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  line-height: 1.25;
   padding: 6px 10px;
   font-size: 0.9rem;
 }
@@ -1736,6 +1759,9 @@ span.flatpickr-weekday {
   border-radius: 999px;
   background: var(--a11y-dt-calendar-bg);
   color: var(--a11y-dt-day-fg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  line-height: 1.25;
   font-size: 0.88rem;
   font-weight: 600;
   padding: 6px 12px;

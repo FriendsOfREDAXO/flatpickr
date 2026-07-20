@@ -1,5 +1,5 @@
 "use strict";
-/* a11y_datetime v5.2.0, based on flatpickr, @license MIT */
+/* a11y_datetime v5.2.3, based on flatpickr, @license MIT */
 var __a11y_datetime_bundle = (() => {
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -85,7 +85,7 @@ var __a11y_datetime_bundle = (() => {
     showMonthNavArrows: false,
     yearRange: { past: 10, future: 10 },
     yearWheelManualInput: true,
-    minuteIncrement: 5,
+    minuteIncrement: 1,
     mode: "single",
     monthSelectorType: "dropdown",
     nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
@@ -862,10 +862,26 @@ var __a11y_datetime_bundle = (() => {
         option.setAttribute("aria-disabled", enabled ? "false" : "true");
       });
     }
+    function normalizeMinuteToIncrement(minute) {
+      const normalizedMinute = (minute % 60 + 60) % 60;
+      const step = Math.max(1, self.config.minuteIncrement || 1);
+      if (step === 1)
+        return normalizedMinute;
+      const lower = Math.floor(normalizedMinute / step) * step;
+      const upper = lower + step;
+      if (upper >= 60) {
+        return lower;
+      }
+      const deltaToLower = normalizedMinute - lower;
+      const deltaToUpper = upper - normalizedMinute;
+      return deltaToUpper <= deltaToLower ? upper : lower;
+    }
     function setHoursFromInputs() {
       if (self.hourElement === void 0 || self.minuteElement === void 0)
         return;
-      let hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24, minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60, seconds = self.secondElement !== void 0 ? (parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
+      let hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24, minutes = normalizeMinuteToIncrement(
+        parseInt(self.minuteElement.value, 10) || 0
+      ), seconds = self.secondElement !== void 0 ? (parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
       if (self.amPM !== void 0) {
         hours = ampm2military(hours, self.amPM.textContent);
       }
@@ -932,14 +948,36 @@ var __a11y_datetime_bundle = (() => {
         option.tabIndex = isSelected ? 0 : -1;
       });
       if (!hasSelected && options[0]) {
-        options[0].tabIndex = 0;
+        const fallback = options[0];
+        fallback.classList.add("is-selected");
+        fallback.setAttribute("aria-selected", "true");
+        fallback.tabIndex = 0;
       }
+    }
+    function centerWheelSelection(options) {
+      const selected = options.find((option) => option.tabIndex === 0) || options.find((option) => option.classList.contains("is-selected"));
+      if (!selected)
+        return;
+      const column = selected.parentElement;
+      if (!column)
+        return;
+      const targetScrollTop = selected.offsetTop - (column.clientHeight - selected.offsetHeight) / 2;
+      column.scrollTop = Math.max(0, targetScrollTop);
     }
     function syncTimeWheelPopover() {
       if (!timeWheelPopover || !self.hourElement || !self.minuteElement)
         return;
       const hourValue = String(parseInt(self.hourElement.value, 10));
-      const minuteValue = String(parseInt(self.minuteElement.value, 10));
+      const normalizedMinute = normalizeMinuteToIncrement(
+        parseInt(self.minuteElement.value, 10) || 0
+      );
+      const minuteValue = String(normalizedMinute);
+      if (parseInt(self.minuteElement.value, 10) !== normalizedMinute) {
+        self.minuteElement.value = pad(normalizedMinute);
+        if (self.latestSelectedDateObj instanceof Date) {
+          self.latestSelectedDateObj.setMinutes(normalizedMinute);
+        }
+      }
       markWheelSelection(timeWheelHourOptions, hourValue);
       markWheelSelection(timeWheelMinuteOptions, minuteValue);
       if (self.amPM !== void 0) {
@@ -960,6 +998,11 @@ var __a11y_datetime_bundle = (() => {
           `${self.l10n.selectedTimeAriaLabel}: ${label}`
         );
       }
+      if (timeWheelPopover.classList.contains("is-open")) {
+        centerWheelSelection(timeWheelHourOptions);
+        centerWheelSelection(timeWheelMinuteOptions);
+        centerWheelSelection(timeWheelAmPmOptions);
+      }
     }
     function setTimeWheelPopoverOpen(open2) {
       if (!timeWheelPopover)
@@ -970,6 +1013,11 @@ var __a11y_datetime_bundle = (() => {
         if (timeWheelTrigger) {
           timeWheelTrigger.setAttribute("aria-expanded", "true");
         }
+        window.requestAnimationFrame(() => {
+          centerWheelSelection(timeWheelHourOptions);
+          centerWheelSelection(timeWheelMinuteOptions);
+          centerWheelSelection(timeWheelAmPmOptions);
+        });
         const initialFocus = timeWheelHourOptions.find((option) => option.tabIndex === 0) || timeWheelHourOptions[0];
         initialFocus == null ? void 0 : initialFocus.focus();
         return;
@@ -1204,6 +1252,7 @@ var __a11y_datetime_bundle = (() => {
       return popover;
     }
     function setHours(hours, minutes, seconds) {
+      minutes = normalizeMinuteToIncrement(minutes);
       if (self.latestSelectedDateObj !== void 0) {
         self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
       }
@@ -1728,6 +1777,10 @@ var __a11y_datetime_bundle = (() => {
       )} ${self.currentYear}`;
       monthYearWheelTrigger.textContent = label;
       monthYearWheelTrigger.setAttribute("aria-label", label);
+      if (monthYearWheelPopover.classList.contains("is-open")) {
+        centerWheelSelection(monthWheelOptions);
+        centerWheelSelection(yearWheelOptions);
+      }
     }
     function setMonthYearWheelPopoverOpen(open2) {
       if (!monthYearWheelPopover)
@@ -1736,6 +1789,10 @@ var __a11y_datetime_bundle = (() => {
         monthYearWheelPopover.removeAttribute("hidden");
         monthYearWheelPopover.classList.add("is-open");
         monthYearWheelTrigger == null ? void 0 : monthYearWheelTrigger.setAttribute("aria-expanded", "true");
+        window.requestAnimationFrame(() => {
+          centerWheelSelection(monthWheelOptions);
+          centerWheelSelection(yearWheelOptions);
+        });
         const initialFocus = monthWheelOptions.find((option) => option.tabIndex === 0) || monthWheelOptions[0] || yearWheelOptions.find((option) => option.tabIndex === 0) || yearWheelOptions[0] || monthYearWheelManualInput;
         initialFocus == null ? void 0 : initialFocus.focus();
         return;
@@ -2728,6 +2785,12 @@ var __a11y_datetime_bundle = (() => {
         }
         switch (e.keyCode) {
           case 13:
+            if (eventTarget === keyboardHelpButton) {
+              e.preventDefault();
+              const isOpen = keyboardHelpButton.getAttribute("aria-expanded") === "true";
+              setKeyboardHelpOpen(!isOpen);
+              break;
+            }
             if (eventTarget === self.closeButton) {
               e.preventDefault();
               focusAndClose();
@@ -2772,6 +2835,12 @@ var __a11y_datetime_bundle = (() => {
               selectDate(e);
             break;
           case 32:
+            if (eventTarget === keyboardHelpButton) {
+              e.preventDefault();
+              const isOpen = keyboardHelpButton.getAttribute("aria-expanded") === "true";
+              setKeyboardHelpOpen(!isOpen);
+              break;
+            }
             if (eventTarget === self.prevMonthNav || eventTarget === self.nextMonthNav) {
               e.preventDefault();
               changeMonth(eventTarget === self.prevMonthNav ? -1 : 1);

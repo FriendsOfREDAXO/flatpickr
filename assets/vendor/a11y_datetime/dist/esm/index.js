@@ -352,10 +352,24 @@ function FlatpickrInstance(element, instanceConfig) {
             option.setAttribute("aria-disabled", enabled ? "false" : "true");
         });
     }
+    function normalizeMinuteToIncrement(minute) {
+        var normalizedMinute = ((minute % 60) + 60) % 60;
+        var step = Math.max(1, self.config.minuteIncrement || 1);
+        if (step === 1)
+            return normalizedMinute;
+        var lower = Math.floor(normalizedMinute / step) * step;
+        var upper = lower + step;
+        if (upper >= 60) {
+            return lower;
+        }
+        var deltaToLower = normalizedMinute - lower;
+        var deltaToUpper = upper - normalizedMinute;
+        return deltaToUpper <= deltaToLower ? upper : lower;
+    }
     function setHoursFromInputs() {
         if (self.hourElement === undefined || self.minuteElement === undefined)
             return;
-        var hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24, minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60, seconds = self.secondElement !== undefined
+        var hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24, minutes = normalizeMinuteToIncrement(parseInt(self.minuteElement.value, 10) || 0), seconds = self.secondElement !== undefined
             ? (parseInt(self.secondElement.value, 10) || 0) % 60
             : 0;
         if (self.amPM !== undefined) {
@@ -415,14 +429,35 @@ function FlatpickrInstance(element, instanceConfig) {
             option.tabIndex = isSelected ? 0 : -1;
         });
         if (!hasSelected && options[0]) {
-            options[0].tabIndex = 0;
+            var fallback = options[0];
+            fallback.classList.add("is-selected");
+            fallback.setAttribute("aria-selected", "true");
+            fallback.tabIndex = 0;
         }
+    }
+    function centerWheelSelection(options) {
+        var selected = options.find(function (option) { return option.tabIndex === 0; }) ||
+            options.find(function (option) { return option.classList.contains("is-selected"); });
+        if (!selected)
+            return;
+        var column = selected.parentElement;
+        if (!column)
+            return;
+        var targetScrollTop = selected.offsetTop - (column.clientHeight - selected.offsetHeight) / 2;
+        column.scrollTop = Math.max(0, targetScrollTop);
     }
     function syncTimeWheelPopover() {
         if (!timeWheelPopover || !self.hourElement || !self.minuteElement)
             return;
         var hourValue = String(parseInt(self.hourElement.value, 10));
-        var minuteValue = String(parseInt(self.minuteElement.value, 10));
+        var normalizedMinute = normalizeMinuteToIncrement(parseInt(self.minuteElement.value, 10) || 0);
+        var minuteValue = String(normalizedMinute);
+        if (parseInt(self.minuteElement.value, 10) !== normalizedMinute) {
+            self.minuteElement.value = pad(normalizedMinute);
+            if (self.latestSelectedDateObj instanceof Date) {
+                self.latestSelectedDateObj.setMinutes(normalizedMinute);
+            }
+        }
         markWheelSelection(timeWheelHourOptions, hourValue);
         markWheelSelection(timeWheelMinuteOptions, minuteValue);
         if (self.amPM !== undefined) {
@@ -437,6 +472,11 @@ function FlatpickrInstance(element, instanceConfig) {
             timeWheelTrigger.textContent = label;
             timeWheelTrigger.setAttribute("aria-label", "".concat(self.l10n.selectedTimeAriaLabel, ": ").concat(label));
         }
+        if (timeWheelPopover.classList.contains("is-open")) {
+            centerWheelSelection(timeWheelHourOptions);
+            centerWheelSelection(timeWheelMinuteOptions);
+            centerWheelSelection(timeWheelAmPmOptions);
+        }
     }
     function setTimeWheelPopoverOpen(open) {
         if (!timeWheelPopover)
@@ -447,6 +487,11 @@ function FlatpickrInstance(element, instanceConfig) {
             if (timeWheelTrigger) {
                 timeWheelTrigger.setAttribute("aria-expanded", "true");
             }
+            window.requestAnimationFrame(function () {
+                centerWheelSelection(timeWheelHourOptions);
+                centerWheelSelection(timeWheelMinuteOptions);
+                centerWheelSelection(timeWheelAmPmOptions);
+            });
             var initialFocus = timeWheelHourOptions.find(function (option) { return option.tabIndex === 0; }) ||
                 timeWheelHourOptions[0];
             initialFocus === null || initialFocus === void 0 ? void 0 : initialFocus.focus();
@@ -647,6 +692,7 @@ function FlatpickrInstance(element, instanceConfig) {
         return popover;
     }
     function setHours(hours, minutes, seconds) {
+        minutes = normalizeMinuteToIncrement(minutes);
         if (self.latestSelectedDateObj !== undefined) {
             self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
         }
@@ -1131,6 +1177,10 @@ function FlatpickrInstance(element, instanceConfig) {
         var label = "".concat(monthToStr(self.currentMonth, self.config.shorthandCurrentMonth, self.l10n), " ").concat(self.currentYear);
         monthYearWheelTrigger.textContent = label;
         monthYearWheelTrigger.setAttribute("aria-label", label);
+        if (monthYearWheelPopover.classList.contains("is-open")) {
+            centerWheelSelection(monthWheelOptions);
+            centerWheelSelection(yearWheelOptions);
+        }
     }
     function setMonthYearWheelPopoverOpen(open) {
         if (!monthYearWheelPopover)
@@ -1139,6 +1189,10 @@ function FlatpickrInstance(element, instanceConfig) {
             monthYearWheelPopover.removeAttribute("hidden");
             monthYearWheelPopover.classList.add("is-open");
             monthYearWheelTrigger === null || monthYearWheelTrigger === void 0 ? void 0 : monthYearWheelTrigger.setAttribute("aria-expanded", "true");
+            window.requestAnimationFrame(function () {
+                centerWheelSelection(monthWheelOptions);
+                centerWheelSelection(yearWheelOptions);
+            });
             var initialFocus = monthWheelOptions.find(function (option) { return option.tabIndex === 0; }) ||
                 monthWheelOptions[0] ||
                 yearWheelOptions.find(function (option) { return option.tabIndex === 0; }) ||
@@ -2067,6 +2121,12 @@ function FlatpickrInstance(element, instanceConfig) {
             }
             switch (e.keyCode) {
                 case 13:
+                    if (eventTarget === keyboardHelpButton) {
+                        e.preventDefault();
+                        var isOpen = keyboardHelpButton.getAttribute("aria-expanded") === "true";
+                        setKeyboardHelpOpen(!isOpen);
+                        break;
+                    }
                     if (eventTarget === self.closeButton) {
                         e.preventDefault();
                         focusAndClose();
@@ -2111,6 +2171,12 @@ function FlatpickrInstance(element, instanceConfig) {
                         selectDate(e);
                     break;
                 case 32:
+                    if (eventTarget === keyboardHelpButton) {
+                        e.preventDefault();
+                        var isOpen = keyboardHelpButton.getAttribute("aria-expanded") === "true";
+                        setKeyboardHelpOpen(!isOpen);
+                        break;
+                    }
                     if (eventTarget === self.prevMonthNav ||
                         eventTarget === self.nextMonthNav) {
                         e.preventDefault();
