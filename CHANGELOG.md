@@ -2,7 +2,7 @@
 
 Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 
-## [Unreleased]
+## [2.2.0]
 
 ## [2.2.1] - 2026-07-20
 
