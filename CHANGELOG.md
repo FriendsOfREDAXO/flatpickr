@@ -4,7 +4,7 @@ Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 
 ## [2.2.0]
 
-## [2.2.1] - 2026-07-20
+## [2.2.2] - 2026-07-20
 
 ### Added
 - Flatpickr-Initializer reicht jetzt sämtliche relevanten Vendor-Optionen (a11y_datetime / flatpickr) als `data-*` Attribute an den Picker weiter. Neben den bisher gepflegten Optionen sind das u. a. `data-allowInput`, `data-allowInvalidPreload`, `data-animate`, `data-announceChanges`, `data-autoFillDefaultTime`, `data-clickOpens`, `data-closeOnSelect`, `data-disableMobile`, `data-enableSeconds`, `data-inline`, `data-shorthandCurrentMonth`, `data-showCloseButton`, `data-showTitleBar`, `data-static`, `data-weekNumbers`, `data-wrap`, `data-altInput`, `data-time_24hr`, `data-altInputClass`, `data-ariaDateFormat`, `data-calendarTitle`, `data-conjunction`, `data-dateFormat`, `data-defaultDate`, `data-initialDayFocus`, `data-maxDate`, `data-maxTime`, `data-minDate`, `data-minTime`, `data-mode`, `data-monthSelectorType`, `data-nextArrow`, `data-now`, `data-position`, `data-prevArrow`, `data-defaultHour`, `data-defaultMinute`, `data-defaultSeconds`, `data-hourIncrement`, `data-minuteIncrement` sowie `data-enable` (kommaseparierte Liste erlaubter Datumsangaben).
