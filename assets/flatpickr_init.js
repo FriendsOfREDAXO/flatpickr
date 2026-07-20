@@ -67,6 +67,7 @@ $(document).on('rex:ready', function () {
         }
     };
 
+
     var getTimeWheelLocaleTexts = function (localeValue) {
         var normalized = '';
 
@@ -419,7 +420,8 @@ $(document).on('rex:ready', function () {
     var pickr_elements = document.querySelectorAll('.flatpickr, .a11y_datetime');
 
     pickr_elements.forEach(function (element) {
-        pickerFactory(element, buildBaseOptions(element));
+        var options = buildBaseOptions(element);
+        pickerFactory(element, options);
     });
 
     var pickr_elements2 = document.querySelectorAll('.flatpickr_range, .a11y_datetime_range');

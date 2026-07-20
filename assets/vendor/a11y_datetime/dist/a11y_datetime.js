@@ -87,6 +87,7 @@ var __a11y_datetime_bundle = (() => {
     yearWheelManualInput: true,
     minuteIncrement: 1,
     mode: "single",
+    mobileRangeMode: "default",
     monthSelectorType: "dropdown",
     nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
     noCalendar: false,
@@ -3290,6 +3291,9 @@ var __a11y_datetime_bundle = (() => {
       if (typeof userConfig.showMonths === "undefined" && datasetConfig.showmonths) {
         userConfig.showMonths = Number(datasetConfig.showmonths);
       }
+      if (typeof userConfig.mobileRangeMode === "undefined" && datasetConfig.mobilerangemode) {
+        userConfig.mobileRangeMode = datasetConfig.mobilerangemode;
+      }
       if (typeof userConfig.yearRange === "undefined" && datasetConfig.yearrange) {
         try {
           userConfig.yearRange = JSON.parse(datasetConfig.yearrange);
@@ -3366,9 +3370,12 @@ var __a11y_datetime_bundle = (() => {
       HOOKS.filter((hook) => self.config[hook] !== void 0).forEach((hook) => {
         self.config[hook] = arrayify(self.config[hook] || []).map(bindToInstance);
       });
-      self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      const supportsNativeMobile = !self.config.disableMobile && !self.config.inline && !self.config.disable.length && !self.config.enable && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
+      const mobileRangeMode = String(self.config.mobileRangeMode || "default").toLowerCase();
+      const allowRangeSplitOnMobile = self.config.mode === "range" && mobileRangeMode === "split" && self.config.enableTime === false;
+      self.isMobile = supportsNativeMobile && (self.config.mode === "single" || allowRangeSplitOnMobile);
       for (let i = 0; i < self.config.plugins.length; i++) {
         const pluginConf = self.config.plugins[i](self) || {};
         for (const key in pluginConf) {
@@ -3748,6 +3755,11 @@ var __a11y_datetime_bundle = (() => {
       self._positionElement = self.config.positionElement || self._input;
     }
     function setupMobile() {
+      if (self.config.mode === "range" && String(self.config.mobileRangeMode || "default").toLowerCase() === "split" && self.config.enableTime === false) {
+        setupMobileRangeSplit();
+        return;
+      }
+
       const inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
       self.mobileInput = createElement(
         "input",
@@ -3791,6 +3803,111 @@ var __a11y_datetime_bundle = (() => {
         triggerEvent("onChange");
         triggerEvent("onClose");
       });
+    }
+
+    function setupMobileRangeSplit() {
+      const toDateValue = (value) => {
+        if (typeof value !== "string") {
+          return "";
+        }
+        const trimmed = value.trim();
+        return /^\d{4}-\d{2}-\d{2}$/.test(trimmed) ? trimmed : "";
+      };
+
+      const splitRangeValue = (value) => {
+        const normalized = String(value || "").trim();
+        if (normalized === "") {
+          return ["", ""];
+        }
+        const parts = normalized.split(/\s+to\s+/i);
+        if (parts.length === 2) {
+          return [parts[0].trim(), parts[1].trim()];
+        }
+        return [normalized, ""];
+      };
+
+      const startInput = createElement("input", self.input.className + " flatpickr-mobile flatpickr-mobile-range-start");
+      const endInput = createElement("input", self.input.className + " flatpickr-mobile flatpickr-mobile-range-end");
+
+      startInput.type = "date";
+      endInput.type = "date";
+      startInput.tabIndex = 1;
+      endInput.tabIndex = 1;
+      startInput.disabled = self.input.disabled;
+      endInput.disabled = self.input.disabled;
+      startInput.required = self.input.required;
+      endInput.required = self.input.required;
+      startInput.placeholder = self.input.placeholder;
+      endInput.placeholder = self.input.placeholder;
+
+      const sourceId = self.input.getAttribute("id") || "flatpickr-mobile-range";
+      startInput.setAttribute("id", sourceId + "__start");
+      endInput.setAttribute("id", sourceId + "__end");
+      startInput.setAttribute("aria-label", self.input.getAttribute("data-mobilerangestartlabel") || "Start date");
+      endInput.setAttribute("aria-label", self.input.getAttribute("data-mobilerangeendlabel") || "End date");
+
+      if (self.config.minDate) {
+        const min = self.formatDate(self.config.minDate, "Y-m-d");
+        startInput.min = min;
+        endInput.min = min;
+      }
+      if (self.config.maxDate) {
+        const max = self.formatDate(self.config.maxDate, "Y-m-d");
+        startInput.max = max;
+        endInput.max = max;
+      }
+
+      if (self.selectedDates.length > 0) {
+        startInput.value = self.formatDate(self.selectedDates[0], "Y-m-d");
+      }
+      if (self.selectedDates.length > 1) {
+        endInput.value = self.formatDate(self.selectedDates[1], "Y-m-d");
+      }
+      if (self.selectedDates.length === 0) {
+        const values = splitRangeValue(self.input.value);
+        startInput.value = toDateValue(values[0]);
+        endInput.value = toDateValue(values[1]);
+      }
+
+      self.input.type = "hidden";
+      if (self.altInput !== void 0) {
+        self.altInput.type = "hidden";
+      }
+
+      const syncRangeValue = () => {
+        const startValue = toDateValue(startInput.value);
+        const endValue = toDateValue(endInput.value);
+
+        if (startValue !== "" && endValue !== "") {
+          self.setDate([startValue, endValue], false, "Y-m-d");
+          self.input.value = startValue + " to " + endValue;
+        } else if (startValue !== "") {
+          self.setDate(startValue, false, "Y-m-d");
+          self.input.value = startValue;
+        } else if (endValue !== "") {
+          self.setDate(endValue, false, "Y-m-d");
+          self.input.value = endValue;
+        } else {
+          self.clear(false, false);
+          self.input.value = "";
+        }
+
+        triggerEvent("onChange");
+        triggerEvent("onClose");
+      };
+
+      try {
+        if (self.input.parentNode) {
+          self.input.parentNode.insertBefore(startInput, self.input.nextSibling);
+          self.input.parentNode.insertBefore(endInput, startInput.nextSibling);
+        }
+      } catch (e) {
+      }
+
+      bind(startInput, "change", syncRangeValue);
+      bind(endInput, "change", syncRangeValue);
+      bind(startInput, "input", syncRangeValue);
+      bind(endInput, "input", syncRangeValue);
     }
     function toggle(e) {
       if (self.isOpen === true)

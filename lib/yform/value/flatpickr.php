@@ -84,6 +84,16 @@ class rex_yform_value_flatpickr extends rex_yform_value_abstract
                     'label' => rex_i18n::msg('flatpickr_yform_show_months'),
                     'notice' => rex_i18n::msg('flatpickr_yform_show_months_notice'),
                 ],
+                'mobile_range_mode' => [
+                    'type' => 'choice',
+                    'label' => rex_i18n::msg('flatpickr_yform_mobile_range_mode'),
+                    'choices' => [
+                        'default' => rex_i18n::msg('flatpickr_yform_mobile_range_mode_default'),
+                        'split' => rex_i18n::msg('flatpickr_yform_mobile_range_mode_split'),
+                    ],
+                    'default' => 'split',
+                    'notice' => rex_i18n::msg('flatpickr_yform_mobile_range_mode_notice'),
+                ],
                 'year_range' => [
                     'type' => 'text',
                     'label' => rex_i18n::msg('flatpickr_yform_year_range'),
@@ -213,6 +223,10 @@ class rex_yform_value_flatpickr extends rex_yform_value_abstract
             $attributes['data-noCalendar'] = 'true';
         } elseif ('date_range' === $pickerType) {
             $attributes['data-mode'] = 'range';
+            $mobileRangeMode = trim((string) $this->getElement('mobile_range_mode'));
+            $attributes['data-mobileRangeMode'] = '' !== $mobileRangeMode ? $mobileRangeMode : 'default';
+            $attributes['data-mobileRangeStartLabel'] = rex_i18n::msg('flatpickr_yform_mobile_range_start');
+            $attributes['data-mobileRangeEndLabel'] = rex_i18n::msg('flatpickr_yform_mobile_range_end');
         }
 
         if ('' !== $dateFormat) {
