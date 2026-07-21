@@ -2,6 +2,15 @@
 
 Alle wichtigen Änderungen an diesem Addon werden in dieser Datei dokumentiert.
 
+## [2.2.4] - 2026-07-21
+
+### Changed
+- Vendor per Script `tools/update-a11y-datetime-vendor.sh` auf a11y_datetime `v5.2.7` aktualisiert.
+- Flatpickr-Addon-Version auf `2.2.4` angehoben.
+
+### Fixed
+- Enthaltene Vendor-Artefakte übernehmen die aktuellen Time-only-Popup-Fixes und Responsive-Monatskorrekturen aus a11y_datetime `v5.2.7`.
+
 ## [2.2.3] - 2026-07-20
 
 ### Added

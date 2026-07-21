@@ -189,12 +189,16 @@
 .flatpickr-calendar .hasWeeks .dayContainer {
   border-left: 0;
 }
-.flatpickr-calendar.hasTime .flatpickr-time {
+.flatpickr-calendar.hasTime:not(.noCalendar) .flatpickr-time {
   height: var(--a11y-dt-time-height);
   border-top: 1px solid var(--a11y-dt-calendar-border);
 }
 .flatpickr-calendar.noCalendar.hasTime .flatpickr-time {
   height: auto;
+}
+.flatpickr-calendar.noCalendar.hasTime:before,
+.flatpickr-calendar.noCalendar.hasTime:after {
+  display: none;
 }
 .flatpickr-calendar:before,
 .flatpickr-calendar:after {

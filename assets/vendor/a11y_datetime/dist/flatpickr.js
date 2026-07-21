@@ -1,5 +1,5 @@
 "use strict";
-/* a11y_datetime v5.2.6, based on flatpickr, @license MIT */
+/* a11y_datetime v5.2.7, based on flatpickr, @license MIT */
 var __a11y_datetime_bundle = (() => {
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
